@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'backend'
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,15 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': '/var/run/mysql',
+#         'USER': 'root',
+#         'PASSWORD': 'Kingstom970106!',
+#         'HOST': '127.0.0.1',
+#     }
+# }
 
 
 # Password validation
