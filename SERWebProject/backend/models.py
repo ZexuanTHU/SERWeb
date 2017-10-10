@@ -9,3 +9,9 @@ class Project(models.Model):
 
     def __str__(self):
         return self.project_name
+
+
+class Choice(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=10)
+    votes = models.BooleanField(default=False)
