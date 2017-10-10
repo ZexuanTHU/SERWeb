@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>projreg</title>
+</head>
+<body>
+{% if latest_project_list %}
+    <ul>
+    {% for project in latest_project_list %}
+        <li><a href="/api/{{ project.id }}/">{{ project.project_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+</body>
+</html>
