@@ -17,6 +17,7 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">突出个人</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">加入院队</a></li>
     </ul>
+	<el-button>文字按钮</el-button>
   </div>
 </template>
 
