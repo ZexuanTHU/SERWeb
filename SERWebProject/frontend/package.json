@@ -14,6 +14,8 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "async-validator": "^1.8.1",
+    "is-mergeable-object": "^1.1.0",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0"
   },
