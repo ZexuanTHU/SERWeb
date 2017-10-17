@@ -44,6 +44,7 @@
     div.panel{
       display: none;
       width: 100%;
+      position: relative;
     }
     #modify p{
       font-size: medium;
@@ -51,16 +52,26 @@
       margin-top: 20px;
       margin-left:30px;
     }
-    #modify input{
-      position: absolute;
-      margin-left:80px;
+    #modify input,textarea{
+      left:120px;
+      /*margin-left:40px;*/
       width: 300px;
+      position: absolute;
     }
+    #modify.p{
+      position: relative;
+    }
+    .mboarderbtn{
+      border:1px solid #b1a2a2;
+      border-radius:3px;
+    }
+
   </style>
 <!-- Page content -->
 <div class="w3-content" style="max-width:2000px;margin-top:46px">
-  <div class="w3-container"style="width: 100%;">
-    <div class="w3-card-2 w3-left leftbar" style="width: 200px;height: 320px;margin-top: 20px;display: block;background:#d8f7fc;text-align:center;">
+  <div class="w3-container"style="width: 100%;min-height: 700px">
+    <div class="w3-left" style="width: 200px;height: 100% ">
+    <div class="w3-card-2 w3-left leftbar" style="width:200px;height: 320px;margin-top: 20px;display: block;background:#d8f7fc;text-align:center;">
       <div class="w3-card" style="border: dotted 1px;background:#5d5efc;height: 20px">
       </div>
       <p><a class="tablink" href="#" onclick="openPanle(event,'register')">比赛报名</a></p>
@@ -68,7 +79,9 @@
       <p><a class="tablink" href="#" onclick="openPanle(event,'view_grade')">成绩查看</a><br></p>
       <p><a class="tablink" href="#" onclick="openPanle(event,'modify')">个人信息</a><br></p>
       </div>
+    </div>
     <div class="panel_content" style="margin-left:200px;display: block; ">
+
       <div id="register" class="w3-container panel w3-left">
         <h1 style="font-size: large;margin: auto">regiser</h1>
 
@@ -79,17 +92,17 @@
       <div id="view_register" class="w3-container panel w3-left">
         <h1 style="font-size: large;margin: auto">view_regiser</h1>
       </div>
-      <div id="modify" class="w3-container panel w3-left">
+      <div id="modify" class="w3-container panel w3-left" style="display: block">
 
-        <p style="margin-top: 100px"><span>姓名</span> <input type="text"></p>
+        <p style="margin-top: 40px"><span>姓名:</span> <input type="text"></p>
         <p><span>电话:</span> <input type="text"></p>
         <p><span>邮箱:</span> <input type="text"></p>
         <p><span>学号:</span> <input type="text"></p>
-        <p style="height: 200px"><span>备注:</span> <input style="width: 400px;height:200px" type="text"></p>
-        <div style="width: 240px;height: 300px;text-align: center;position: absolute;right: 200px;top: 80px">
-          <img class="icon" src="image/icon.jpg" style="width:100%;height: 240px" alt="">
-          <button class="w3-button "style="margin-top:10px;width: 50%;margin: auto;" onclick="$('#filechooser').click()">选择头像</button>
-          <input id="filechooser" type="file" onclick="jsReadFiles(this.files)" style="display: none"/>
+        <p style="height: 200px"><span>备注:</span><textarea style="width: 400px;height:200px;" type="text"></textarea> </p>
+        <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
+          <img class="icon" src="image/icon.jpg" style="width:100%;height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;" alt="">
+          <button class="w3-button mboarderbtn "style="margin-top:20px!important;width: 50%;margin: auto;" onclick="$('#filechooser').click()">选择头像</button>
+          <input id="filechooser" type="file" onchange="jsReadFiles(this.files)" style="display: none"/>
         </div>
       </div>
     </div>
@@ -107,6 +120,7 @@
   <p class="w3-medium">Powered by <a href="#" target="_blank">软件工程GROUPCHAT</a></p>
 </footer>
 <script>
+  //切换
 function openPanle(evt, option) {
     var i, x, tablinks;
     x = document.getElementsByClassName("panel");
@@ -122,22 +136,22 @@ function openPanle(evt, option) {
 }
 </script>
 <script>
-    function jsReadFiles(files) {
-        if (files.length) {
-            var file = files[0];
-            var reader = new FileReader();//new一个FileReader实例
-            if(/image+/.test(file.type)) {//判断文件是不是imgage类型
-                reader.onload = function() {
-                    $(".icon").attr("src",this.result);
-                    //('<img src="' + this.result + '"/>');
-                }
-                reader.readAsDataURL(file);
+function jsReadFiles(files) {
+    if (files.length) {
+        var file = files[0];
+        var reader = new FileReader();//new一个FileReader实例
+        if(/image+/.test(file.type)) {//判断文件是不是imgage类型
+            reader.onload = function() {
+                $(".icon").attr("src",this.result);
+                $("#modify").append("<img width='200px' height='200px' src='"+this.result+"'>");
             }
-            else {
-                alert("请选择一张图片");
-            }
+            reader.readAsDataURL(file);
+        }
+        else {
+            alert("请选择一张图片");
         }
     }
+}
 </script>
 
 
