@@ -23,3 +23,14 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+
+class User(models.Model):
+    user_name = models.CharField(max_length=10)
+    password = models.CharField(max_length=20)
+    client_ID = models.CharField(max_length=30)
+    client_secret = models.CharField(max_length=30)
+    email = models.EmailField
+
+    def __str__(self):
+        return self.user_name
