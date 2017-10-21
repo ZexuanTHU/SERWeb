@@ -218,9 +218,5 @@
   .clearfix:after {
     clear: both
   }
+</style>
 
-<<<<<<< HEAD
-</style>
-=======
-</style>
->>>>>>> master
