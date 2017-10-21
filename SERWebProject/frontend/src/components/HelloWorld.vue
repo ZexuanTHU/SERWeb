@@ -12,13 +12,9 @@
         <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">院系荣誉</a></el-menu-item>
         <el-menu-item index="5"><a href="https://www.ele.me" target="_blank">突出个人</a></el-menu-item>
         <el-menu-item index="6"><a href="https://www.ele.me" target="_blank">加入院队</a></el-menu-item>
-<<<<<<< HEAD
         <el-menu-item id="login" index="7">
           <router-link to="Login">用户信息</router-link>
         </el-menu-item>
-=======
-        <el-menu-item id="login" index="7"><a href="https://www.ele.me" target="_blank">用户信息</a></el-menu-item>
->>>>>>> master
       </el-menu>
     </div>
 
