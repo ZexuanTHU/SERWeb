@@ -62,11 +62,11 @@ __pycache__/
 .Python
 #build/
 develop-eggs/
-dist/
+#dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/
 lib64/
 parts/
 sdist/
@@ -107,7 +107,7 @@ coverage.xml
 local_settings.py
 
 # Flask stuff:
-instance/
+#instance/
 .webassets-cache
 
 # Scrapy stuff:

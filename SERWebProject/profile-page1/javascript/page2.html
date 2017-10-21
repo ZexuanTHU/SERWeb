@@ -1,0 +1,621 @@
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Title--> <title>How To (Safely) Use A
+    jQuery Plugin With Vue.js</title> <!--Description-->
+    <meta name="description"
+          content="jQuery and VueJS don't play well together. But if you really need to use a jQuery plugin in a Vue project, you can wrap it in a component to mitigate some of the potential problems. In this article I'll show you how!">
+    <!--Date-->
+    <meta content="2017-05-20T00:00:00+00:00" property="article:published_time"> <!--Tags-->
+    <meta content="vue.js" property="article:tag">
+    <meta content="jquery" property="article:tag">
+    <meta content="plugin" property="article:tag"> <!--Open Graph: Site Name-->
+    <meta content="Vue.js Developers" property="og:site_name"> <!--Open Graph: Title-->
+    <meta content="How To (Safely) Use A jQuery Plugin With Vue.js" property="og:title"> <!--Open Graph: Type-->
+    <meta content="article" property="og:type"> <!--Open Graph: Description-->
+    <meta content="jQuery and VueJS don't play well together. But if you really need to use a jQuery plugin in a Vue project, you can wrap it in a component to mitigate some of the potential problems. In this article I'll show you how!"
+          property="og:description"> <!--Open Graph: URL--> <!--This fixes the issue of losing pre-https share count-->
+    <meta content="http://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/" property="og:url">
+    <!--Open Graph: Image-->
+    <meta content="https://vuejsdevelopers.com/images/posts/jquery_plugin.jpg" property="og:image"> <!--Facebook: App-->
+    <meta property="fb:app_id" content="1476013142459100"/> <!--Twitter: General-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@vuejsdevelopers"> <!--Twitter: Creator-->
+    <meta name="twitter:creator" content="@anthonygore"> <!--Twitter: Title-->
+    <meta name="twitter:title" content="How To (Safely) Use A jQuery Plugin With Vue.js"> <!--Twitter: URL-->
+    <meta name="twitter:url" content="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/">
+    <!--Twitter: Description-->
+    <meta name="twitter:description"
+          content="jQuery and VueJS don't play well together. But if you really need to use a jQuery plugin in a Vue project, you can wrap it in a component to mitigate some of the potential problems. In this article I'll show you how!">
+    <!--Twitter: Image-->
+    <meta name="twitter:image:src" content="https://vuejsdevelopers.com/images/posts/jquery_plugin.jpg"> <!--Icons-->
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="manifest" href="/icons/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff"> <!--Stylesheets-->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic"/>
+    <link type='text/css' rel='stylesheet'
+          href='https://d33wubrfki0l68.cloudfront.net/bundles/a8d41c572db869bb3bcc82f72d04e2adaa79e702.css'/>
+    <!--This fixes the issue of losing pre-https share count-->
+    <link rel="canonical" href="http://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/">
+    <link rel="alternate" type="application/rss+xml" title="Vue.js Developers Feed"
+          href="https://vuejsdevelopers.com/feed.xml"> <!--Inline scripts-->
+    <script>document.documentElement.classList.remove("no-js");</script>
+    <script type="text/javascript"> var DOMAIN = location.origin;
+    var PROD_DOMAIN = "https://vuejsdevelopers.com"; </script>
+</head>
+<body>
+<nav id="top" class="site-navigation">
+    <div class="inner">
+        <div class="logo"><a href="/"> <img class="lazy"
+                                            data-src="https://d33wubrfki0l68.cloudfront.net/29c9435f4d4418aadee4ba7c05e6da3babe47205/89acf/images/logo_graphic_no_base_94x94.png">
+        </a></div>
+        <div class="pull-right">
+            <button id="menu-toggle" aria-expanded="false">Menu</button>
+            <div class="nav-menu">
+                <ul class="menu">
+                    <li class=""><a class="" href="/">Latest Posts</a></li>
+                    <li class=""><a class=""
+                                    href="https://www.udemy.com/vuejs-2-essentials/learn/v4/?couponCode=VUEJS-BLOG">Courses</a>
+                    </li>
+                    <li class=""><a class="" href="/newsletter/">Newsletter</a></li>
+                    <li class=""><a class="" href="/about/">About</a></li>
+                </ul>
+            </div><!-- .nav-menu --> </div>
+    </div><!-- .inner --> </nav><!-- .site-navigation -->
+<div class="site-content">
+    <div class="inner">
+        <main class="site-main">
+            <section id="search-results" style="display: none"></section>
+            <script id="search-results-template" type="text/mustache">
+                 {{#entries}} {{#is_post}} <article class="post post-search"> <a class="post-thumb-mobile" href="{{url}}"> <img class="lazy" data-src="/images/{{ banner_image }}" alt=""> </a> </div> <a href="{{url}}" class="post-thumb" style="background-image: url('/images/{{ banner_image }}');"> </a> <div class="post-content"> <div class="post-inner"> <h2 class="title"> <a href="{{url}}" rel="bookmark" title="Permanent Link to {{url}}">{{title}}</a> </h2> <div class="post-date"> {{#date}} <time class="published" datetime="{{pubdate}}" pubdate>{{displaydate}}</time>{{/date}} </div> <p>{{ exerpt }}</p> </div> <div class="post-content-footer"> <div class="two-col"> <!-- share --> <div class="share-post"> <a class="fa-twitter" target="_blank" href="https://twitter.com/intent/tweet?text={{ escaped_title }}&amp;url={{shareurl}}&amp;hashtags=vuejs&amp;via=vuejsdevelopers"><span class="screen-reader-text">Twitter</span><span data-url="{{shareurl}}" class="counter c_twitter"></span></a> <a class="fa-facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{shareurl}}&amp;t={{ escaped_title }}"><span class="screen-reader-text">Facebook</span><span data-url="{{shareurl}}" class="counter c_facebook"></span></a> <a class="fa-google-plus" target="_blank" href="http://plus.google.com/share?url={{shareurl}}"><span class="screen-reader-text">Google+</span><span data-url="{{shareurl}}" class="counter c_plus"></span></a> </div> <!-- share --> <div class="comment-count"> <a href="{{ url }}#disqus" class="link-comments"> <i class="fa fa-lg fa-comments-o"> </i> <span class="disqus-comment-count" data-disqus-identifier="{{ post_id }}">0 Comments</span> </a> </div> </div> </div> </div> </article> {{/is_post}} {{/entries}}
+            </script>
+            <article class="post">
+                <header class="entry-header">
+                    <div class="entry-header-wrap">
+                        <div class="post-thumbnail"><img class="lazy"
+                                                         data-src="https://d33wubrfki0l68.cloudfront.net/36b1c522dad2a9bb69e7ea65b874f4108a65ff7a/f0089/images/posts/jquery_plugin.jpg"
+                                                         alt=""
+                                                         data-srcset=" https://d33wubrfki0l68.cloudfront.net/78adbce84818e650af1edf70cd5ac9a4b38c5285/6cc76/images/345/jquery_plugin.jpg 345w, https://d33wubrfki0l68.cloudfront.net/34c0d2dd68015629310454db30ee005fd8ba1ff1/c33dc/images/290/jquery_plugin.jpg 290w, https://d33wubrfki0l68.cloudfront.net/36b1c522dad2a9bb69e7ea65b874f4108a65ff7a/f0089/images/posts/jquery_plugin.jpg 600w">
+                            <noscript><img class="lazy"
+                                           data-src="https://d33wubrfki0l68.cloudfront.net/36b1c522dad2a9bb69e7ea65b874f4108a65ff7a/f0089/images/posts/jquery_plugin.jpg"
+                                           alt=""
+                                           srcset=" https://d33wubrfki0l68.cloudfront.net/78adbce84818e650af1edf70cd5ac9a4b38c5285/6cc76/images/345/jquery_plugin.jpg 345w, https://d33wubrfki0l68.cloudfront.net/34c0d2dd68015629310454db30ee005fd8ba1ff1/c33dc/images/290/jquery_plugin.jpg 290w, https://d33wubrfki0l68.cloudfront.net/36b1c522dad2a9bb69e7ea65b874f4108a65ff7a/f0089/images/posts/jquery_plugin.jpg 600w">
+                            </noscript>
+                        </div><!-- .post-thumbnail --> <h1 class="entry-title">How To (Safely) Use A jQuery Plugin With
+                        Vue.js</h1></div><!-- .entry-header-wrap -->
+                    <div class="entry-meta-wrapper">
+                        <div class="entry-meta">
+                            <div class="meta"> by <span class="post-author">Anthony Gore</span> on
+                                <time class="published" datetime="2017-05-20">May 20, 2017</time>
+                            </div>
+                            <div class="comment-count"><a
+                                    href="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/#disqus"
+                                    class="link-comments"> <i class="fa fa-lg fa-comments-o"> </i> <span
+                                    class="disqus-comment-count"
+                                    data-disqus-identifier="/2017/05/20/vue-js-safely-jquery-plugin">0 Comments</span></a>
+                            </div>
+                        </div><!-- .entry-meta -->
+                        <div class="share-post"><a class="fa-twitter" target="_blank"
+                                                   href="https://twitter.com/intent/tweet?text=How%20To%20(Safely)%20Use%20A%20jQuery%20Plugin%20With%20Vue.js&amp;url=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/&amp;hashtags=vuejs&amp;via=vuejsdevelopers"><span
+                                class="screen-reader-text">Twitter</span><span
+                                data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                                class="counter c_twitter"></span></a> <a class="fa-facebook" target="_blank"
+                                                                         href="https://www.facebook.com/sharer/sharer.php?u=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/&amp;t=How%20To%20(Safely)%20Use%20A%20jQuery%20Plugin%20With%20Vue.js"><span
+                                class="screen-reader-text">Facebook</span><span
+                                data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                                class="counter c_facebook"></span></a> <a class="fa-google-plus" target="_blank"
+                                                                          href="http://plus.google.com/share?url=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"><span
+                                class="screen-reader-text">Google+</span><span
+                                data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                                class="counter c_plus"></span></a></div><!-- .share-post --> </div>
+                </header><!-- .entry-header -->
+                <div class="entry-content"><p>It’s not a great idea to use jQuery and Vue.js in the same UI. Don’t do it
+                    if you can avoid it.</p>
+                    <p>But you’re probably reading this not because you <em>want</em> to use jQuery and Vue together,
+                        but because you <em>have to</em>. Perhaps a client is insisting on using a particular jQuery
+                        plugin that you won’t have time to rewrite for Vue.</p>
+                    <p>If you’re careful about how you do it, you can use jQuery and Vue together safely. In this
+                        article I’m going to demonstrate how to add the <em>jQuery UI Datepicker</em> plugin to a Vue
+                        project.</p>
+                    <p>And just to show off a bit, I’m even going to send data between this jQuery plugin and Vue!</p>
+                    <p>See it working in this <a href="https://jsbin.com/bepikonube/2/edit?html,js,output">JS Bin</a>.
+                    </p>
+                    <p><img class="lazy"
+                            data-src="https://d33wubrfki0l68.cloudfront.net/9ddb849b293eb0e4df9a352fd8b48fe2bc772da4/6b43e/images/posts/jquery_plugin_1.png"
+                            alt="jQuery UI Datepicker"/></p>
+                    <p><em>jQuery UI Datepicker</em></p>
+                    <h2>The problem with using jQuery and Vue together</h2>
+                    <p>Why is doing this potentially hazardous?</p>
+                    <p>Vue is a jealous library in the sense that you must let it completely own the patch of DOM that
+                        you give it (defined by what you pass to <code class="highlighter-rouge">el</code>). If jQuery
+                        makes a change to an element that Vue is managing, say, adds a class to something, Vue won’t be
+                        aware of the change and is going to go right ahead and overwrite it in the next update cycle.
+                    </p>
+                    <h2>Solution: use a component as a wrapper</h2>
+                    <p>Knowing that Vue and jQuery are never going to share part of the DOM, we have to tell Vue to
+                        cordon off an area and give it over to jQuery.</p> <!--more--> <p>Using a component to wrap a
+                        jQuery plugin seems like the way to go because:</p>
+                    <ul>
+                        <li>We can utilise lifecycle hooks for setup and teardown of the jQuery code</li>
+                        <li>We can use the component interface to communicate with the rest of the Vue app via props and
+                            events
+                        </li>
+                        <li>Components can opt-out of updates with <code class="highlighter-rouge">v-once</code></li>
+                    </ul>
+                    <h2>Set up jQuery UI Datepicker</h2>
+                    <p>Obviously you need to include both the jQuery and jQuery UI libraries in your project first. Once
+                        you have those, the datepicker just requires an <code class="highlighter-rouge">input</code>
+                        element to attach itself to:</p>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code>Date: <span class="nt">&lt;input</span> <span
+                            class="na">id=</span><span class="s">"datepicker"</span><span class="nt">/&gt;</span>
+</code></pre>
+                    </div>
+                    <p>It can then be instantiated by selecting it and calling the method:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">$</span><span class="p">(</span><span class="s1">'#datepicker'</span><span
+                            class="p">).</span><span class="nx">datepicker</span><span class="p">();</span>
+</code></pre>
+                    </div>
+                    <h2>Datepicker component</h2>
+                    <p>To make our datepicker component, the template will be this one <code class="highlighter-rouge">input</code>
+                        element:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">Vue</span><span class="p">.</span><span class="nx">component</span><span
+                            class="p">(</span><span class="s1">'date-picker'</span><span class="p">,</span> <span
+                            class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nl">template</span><span class="p">:</span> <span class="s1">'&lt;input/&gt;'</span>
+<span class="p">});</span>
+
+<span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="na">el</span><span class="p">:</span> <span class="s1">'#app'</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  Date: <span class="nt">&lt;date-picker&gt;&lt;/date-picker&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <blockquote><p>Note: this component should be nothing more than a wrapper for the plugin. Don’t push
+                        your luck and give it any data properties or use directives or slots.</p></blockquote>
+                    <h3>Instantiating the widget</h3>
+                    <p>Rather than giving our <code class="highlighter-rouge">input</code> an ID and selecting it, we
+                        can use <code class="highlighter-rouge">this.$el</code>, as every component can access its own
+                        root node like that. The root node will of course be the <code
+                                class="highlighter-rouge">input</code>.</p>
+                    <p>We can then wrap the node reference in a jQuery selector to access the <code
+                            class="highlighter-rouge">datepicker</code> method i.e. <code class="highlighter-rouge">$(this.$el).datepicker()</code>.
+                    </p>
+                    <p>Note that we use the <code class="highlighter-rouge">mounted</code> lifecycle hook as <code
+                            class="highlighter-rouge">this.$el</code> is undefined until the component is mounted.</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">Vue</span><span class="p">.</span><span class="nx">component</span><span
+                            class="p">(</span><span class="s1">'date-picker'</span><span class="p">,</span> <span
+                            class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nl">template</span><span class="p">:</span> <span class="s1">'&lt;input/&gt;'</span><span
+                                class="p">,</span>
+  <span class="nx">mounted</span><span class="err">:</span> <span class="kd">function</span><span
+                                class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span
+                                class="nx">$el</span><span class="p">).</span><span class="nx">datepicker</span><span
+                                class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <h3>Teardown</h3>
+                    <p>To teardown the datepicker we can follow a similar approach and use a lifecycle hook. Note that
+                        we must use <code class="highlighter-rouge">beforeDestroy</code> to ensure our <code
+                                class="highlighter-rouge">input</code> is still in the DOM and thus can be selected
+                        (it’s undefined in the <code class="highlighter-rouge">destroy</code> hook).</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">Vue</span><span class="p">.</span><span class="nx">component</span><span
+                            class="p">(</span><span class="s1">'date-picker'</span><span class="p">,</span> <span
+                            class="p">{</span>
+  <span class="na">template</span><span class="p">:</span> <span class="s1">'&lt;input/&gt;'</span><span
+                                class="p">,</span>
+  <span class="na">mounted</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span
+                                class="nx">$el</span><span class="p">).</span><span class="nx">datepicker</span><span
+                                class="p">();</span>
+  <span class="p">},</span>
+  <span class="na">beforeDestroy</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span
+                                class="nx">$el</span><span class="p">).</span><span class="nx">datepicker</span><span
+                                class="p">(</span><span class="s1">'hide'</span><span class="p">).</span><span
+                                class="nx">datepicker</span><span class="p">(</span><span
+                                class="s1">'destroy'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <h2>Pass config with props</h2>
+                    <p>To make our component reusable, it would be nice to allow for custom configuration, like
+                        specifying the date format with the configuration property <code class="highlighter-rouge">dateFormat</code>.
+                        We can do this with <code class="highlighter-rouge">props</code>:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">Vue</span><span class="p">.</span><span class="nx">component</span><span
+                            class="p">(</span><span class="s1">'date-picker'</span><span class="p">,</span> <span
+                            class="p">{</span>
+  <span class="na">template</span><span class="p">:</span> <span class="s1">'&lt;input/&gt;'</span><span
+                                class="p">,</span>
+  <span class="na">props</span><span class="p">:</span> <span class="p">[</span> <span
+                                class="s1">'dateFormat'</span> <span class="p">],</span>
+  <span class="na">mounted</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span
+                                class="nx">$el</span><span class="p">).</span><span class="nx">datepicker</span><span
+                                class="p">({</span>
+      <span class="na">dateFormat</span><span class="p">:</span> <span class="k">this</span><span
+                                class="p">.</span><span class="nx">dateFormat</span>
+    <span class="p">});</span>
+  <span class="p">},</span>
+  <span class="na">beforeDestroy</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  <span class="nt">&lt;date-picker</span> <span class="na">date-format=</span><span class="s">"yy-mm-dd"</span><span
+                                class="nt">&gt;&lt;/date-picker&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <h2>Letting jQuery handle updates</h2>
+                    <p>Let’s say that, rather than passing your <code class="highlighter-rouge">dateFormat</code> prop
+                        as a string, you made it a <code class="highlighter-rouge">data</code> property of your root
+                        instance i.e.:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span
+                            class="nx">vm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span
+                            class="p">({</span>
+  <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="na">dateFormat</span><span class="p">:</span> <span class="s1">'yy-mm-dd'</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  <span class="nt">&lt;date-picker</span> <span class="na">date-format=</span><span class="s">"dateFormat"</span><span
+                                class="nt">&gt;&lt;/date-picker&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <p>This would mean <code class="highlighter-rouge">dateFormat</code> would be a reactive data
+                        property. You could update its value at some point in the life of your app:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="c1">// change the date format to something new</span>
+<span class="nx">vm</span><span class="p">.</span><span class="nx">dateFormat</span> <span class="o">=</span> <span
+                                class="s1">'yy-dd-mm'</span><span class="p">;</span>
+</code></pre>
+                    </div>
+                    <p>Since the <code class="highlighter-rouge">dateFormat</code> prop is a dependency of the
+                        datepicker component’s <code class="highlighter-rouge">mounted</code> hook, updating it would
+                        trigger the component to re-render. This would not be cool. jQuery has already setup your
+                        datepicker on the <code class="highlighter-rouge">input</code> and is now managing it with it’s
+                        own custom classes and event listeners. An update of the component would result in the <code
+                                class="highlighter-rouge">input</code> being replaced and thus jQuery’s setup would be
+                        instantly reset.</p>
+                    <p>We need to make it so that reactive data can’t trigger an update in this component…</p>
+                    <h3>v-once</h3>
+                    <p>The <code class="highlighter-rouge">v-once</code> directive is used to cache a component in the
+                        case that it has a lot of static content. This in effect makes the component opt-out from
+                        updates.</p>
+                    <p>This is actually perfect to use on our plugin component, as it will effectively make Vue ignore
+                        it. This gives us some confidence that jQuery is going to have unhampered control over this
+                        element during the lifecycle of the app.</p>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  <span class="nt">&lt;date-picker</span> <span class="na">date-format=</span><span class="s">"yy-mm-dd"</span> <span
+                                class="na">v-once</span><span class="nt">&gt;&lt;/date-picker&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <h2>Passing data from jQuery to Vue</h2>
+                    <p>It’d be pretty useless to have a datepicker if we couldn’t retrieve the picked date and use it
+                        somewhere else in the app. Let’s make it so that after a value is picked it’s printed to the
+                        page.</p>
+                    <p>We’ll start by giving our root instance a <code class="highlighter-rouge">date</code> property:
+                    </p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="na">el</span><span class="p">:</span> <span class="s1">'#app'</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">date</span><span class="p">:</span> <span class="kc">null</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  <span class="nt">&lt;date-picker</span> <span class="na">date-format=</span><span class="s">"yy-mm-dd"</span> <span
+                                class="na">v-once</span><span class="nt">&gt;&lt;/date-picker&gt;</span>
+  <span class="nt">&lt;p&gt;</span>{{ date }}<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <p>The datepicker widget has an <code class="highlighter-rouge">onSelect</code> callback that is
+                        called when a date is picked. We can then use our component to emit this date via a custom
+                        event:</p>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="nx">mounted</span><span class="err">:</span> <span class="kd">function</span><span
+                            class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span
+                                class="p">;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span
+                                class="p">).</span><span class="nx">datepicker</span><span class="p">({</span>
+    <span class="na">dateFormat</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span
+                                class="nx">dateFormat</span><span class="p">,</span>
+    <span class="na">onSelect</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">(</span><span class="nx">date</span><span class="p">)</span> <span
+                                class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span
+                                class="s1">'update-date'</span><span class="p">,</span> <span
+                                class="nx">date</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+                    </div>
+                    <p>Our root instance can listen to the custom event and receive the new date:</p>
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span
+                            class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span
+                            class="nt">&gt;</span>
+  <span class="nt">&lt;date-picker</span> <span class="err">@</span><span class="na">update-date=</span><span class="s">"updateDate"</span> <span
+                                class="na">date-format=</span><span class="s">"yy-mm-dd"</span> <span
+                                class="na">v-once</span><span class="nt">&gt;&lt;/date-picker&gt;</span>
+  <span class="nt">&lt;p&gt;</span>{{ date }}<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+                    </div>
+                    <div class="language-js highlighter-rouge"><pre class="highlight"><code><span
+                            class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="na">el</span><span class="p">:</span> <span class="s1">'#app'</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">date</span><span class="p">:</span> <span class="kc">null</span>
+  <span class="p">},</span>
+  <span class="na">methods</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">updateDate</span><span class="p">:</span> <span class="kd">function</span><span
+                                class="p">(</span><span class="nx">date</span><span class="p">)</span> <span
+                                class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span
+                                class="nx">date</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+                    </div>
+                    <p>Thanks to <a href="http://stackoverflow.com/a/40350880/2278963">this Stack Overflow answer</a>
+                        for inspiration.</p></div><!-- .entry-content -->
+                <footer class="entry-footer">
+                    <div class="share-post"><a class="fa-twitter" target="_blank"
+                                               href="https://twitter.com/intent/tweet?text=How%20To%20(Safely)%20Use%20A%20jQuery%20Plugin%20With%20Vue.js&amp;url=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/&amp;hashtags=vuejs&amp;via=vuejsdevelopers"><span
+                            class="screen-reader-text">Twitter</span><span
+                            data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                            class="counter c_twitter"></span></a> <a class="fa-facebook" target="_blank"
+                                                                     href="https://www.facebook.com/sharer/sharer.php?u=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/&amp;t=How%20To%20(Safely)%20Use%20A%20jQuery%20Plugin%20With%20Vue.js"><span
+                            class="screen-reader-text">Facebook</span><span
+                            data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                            class="counter c_facebook"></span></a> <a class="fa-google-plus" target="_blank"
+                                                                      href="http://plus.google.com/share?url=https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"><span
+                            class="screen-reader-text">Google+</span><span
+                            data-url="https://vuejsdevelopers.com/2017/05/20/vue-js-safely-jquery-plugin/"
+                            class="counter c_plus"></span></a></div><!-- .share-post -->
+                    <div class="newsletter-post"><p>Enjoy this article? Get the latest Vue.js articles in your inbox by
+                        joining the <a href="/newsletter"> Vue.js Developers Newsletter</a>.</p></div>
+                    <div class="tag-links"> Tags: <a href="/tags/index.html#vue.js" title="Pages tagged vue.js"
+                                                     rel="tag">vue.js</a><a href="/tags/index.html#jquery"
+                                                                            title="Pages tagged jquery"
+                                                                            rel="tag">jquery</a><a
+                            href="/tags/index.html#plugin" title="Pages tagged plugin" rel="tag">plugin</a></div>
+                </footer><!-- .entry-footer --> </article><!-- .post -->
+            <div class="author-box">
+                <div class="author-info">
+                    <div class="author-avatar" style="background-image: url(/images/anthony_gore.jpg)"><span
+                            class="screen-reader-text">Anthony Gore's Picture</span></div>
+                    <div class="author-details"><h2 class="author-title">About Anthony Gore</h2>
+                        <p class="author-bio">Anthony is a web developer and online course instructor with a passion for
+                            Javascript. He currently resides in Chiang Mai, Thailand.</p>
+                        <div class="author-website"><a href="https://twitter.com/" target="_blank"> @anthonygore</a>
+                        </div>
+                    </div><!-- .author-details --> </div><!-- .author-info --> </div><!-- .author-box -->
+            <nav class="post-navigation"><h2 class="screen-reader-text">Post navigation</h2>
+                <div class="nav-previous">
+                    <div class="nav-inside"><a href="/2017/05/15/vue-js-what-is-vuex/" class="nav-thumb"
+                                               style="background-image: url(/images/posts/wtf_vuex.jpg)"></a>
+                        <div class="nav-before">Previous</div>
+                        <div class="nav-title"><a href="/2017/05/15/vue-js-what-is-vuex/">WTF is Vuex? A Beginner's
+                            Guide To Vue's Application Data Store</a></div>
+                        <div class="nav-date">May 15, 2017</div>
+                    </div><!-- .nav-inside --> </div><!-- .nav-previous -->
+                <div class="nav-next">
+                    <div class="nav-inside"><a href="/2017/05/28/switch-from-react-to-vue-js/" class="nav-thumb"
+                                               style="background-image: url(/images/posts/switch_react_vue.jpg)"></a>
+                        <div class="nav-before">Next</div>
+                        <div class="nav-title"><a href="/2017/05/28/switch-from-react-to-vue-js/">Switching From React
+                            To Vue.js</a></div>
+                        <div class="nav-date">May 28, 2017</div>
+                    </div><!-- .nav-inside --> </div><!-- .nav-next --> </nav><!-- .post-navigation -->
+            <div id="disqus" class="comments-area">
+                <div class="comments-inner"><h2 class="comments-title">Comments</h2>
+                    <div id="disqus_thread"></div>
+                    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments
+                        powered by Disqus</a>.
+                    </noscript>
+                </div><!-- .comments-inner --> </div><!-- .comments-area -->
+            <script type="text/javascript">
+                var disqus_shortname = 'vuejsdevelopers';
+                var disqus_developer = 0;
+                var disqus_url = window.location.protocol + "//" + window.location.hostname + "/2017/05/20/vue-js-safely-jquery-plugin/";
+                var disqus_identifier = "/2017/05/20/vue-js-safely-jquery-plugin";
+                (function () {
+                    var dsq = document.createElement('script');
+                    dsq.type = 'text/javascript';
+                    dsq.async = true;
+                    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })(); </script>
+        </main><!-- .site-main -->
+        <aside class="sidebar">
+            <section class="widget widget-search"><h2 class="widget-title">Search This Site</h2>
+                <form action="/search/" method="get"><input type="text" id="search-query" name="q"
+                                                            placeholder="e.g. Vuex" autocomplete="off"> <input
+                        type="submit" value="Search"></form>
+            </section>
+            <section class="widget widget-banner">
+                <script async type="text/javascript"
+                        src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=vuejsdeveloperscom"
+                        id="_carbonads_js"></script>
+            </section>
+            <section class="widget widget-social"><h2 class="widget-title">Follow us</h2>
+                <ul class="social-list">
+                    <li><a class="icon-twitter" target="_blank" href="https://twitter.com/@vuejsdevelopers"><i
+                            class="fa fa-lg fa-twitter"></i></a></li>
+                    <li><a class="icon-facebook" target="_blank" href="https://facebook.com/groups/vuejsdevelopers"><i
+                            class="fa fa-lg fa-facebook"></i></a></li>
+                    <li><a class="icon-envelope" target="_blank" href="/newsletter"><i class="fa fa-lg fa-envelope"></i></a>
+                    </li>
+                    <li><a class="icon-rss" target="_blank" href="/feed.xml"><i class="fa fa-lg fa-rss"></i></a></li>
+                </ul>
+            </section>
+            <section class="widget widget-recent-posts"><h2 class="widget-title">Latest Posts</h2>
+                <ul class="recent-posts">
+                    <li class="recent-item"><a href="/2017/10/02/vue-js-scoped-slots/">Getting Your Head Around Vue.js
+                        Scoped Slots</a> <span>October 2, 2017</span></li>
+                    <li class="recent-item"><a href="/2017/09/24/vue-js-single-file-javascript-components/">Vue.js
+                        Single-File JavaScript Components In The Browser</a> <span>September 24, 2017</span></li>
+                    <li class="recent-item"><a href="/2017/09/17/vue-js-avoid-dom-templates/">Why You Should Avoid
+                        Vue.js DOM Templates</a> <span>September 17, 2017</span></li>
+                    <li class="recent-item"><a href="/2017/09/11/vue-js-vuex-plugins/">5 Vuex Plugins For Your Next
+                        VueJS Project</a> <span>September 11, 2017</span></li>
+                    <li class="recent-item"><a href="/2017/09/05/vue-js-pdf-viewer/">Build a PDF Viewer with Vue.js and
+                        Cloudinary</a> <span>September 5, 2017</span></li>
+                </ul><!-- .recent-posts --> </section><!-- .widget-recent-posts --> <!--Create a sorted array of tags-->
+            <section class="widget widget-tags"><h2 class="widget-title">Topics</h2>
+                <div class="tagcloud"><a href="/topics/#ajax">ajax</a> <a href="/topics/#blade">blade</a> <a
+                        href="/topics/#brunch">brunch</a> <a href="/topics/#chrome">chrome</a> <a
+                        href="/topics/#components">components</a> <a href="/topics/#computed">computed</a> <a
+                        href="/topics/#css">css</a> <a href="/topics/#design+patterns">design patterns</a> <a
+                        href="/topics/#extensions">extensions</a> <a href="/topics/#javascript">javascript</a> <a
+                        href="/topics/#jquery">jquery</a> <a href="/topics/#jsx">jsx</a> <a href="/topics/#laravel">laravel</a>
+                    <a href="/topics/#libraries">libraries</a> <a href="/topics/#lifecycle+hooks">lifecycle hooks</a> <a
+                            href="/topics/#methods">methods</a> <a href="/topics/#node.js">node.js</a> <a
+                            href="/topics/#npm">npm</a> <a href="/topics/#pdf">pdf</a> <a
+                            href="/topics/#plugin">plugin</a> <a href="/topics/#plugins">plugins</a> <a
+                            href="/topics/#pre-rendering">pre-rendering</a> <a href="/topics/#props">props</a> <a
+                            href="/topics/#pug">pug</a> <a href="/topics/#react">react</a> <a
+                            href="/topics/#reactivity">reactivity</a> <a href="/topics/#render">render</a> <a
+                            href="/topics/#router">router</a> <a href="/topics/#server-side+rendering">server-side
+                        rendering</a> <a href="/topics/#single+file+components">single file components</a> <a
+                            href="/topics/#slots">slots</a> <a href="/topics/#templates">templates</a> <a
+                            href="/topics/#transitions">transitions</a> <a href="/topics/#ux">ux</a> <a
+                            href="/topics/#virtual+dom">virtual dom</a> <a href="/topics/#vue+router">vue router</a> <a
+                            href="/topics/#vue.js">vue.js</a> <a href="/topics/#vueconf">vueconf</a> <a
+                            href="/topics/#vuex">vuex</a> <a href="/topics/#watchers">watchers</a> <a
+                            href="/topics/#web+performance">web performance</a> <a href="/topics/#webpack">webpack</a>
+                </div><!-- .tagcloud --> </section><!-- .widget --> </aside><!-- .sidebar --> </div><!-- .inner -->
+</div><!-- .site-content -->
+<footer class="site-footer">
+    <div class="inner">
+        <div class="social-links"><a href="https://twitter.com/vuejsdevelopers"
+                                     class="fa-twitter square fill-horizontal"><span
+                class="screen-reader-text">Twitter</span></a> <a href="https://www.facebook.com/vuejsdevelopers"
+                                                                 class="fa-facebook square fill-horizontal"><span
+                class="screen-reader-text">Facebook</span></a> <a href="https://github.com/vuejsdevelopers"
+                                                                  class="fa-github-alt square fill-horizontal"><span
+                class="screen-reader-text">GitHub</span></a> <a href="https://medium.com/js-dojo"
+                                                                class="fa-medium square fill-horizontal"><span
+                class="screen-reader-text">Medium</span></a> <a class="fa-feed square fill-horizontal" href="/feed.xml"><span
+                class="screen-reader-text">RSS</span></a></div><!-- .social-links -->
+        <div class="site-info"> &copy; <a href="/">Vue.js Developers</a> all rights reserved. <br/>Powered by <a
+                target="_blank" href="https://jekyllrb.com/">Jekyll</a>. BlogInn theme by <a target="_blank"
+                                                                                             href="http://justgoodthemes.com/">JustGoodThemes</a>.
+            <a href="#top" id="top-link" class="fa-chevron-up top-link square fill-horizontal"><span
+                    class="screen-reader-text">Back to the top</span></a></div><!-- .site-info --> </div><!-- .inner -->
+</footer><!-- .site-footer -->
+<div id="popup-form" class="white-popup-block mfp-hide">
+    <div class="popup-header"><img class="lazy"
+                                   data-src="https://d33wubrfki0l68.cloudfront.net/17dcb1a85595eecafec256cfd285e05249e4a3ca/47a5c/images/logo_standard_630x207.png"
+                                   alt="Vue.js Developers"
+                                   srcset=" https://d33wubrfki0l68.cloudfront.net/2e251a559da962504837f1d86f7b5c5f32ada9e8/dfb61/images/600/logo_standard_630x207.png 600w, https://d33wubrfki0l68.cloudfront.net/f6f28296d311f1c1b9bbc59281de7b6e9b6e3a95/742da/images/345/logo_standard_630x207.png 345w, https://d33wubrfki0l68.cloudfront.net/ca5752240791e2ffc425f82a5c6ff516c6268f3c/53f07/images/290/logo_standard_630x207.png 290w, https://d33wubrfki0l68.cloudfront.net/17dcb1a85595eecafec256cfd285e05249e4a3ca/47a5c/images/logo_standard_630x207.png 630w">
+    </div>
+    <div class="popup-intro"><em>Loading...</em>
+        <noscript><p>The <strong>Vue.js Developers Newsletter</strong> is a weekly curated publication of the best
+            articles, latest news and coolest Vue projects! Subscribe now stay up-to-date with everything Vue.js.</p>
+        </noscript>
+    </div>
+    <div class="popup-cta"><h2 class="popup-cta-title">Subscribe with Email</h2>
+        <div class="popup-cta-pane">
+            <form id="vuejs-developers-newsletter"
+                  action="//getjsdojo.us13.list-manage.com/subscribe/post?u=cd0e0c3fe7829518b809554a8&amp;id=ae2f1465e2"
+                  method="post" accept-charset="UTF-8" data-remote="true" target="_blank"><input name="utf8"
+                                                                                                 type="hidden"
+                                                                                                 value="✓"><input
+                    type="hidden" name="authenticity_token"
+                    value="147vZmsfsg+n7rYnEoe+3FVSX7nrAyPEManH7Qrl995IgAIhUqvgwvf8MIG0oObiPjIkWZZi/5A862v53tifig==">
+                <div class="popup-form-elements"><label class="control-label" for="popup-email">Email</label> <input
+                        placeholder="Your email address" type="email" name="EMAIL" id="popup-email">
+                    <button data-disable-with="Subscribing...">Subscribe</button>
+                    <input type="hidden" name="COURSE" value="0"> <input type="hidden" name="SOURCE" value="unknown">
+                    <input type="hidden" name="form_dom_id" id="subscribe-form-calltoaction-hidden-field"
+                           value="subscribe-form-calltoaction"> <input type="hidden" name="publication_site"
+                                                                       id="publication_site" value="1"></div>
+            </form>
+            <p>This subscription also includes Vue.js Developers promotional emails. You can opt-out at any time.</p>
+        </div>
+    </div>
+</div>
+<script type="text/template" id="popup-template-1"> <h2>Join more than 4,000 Vue.js users!</h2> <p>Get exclusive new
+    content every Tuesday by subscribing to the weekly <strong>Vue.js Developers Newsletter</strong>.</p> <p>Curated by
+    Anthony Gore, the newsletter includes only the best Vue.js articles and most important news.</p> </script>
+<script type="text/template" id="popup-template-2"> <h2>Never miss a new post!</h2> <p>Get our latest post in your inbox
+    every Tuesday by subscribing to the <strong>Vue.js Developers Newsletter</strong>.</p> <p>With <em>more than 4000
+    subscribers</em>, the newsletter also includes the latest Vue.js news and best new articles and tutorials.
+</p> </script> <!--Disqus, async-->
+<script id="dsq-count-scr" src="//vuejsdevelopers.disqus.com/count.js" async></script> <!--jQuery-->
+<script src="https://code.jquery.com/jquery-1.12.2.min.js"
+        integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk=" crossorigin="anonymous"></script>
+<!--Scripts needed on all pages-->
+<script type='text/javascript'
+        src='https://d33wubrfki0l68.cloudfront.net/bundles/a7d512f34751d46d69a845b2c62d94992ac56e1b.js'></script>
+<!--Scripts needed only on search page--> <!--Google Analytics experiment--> <!--My custom scripts-->
+<script type='text/javascript'
+        src='https://d33wubrfki0l68.cloudfront.net/js/af2ea946cf90a78cf64cc0700e60cc53e78b5ae0/assets/custom-27cb5aa8dd144a390e31d4d699a7a149ef831dc193cae307e4747c8935dcc0c2.js'></script>
+<!--Google Analytics-->
+<script> (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+ga('create', 'UA-76872724-2', 'auto');
+ga('send', 'pageview'); </script>
+</body>
+</html>
