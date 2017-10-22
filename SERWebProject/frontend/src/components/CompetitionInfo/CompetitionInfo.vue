@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="CompetitionInfo">
     <div id="nav">
       <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item index="1">首页</el-menu-item>
@@ -18,28 +18,54 @@
       </el-menu>
     </div>
 
-    <div>
+    <div id="compinfo">
       <h1 align="left">赛事资讯</h1>
-      <ul id="info">
-        <li v-for="item in items">
-          {{ item.message }}
-        </li>
-      </ul>
+      <div>
+        <div align="left">
+          竞赛名称:{{name}}
+        </div>
+        <div align="left">
+          时间:{{time}}
+        </div>
+        <div align="left">
+          地点:{{location}}
+        </div>
+        <div align="left">
+          竞赛类别:{{catagory}}
+        </div>
+        <div align="left">
+          主办单位:{{host}}
+        </div>
+        <hr>
 
+        <h2 align="left">详细介绍</h2>
+        <p>
+          {{detail}}
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import ElRow from "element-ui/packages/row/src/row";
-
 export default {
-  el: '#info',
-  data: {
-    items: [
-      { message: 'Foo' },
-      { message: 'Bar' }
-    ]
+  data () {
+    return {
+      name: '足球錦標賽',
+      time: '12/32 14:30',
+      location: '操场',
+      catagory: '⚽️',
+      host: '计算机系',
+      detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛'
+    }
   }
 }
 </script>
+
+<style>
+  #compinfo{
+    margin: 20px;
+    text-align: left;
+  }
+
+</style>
