@@ -19,25 +19,27 @@
     </div>
 
     <div id="compinfo">
-      <h1 align="left">赛事资讯</h1>
-      <div>
-        <div align="left">
-          竞赛名称:{{name}}
-        </div>
-        <div align="left">
-          时间:{{time}}
-        </div>
-        <div align="left">
-          地点:{{location}}
-        </div>
-        <div align="left">
-          竞赛类别:{{catagory}}
-        </div>
-        <div align="left">
-          主办单位:{{host}}
-        </div>
+      <h1 align="left">{{name}}</h1>
+      <div id="basic">
+        <p align="left">
+          时间: {{time}}
+        </p>
+        <p align="left">
+          地点: {{location}}
+        </p>
+        <p align="left">
+          竞赛类别: {{catagory}}
+        </p>
+        <p align="left">
+          主办单位: {{host}}
+        </p>
+        <el-button id="submit" type="primary">立即报名</el-button>
+      </div>
+      <div id="status">
+        這裡可以放報名狀況
+      </div>
+      <div id="detail">
         <hr>
-
         <h2 align="left">详细介绍</h2>
         <p>
           {{detail}}
@@ -63,9 +65,25 @@ export default {
 </script>
 
 <style>
+  #login {
+    float: right;
+  }
   #compinfo{
     margin: 20px;
     text-align: left;
+  }
+  #basic{
+    float: left;
+    width: 30%;
+  }
+  #detail{
+    clear: left;
+  }
+  #status{
+  }
+  #submit{
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
 </style>
