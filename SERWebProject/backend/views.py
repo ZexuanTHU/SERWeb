@@ -36,7 +36,11 @@ def register(request):
         # 这里提交的就是用户名（username）、client_ID、client_secret、密码（password）、邮箱（email）
         # 用这些数据实例化一个用户注册表单
         form = RegisterForm(request.POST)
-
+        if 'client_ID' in form and 'client_secret' in form:
+            obtain_code_url = 'https://accounts.net9.org/api/authorize?client_id=' \
+                          + form.client_ID + \
+                          '&redirect_uri=http://my.awesome.app/oauth_redirect'
+            redirect(obtain_code_url)
         # 验证数据的合法性
         if form.is_valid():
             # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
