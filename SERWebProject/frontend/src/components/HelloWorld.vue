@@ -37,9 +37,10 @@
               <span>Yummy hamburger</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button"><router-link to="CompetitionInfo">Operating button</router-link></el-button>
+                <el-button type="text" class="button">Operating button</el-button>
               </div>
             </div>
+            <el-progress type="circle" :percentage="0"></el-progress>
           </el-card>
         </el-col>
       </el-row>
@@ -49,6 +50,7 @@
       <h1 align="left">其他赛事</h1>
       <el-table
         :data="tableData"
+        height="200"
         border
         style="width: 100%">
         <el-table-column
@@ -88,6 +90,23 @@
       </el-table>
     </div>
 
+    <br/>
+
+    <div id="statistics">
+      <div class="container">
+        <el-progress type="circle" :percentage="0"></el-progress><h1>event1</h1>
+      </div>
+      <div class="container">
+        <el-progress type="circle" :percentage="25"></el-progress><h1>event2</h1>
+      </div>
+      <div class="container">
+        <el-progress type="circle" :percentage="50"></el-progress><h1>event3</h1>
+      </div>
+      <div class="container">
+        <el-progress type="circle" :percentage="100"></el-progress><h1>event4</h1>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -214,5 +233,16 @@
   .clearfix:after {
     clear: both
   }
-</style>
 
+  #statistics {
+    display: flex;
+  }
+
+  .container {
+    width: calc(100% / 4);
+    height: 150px;
+    padding: 0;
+    margin: 0;
+    float: left;
+  }
+</style>
