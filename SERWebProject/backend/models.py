@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -25,12 +26,13 @@ class Choice(models.Model):
         return self.choice_text
 
 
-class User(models.Model):
-    username = models.CharField(max_length=10)
-    password = models.CharField(max_length=20)
+class User(AbstractUser):
     client_ID = models.CharField(max_length=30)
     client_secret = models.CharField(max_length=30)
     email = models.EmailField()
 
     def __str__(self):
         return self.username
+
+    class Meta(AbstractUser.Meta):
+        pass
