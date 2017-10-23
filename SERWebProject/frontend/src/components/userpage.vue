@@ -4,7 +4,7 @@
     <mheader></mheader>
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:46px">
-      <div class="w3-container" style="width: 100%;min-height: 700px">
+      <div class="w3-container" style="width: 100%;min-height: 650px">
         <div class="w3-left" style="width: 200px;height: 100% ">
           <div class="w3-card-2 w3-left leftbar"
                style="width:200px;height: 420px;margin-top: 20px;display: block;background:#eef1f6;text-align:center;">
@@ -56,10 +56,9 @@
             <p><span style="width: 100px">时间:</span> <input type="date"><span
               style="padding-left: 20px">地点：</span><input style="left: 500px" type="text"></p>
           </div>
-
         </div>
       </div>
-
+      <mfooter></mfooter>
     </div>
 
   </div>
