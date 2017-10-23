@@ -37,7 +37,7 @@
               <span>Yummy hamburger</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button">Operating button</el-button>
+                <el-button type="text" class="button"><router-link to="CompetitionInfo">Operating button</router-link></el-button>
               </div>
             </div>
           </el-card>
