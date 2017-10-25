@@ -1,3 +1,3 @@
-cd SERWebProject\backend
-coverage run testCalculator.py
-coverage html -d ../../Coverage_Python
+cd SERWebProject
+coverage run manage.py test
+coverage html -d ../Coverage_Python
