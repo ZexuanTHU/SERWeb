@@ -85,11 +85,33 @@
       register (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            let clientid = 'EqlnQKv2oxvF2imyZloL6N1Doy8'
+            let clientsecret = 'bmKP9oZbal6W6qSNbZtj'
+            let uname = this.registerForm.username
+            let email = this.registerForm.email
+            let pwd = this.registerForm.pass
             alert('submit!')
-            this.$http.get('http://localhost:8000/api/register?username=' + this.registerForm.username +
-              '&email=' + this.registerForm.email +
-              '&password1=' + this.registerForm.pass +
-              '&password2=' + this.registerForm.checkPass)
+            this.$http.get('https://accounts.net9.org/api/access_token?client_id=' + clientid +
+              '&client_secret=' + clientsecret +
+              '&username=' + this.registerForm.username +
+              '&password=' + this.registerForm.pass)
+              .then((response) => {
+                let res = JSON.parse(response.bodyText)
+                if (res.error) {
+                  alert('登录失败！请输入正确的 Account9 用户名及密码')
+                } else {
+                  console.log(res)
+                  this.$http.get('https://accounts.net9.org/api/userinfo?access_token=' + res.access_token)
+                    .then((response) => {
+                      let res2 = JSON.parse(response.bodyText)
+                      console.log(res2)
+                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+                        '&email=' + email +
+                        '&password1=' + pwd +
+                        '&password2=' + pwd)
+                    })
+                }
+              })
           } else {
             console.log('error submit!!')
             return false
