@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
+import Register from '@/components/register/Register'
 
 Vue.use(Router)
 Vue.use(Element)
@@ -30,6 +31,11 @@ export default new Router({
       path: '/userpage',
       name: 'userpage',
       component: userpage
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: Register
     }
   ]
 })
