@@ -33,11 +33,34 @@
         <p align="left">
           主办单位: {{host}}
         </p>
-        <el-button id="submit" type="primary">立即报名</el-button>
+        <p>
+          参赛资格: {{qualification}}
+        </p>
       </div>
-      <div id="status">
-        這裡可以放報名狀況
+      <div class="status">
+        <el-progress :show-text="false" :stroke-width="18" :percentage="30"></el-progress>
+        <h3>{{attend}}人報名</h3>
+        <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
+        <h3>剩下{{date}}天</h3>
       </div>
+      <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
+      <el-dialog title="报名资料填写" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+          <el-form-item label="名字" :label-width="formLabelWidth">
+            <el-input v-model="form.name" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="项目" :label-width="formLabelWidth">
+            <el-select v-model="form.region" placeholder="请选择报名项目">
+              <el-option label="半程" value="half"></el-option>
+              <el-option label="全程" value="whole"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -58,7 +81,22 @@ export default {
       location: '操场',
       catagory: '⚽️',
       host: '计算机系',
-      detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛'
+      qualification: '计算机系同学',
+      attend: '30',
+      date: '1',
+      detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛',
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px'
     }
   }
 }
@@ -79,7 +117,10 @@ export default {
   #detail{
     clear: left;
   }
-  #status{
+  .status el-progress{
+    padding-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   #submit{
     margin-top: 20px;
