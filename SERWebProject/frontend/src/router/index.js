@@ -3,6 +3,7 @@ import Element from 'element-ui'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/Login'
+import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 
 Vue.use(Router)
@@ -24,6 +25,11 @@ export default new Router({
       path: '/CompetitionInfo',
       name: 'CompetitionInfo',
       component: CompetitionInfo
+    },
+    {
+      path: '/userpage',
+      name: 'userpage',
+      component: userpage
     }
   ]
 })
