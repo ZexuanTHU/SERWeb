@@ -27,8 +27,6 @@ class Choice(models.Model):
 
 
 class User(AbstractUser):
-    client_ID = models.CharField(max_length=30)
-    client_secret = models.CharField(max_length=30)
     email = models.EmailField()
 
     def __str__(self):
