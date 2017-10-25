@@ -9,7 +9,7 @@
     <el-form-item prop="pass">
       <el-input placeholder="Password" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item prop="checkpass">
+    <el-form-item prop="checkPass">
       <el-input placeholder="Check Password" type="password" v-model="registerForm.checkPass"
                 auto-complete="off"></el-input>
     </el-form-item>
@@ -35,6 +35,8 @@
       var validateEmail = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入邮箱'))
+        } else {
+          callback()
         }
       }
       var validatePass = (rule, value, callback) => {
@@ -80,11 +82,10 @@
       }
     },
     methods: {
-      register (formName) {
-        this.$refs[formName].validate((valid) => {
+      register (registerForm) {
+        this.$refs[registerForm].validate((valid) => {
           if (valid) {
             alert('submit!')
-            this.$http.post('http://127.0.0.1:8000/api/register', this.registerForm)
           } else {
             console.log('error submit!!')
             return false
