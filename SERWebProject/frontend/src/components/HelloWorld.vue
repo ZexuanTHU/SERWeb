@@ -32,13 +32,13 @@
       <el-row>
         <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
-            <img src="https://www.kingsford.com/wp-content/uploads/2014/11/kfd-howtohamburger-Burgers_5_0391-1024x621.jpg" class="image">
+            <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-              <span>Yummy hamburger</span>
+              <span>清华大学校园马拉松</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
                 <el-button type="text" class="button">
-                  <router-link to="CompetitionInfo">operation button</router-link>
+                  <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
               </div>
             </div>
