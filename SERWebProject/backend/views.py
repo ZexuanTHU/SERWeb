@@ -3,11 +3,12 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from .models import Project
-
+# from oauthlib.oauth2 import LegacyApplicationClient
+# from requests_oauthlib import OAuth2Session
 
 # Create your views here.
 def hello(request):
-    return HttpResponse("Hello world! This is SERWeb project!")
+    return HttpResponse("Hello!")
 
 
 def projreg(request):
@@ -36,11 +37,7 @@ def register(request):
         # 这里提交的就是用户名（username）、client_ID、client_secret、密码（password）、邮箱（email）
         # 用这些数据实例化一个用户注册表单
         form = RegisterForm(request.POST)
-        if 'client_ID' in form and 'client_secret' in form:
-            obtain_code_url = 'https://accounts.net9.org/api/authorize?client_id=' \
-                          + form.client_ID + \
-                          '&redirect_uri=http://my.awesome.app/oauth_redirect'
-            redirect(obtain_code_url)
+
         # 验证数据的合法性
         if form.is_valid():
             # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
@@ -55,4 +52,4 @@ def register(request):
     # 渲染模板
     # 如果用户正在访问注册页面，则渲染的是一个空的注册表单
     # 如果用户通过表单提交注册信息，但是数据验证不合法，则渲染的是一个带有错误信息的表单
-    return render(request, 'users/register.html', context={'form': form})
+    return render(request, 'backend/register.html', context={'form': form})

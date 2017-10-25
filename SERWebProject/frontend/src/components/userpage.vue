@@ -157,7 +157,7 @@
     },
     mounted: function () {
       var input = document.getElementsByTagName('input')
-//      console.log(input)
+      console.log(input)
       for (var i = 0; i < input.length; i++) {
         console.log(input[i])
         input[i].value = localStorage.getItem(input[i].name) || ''
