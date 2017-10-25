@@ -32,11 +32,11 @@ def vote(request, project_id):
 
 def register(request):
     # 只有当请求为 POST 时，才表示用户提交了注册信息
-    if request.method == 'POST':
+    if request.method == 'GET':
         # request.POST 是一个类字典数据结构，记录了用户提交的注册信息
         # 这里提交的就是用户名（username）、client_ID、client_secret、密码（password）、邮箱（email）
         # 用这些数据实例化一个用户注册表单
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.GET)
 
         # 验证数据的合法性
         if form.is_valid():

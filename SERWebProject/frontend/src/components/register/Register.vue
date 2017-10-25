@@ -82,10 +82,14 @@
       }
     },
     methods: {
-      register (registerForm) {
-        this.$refs[registerForm].validate((valid) => {
+      register (formName) {
+        this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!')
+            this.$http.get('http://localhost:8000/api/register?username=' + this.registerForm.username +
+              '&email=' + this.registerForm.email +
+              '&password1=' + this.registerForm.pass +
+              '&password2=' + this.registerForm.checkPass)
           } else {
             console.log('error submit!!')
             return false

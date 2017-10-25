@@ -6,9 +6,11 @@ import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import Register from '@/components/register/Register'
+import VueResource from 'vue-resource'
 
 Vue.use(Router)
 Vue.use(Element)
+Vue.use(VueResource)
 
 export default new Router({
   routes: [
