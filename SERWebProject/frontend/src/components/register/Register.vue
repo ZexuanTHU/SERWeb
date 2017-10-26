@@ -3,9 +3,9 @@
     <el-form-item prop="username">
       <el-input placeholder="Account9 用户名" v-model="registerForm.username" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item prop="email">
+    <!--<el-form-item prop="email">
       <el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item prop="pass">
       <el-input placeholder="Account9 密码" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
     </el-form-item>
@@ -32,13 +32,7 @@
           callback()
         }
       }
-      var validateEmail = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入邮箱'))
-        } else {
-          callback()
-        }
-      }
+
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
@@ -68,9 +62,6 @@
         registerRules: {
           username: [
             {validator: validateUsername, trigger: 'blur'}
-          ],
-          email: [
-            {validator: validateEmail, trigger: 'blur'}
           ],
           pass: [
             {validator: validatePass, trigger: 'blur'}
@@ -141,5 +132,5 @@
   .el-button {
     width: 100%;
   }
-
+  
 </style>
