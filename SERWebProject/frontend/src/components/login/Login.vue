@@ -1,13 +1,13 @@
 <template>
-    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="120px" id="login">
+    <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="120px" id="login">
       <el-form-item  prop="username">
-        <el-input placeholder="Username"  v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+        <el-input placeholder="Account9 用户名"  v-model="loginForm.username" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input placeholder="Password" type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+        <el-input placeholder="Account9 密码" type="password" v-model="loginForm.pass" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
+        <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
       </el-form-item>
       <el-button>
         <router-link to="Register">新用户认证</router-link>
@@ -18,45 +18,38 @@
 <script>
   export default {
     data () {
-      var Username = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('Please input username'))
+      var validateUsername = (rule, value, callback) => {
+        var pattern = /^[\w\u4e00-\u9fa5]{3,10}$/g
+        if (value === '') {
+          callback(new Error('请输入用户名'))
+        } else if (!pattern.test(value)) {
+          callback(new Error('请输入3-10个字母/汉字/数字/下划线'))
+        } else {
+          callback()
         }
-        setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('Please input digits'))
-          } else {
-            if (value < 18) {
-              callback(new Error('Age must be greater than 18'))
-            } else {
-              callback()
-            }
-          }
-        }, 1000)
       }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('Please input the password'))
+          callback(new Error('请输入密码'))
         } else {
-          if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass')
+          if (this.loginForm.checkPass !== '') {
+            this.$refs.loginForm.validateField('checkPass')
           }
           callback()
         }
       }
 
       return {
-        ruleForm2: {
-          pass: '',
-          checkPass: '',
-          age: ''
+        loginForm: {
+          username: '',
+          pass: ''
         },
-        rules2: {
+        loginRules: {
+          username: [
+            { validator: validateUsername, trigger: 'blur' }
+          ],
           pass: [
             { validator: validatePass, trigger: 'blur' }
-          ],
-          age: [
-            { validator: Username, trigger: 'blur' }
           ]
         }
       }
@@ -66,6 +59,11 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!')
+            this.$http.post('http://localhost:8000/api/users', formName)
+                .then((response) => {
+                  alert('login')
+                }
+              )
           } else {
             console.log('error submit!!')
             return false
