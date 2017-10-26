@@ -1,20 +1,20 @@
 <template>
   <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="120px" id="login">
     <el-form-item prop="username">
-      <el-input placeholder="Username" v-model="registerForm.username" auto-complete="off"></el-input>
+      <el-input placeholder="Account9 用户名" v-model="registerForm.username" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item prop="email">
       <el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item prop="pass">
-      <el-input placeholder="Password" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
+      <el-input placeholder="Account9 密码" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
-      <el-input placeholder="Check Password" type="password" v-model="registerForm.checkPass"
+      <el-input placeholder="请再次确认 Account9 密码" type="password" v-model="registerForm.checkPass"
                 auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="register('registerForm')">Register</el-button>
+      <el-button type="primary" @click="register('registerForm')">认证</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -90,7 +90,6 @@
             let uname = this.registerForm.username
             let email = this.registerForm.email
             let pwd = this.registerForm.pass
-            alert('submit!')
             this.$http.get('https://accounts.net9.org/api/access_token?client_id=' + clientid +
               '&client_secret=' + clientsecret +
               '&username=' + this.registerForm.username +
@@ -110,6 +109,8 @@
                         '&password1=' + pwd +
                         '&password2=' + pwd)
                       alert('认证成功！')
+                      alert('你今后可以直接使用 Account9 账户登录 SERWeb 体育赛事报名平台！')
+                      this.$router.push('Login')
                     })
                 }
               })
