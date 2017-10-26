@@ -1,8 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from .models import Project
+from django.contrib import auth
+
+
 # from oauthlib.oauth2 import LegacyApplicationClient
 # from requests_oauthlib import OAuth2Session
 
@@ -53,3 +56,18 @@ def register(request):
     # 如果用户正在访问注册页面，则渲染的是一个空的注册表单
     # 如果用户通过表单提交注册信息，但是数据验证不合法，则渲染的是一个带有错误信息的表单
     return render(request, 'backend/register.html', context={'form': form})
+
+
+def login(request):
+    username = request.GET['username']
+    password = request.GET['password']
+    user = auth.authenticate(username=username, password=password)
+    success = True
+    if user is not None and user.is_active:
+        # Correct password, and the user is marked "active"
+        auth.login(request, user)
+        # Redirect to a success page.
+        return HttpResponse(success)
+    else:
+        # Show an error page
+        return HttpResponse(not success)

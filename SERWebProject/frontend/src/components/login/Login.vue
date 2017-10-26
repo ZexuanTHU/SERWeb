@@ -3,8 +3,8 @@
       <el-form-item  prop="username">
         <el-input placeholder="Account9 用户名"  v-model="loginForm.username" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item prop="pass">
-        <el-input placeholder="Account9 密码" type="password" v-model="loginForm.pass" auto-complete="off"></el-input>
+      <el-form-item prop="password">
+        <el-input placeholder="Account9 密码" type="password" v-model="loginForm.password" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
@@ -19,22 +19,17 @@
   export default {
     data () {
       var validateUsername = (rule, value, callback) => {
-        var pattern = /^[\w\u4e00-\u9fa5]{3,10}$/g
+//        var pattern = /^[\w\u4e00-\u9fa5]{3,10}!$/g
         if (value === '') {
           callback(new Error('请输入用户名'))
-        } else if (!pattern.test(value)) {
-          callback(new Error('请输入3-10个字母/汉字/数字/下划线'))
         } else {
           callback()
         }
       }
-      var validatePass = (rule, value, callback) => {
+      var validatePassword = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
         } else {
-          if (this.loginForm.checkPass !== '') {
-            this.$refs.loginForm.validateField('checkPass')
-          }
           callback()
         }
       }
@@ -42,14 +37,14 @@
       return {
         loginForm: {
           username: '',
-          pass: ''
+          password: ''
         },
         loginRules: {
           username: [
             { validator: validateUsername, trigger: 'blur' }
           ],
-          pass: [
-            { validator: validatePass, trigger: 'blur' }
+          password: [
+            { validator: validatePassword, trigger: 'blur' }
           ]
         }
       }
@@ -58,12 +53,19 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!')
-            this.$http.post('http://localhost:8000/api/users', formName)
+            let username = this.loginForm.username
+            let password = this.loginForm.password
+            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
                 .then((response) => {
-                  alert('login')
+//                  let res = JSON.parse(response.bodyText)
+                  if (response) {
+                    alert('登录成功，返回首页')
+                    this.$router.push('/')
+                  } else {
+                    alert('登录失败，请检查您输入的用户名与密码')
+                  }
                 }
-              )
+                )
           } else {
             console.log('error submit!!')
             return false
