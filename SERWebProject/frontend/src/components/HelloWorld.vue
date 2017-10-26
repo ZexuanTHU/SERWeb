@@ -31,7 +31,7 @@
                 <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
               </el-form-item>
 
-              <el-collapse v-model="activeName2" accordion>
+              <el-collapse v-model="activeName2" accordion @change="handleChange">
                 <el-collapse-item title="新用户认证">
                   <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="120px" class="login">
                     <el-form-item prop="username">
@@ -209,7 +209,7 @@
         activeIndex: '1',
         activeIndex2: '1',
         activeName: 'first',
-        activeName2: '1',
+        activeName2: '10',
         currentDate: new Date(),
         tableData: [{
           event: 'event',
@@ -288,15 +288,17 @@
           if (valid) {
             let username = this.loginForm.username
             let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password).then((response) => {
-              //                  let res = JSON.parse(response.bodyText)
-              if (response) {
-                alert('登录成功，返回首页')
-                this.$router.push('/')
-              } else {
-                alert('登录失败，请检查您输入的用户名与密码')
-              }
-            })
+            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+              .then((response) => {
+                let res = JSON.parse(response.bodyText)
+                if (res.status === 0) {
+                  alert('登录成功，返回首页')
+                  this.dialogVisible = false
+//                  this.$router.push('/')
+                } else {
+                  alert('登录失败，请检查您输入的用户名与密码')
+                }
+              })
           } else {
             console.log('error submit!!')
             return false
@@ -331,7 +333,8 @@
                         '&password2=' + pwd)
                       alert('认证成功！')
                       alert('你今后可以直接使用 Account9 账户登录 SERWeb 体育赛事报名平台！')
-                      this.$router.push('Login')
+                      this.activeName2 = 10
+//                      this.$router.push('Login')
                     })
                 }
               })

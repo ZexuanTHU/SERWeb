@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
@@ -62,12 +62,11 @@ def login(request):
     username = request.GET['username']
     password = request.GET['password']
     user = auth.authenticate(username=username, password=password)
-    success = True
     if user is not None and user.is_active:
         # Correct password, and the user is marked "active"
         auth.login(request, user)
         # Redirect to a success page.
-        return HttpResponse(success)
+        return JsonResponse({'status': 0})
     else:
         # Show an error page
-        return HttpResponse(not success)
+        return JsonResponse({'status': 1})
