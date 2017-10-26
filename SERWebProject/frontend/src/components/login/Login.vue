@@ -57,8 +57,8 @@
             let password = this.loginForm.password
             this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
                 .then((response) => {
-//                  let res = JSON.parse(response.bodyText)
-                  if (response) {
+                  let res = JSON.parse(response.bodyText)
+                  if (res.status === 0) {
                     alert('登录成功，返回首页')
                     this.$router.push('/')
                   } else {

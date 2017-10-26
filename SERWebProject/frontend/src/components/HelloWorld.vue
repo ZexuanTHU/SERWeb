@@ -288,15 +288,16 @@
           if (valid) {
             let username = this.loginForm.username
             let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password).then((response) => {
-              //                  let res = JSON.parse(response.bodyText)
-              if (response) {
-                alert('登录成功，返回首页')
-                this.$router.push('/')
-              } else {
-                alert('登录失败，请检查您输入的用户名与密码')
-              }
-            })
+            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+              .then((response) => {
+                let res = JSON.parse(response.bodyText)
+                if (res.status === 0) {
+                  alert('登录成功，返回首页')
+                  this.$router.push('/')
+                } else {
+                  alert('登录失败，请检查您输入的用户名与密码')
+                }
+              })
           } else {
             console.log('error submit!!')
             return false
