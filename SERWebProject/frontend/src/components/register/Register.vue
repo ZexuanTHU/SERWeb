@@ -109,6 +109,7 @@
                         '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)
+                      alert('认证成功！')
                     })
                 }
               })

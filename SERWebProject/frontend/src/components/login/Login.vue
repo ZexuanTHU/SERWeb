@@ -7,8 +7,11 @@
         <el-input placeholder="Password" type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">Login</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
       </el-form-item>
+      <el-button>
+        <router-link to="Register">新用户认证</router-link>
+      </el-button>
     </el-form>
 </template>
 
