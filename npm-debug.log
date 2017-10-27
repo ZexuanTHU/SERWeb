@@ -1,5 +1,5 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'run', 'dev' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'run', 'build' ]
 2 info using npm@3.10.8
 3 info using node@v6.11.4
 4 verbose config Skipping project config: /home/shianyip/.npmrc. (matches userconfig)
@@ -7,7 +7,7 @@
 5 verbose stack     at Error (native)
 6 verbose cwd /home/shianyip/PycharmProjects/SERWeb
 7 error Linux 4.4.0-97-generic
-8 error argv "/usr/bin/node" "/usr/bin/npm" "run" "dev"
+8 error argv "/usr/bin/node" "/usr/bin/npm" "run" "build"
 9 error node v6.11.4
 10 error npm  v3.10.8
 11 error path /home/shianyip/package.json

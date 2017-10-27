@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 class RegisterForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("username", "email")
+        # fields = ("username", "email")
 
     @staticmethod
     def account9auth():

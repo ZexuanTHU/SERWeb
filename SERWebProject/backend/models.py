@@ -27,7 +27,7 @@ class Choice(models.Model):
 
 
 class User(AbstractUser):
-    email = models.EmailField()
+    # email = models.EmailField()
 
     def __str__(self):
         return self.username

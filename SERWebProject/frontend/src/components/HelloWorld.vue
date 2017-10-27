@@ -311,7 +311,7 @@
             let clientid = 'EqlnQKv2oxvF2imyZloL6N1Doy8'
             let clientsecret = 'bmKP9oZbal6W6qSNbZtj'
             let uname = this.registerForm.username
-            let email = this.registerForm.email
+//            let email = this.registerForm.email
             let pwd = this.registerForm.pass
             this.$http.get('https://accounts.net9.org/api/access_token?client_id=' + clientid +
               '&client_secret=' + clientsecret +
@@ -328,7 +328,7 @@
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
                       this.$http.get('http://localhost:8000/api/register?username=' + uname +
-                        '&email=' + email +
+//                        '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)
                       alert('认证成功！')
