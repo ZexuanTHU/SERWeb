@@ -83,3 +83,14 @@ def project_list_display(request):
         response['error_num'] = 0
 
     return JsonResponse(response)
+
+
+def project_card_display(request):
+    response = {}
+    if request.method == 'GET':
+        hottest_project_list = Project.objects.order_by('-project_hot')[:3]
+        response['list'] = json.loads(serializers.serialize("json", hottest_project_list))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+
+    return JsonResponse(response)
