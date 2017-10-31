@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from .models import Project
 from django.contrib import auth
+from django.core import serializers
+import json
 
 
 # from oauthlib.oauth2 import LegacyApplicationClient
@@ -70,3 +72,14 @@ def login(request):
     else:
         # Show an error page
         return JsonResponse({'status': 1})
+
+
+def project_list_display(request):
+    response = {}
+    if request.method == 'GET':
+        latest_project_list = Project.objects.order_by('-project_hot')[:20]
+        response['list'] = json.loads(serializers.serialize("json", latest_project_list))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+
+    return JsonResponse(response)
