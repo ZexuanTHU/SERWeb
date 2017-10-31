@@ -10,5 +10,6 @@ urlpatterns = [
     # ex: /polls/5/vote/
     url(r'^(?P<project_id>[0-9]+)/vote/$', views.vote, name='vote'),
     url(r'^register', views.register, name='register'),
-    url(r'^login', views.login, name='login')
+    url(r'^login', views.login, name='login'),
+    url(r'^project_list_display', views.project_list_display, name='project_list_display')
 ]

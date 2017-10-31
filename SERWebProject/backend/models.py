@@ -9,12 +9,26 @@ class Project(models.Model):
     project_name = models.CharField(max_length=30)  # 项目名称
     project_text = models.CharField(max_length=200)  # 项目描述
     pub_date = models.DateTimeField('date published')  # 发布时间
+    ddl_date = models.DateTimeField('registration deadline')  # 发布时间
+    max_reg = models.IntegerField(default=100)
+    contact_name = models.CharField(max_length=30, default='郭志芃')
+    contact_tel = models.CharField(max_length=30, default='18813040000')
+    project_hot = models.IntegerField(default=0)
 
     def __str__(self):
         return self.project_name
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    def was_below_max_reg(self):
+        if self.max_reg - self.project_hot >= 0:
+            return True
+        else:
+            return False
+
+    def show_project_hot(self):
+        return self.project_hot
 
 
 class Choice(models.Model):
