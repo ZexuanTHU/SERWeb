@@ -14,6 +14,7 @@ class Project(models.Model):
     contact_name = models.CharField(max_length=30, default='郭志芃')
     contact_tel = models.CharField(max_length=30, default='18813040000')
     project_hot = models.IntegerField(default=0)
+    group_project = models.BooleanField(default=False)
 
     def __str__(self):
         return self.project_name
