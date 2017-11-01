@@ -5,6 +5,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
+import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import Register from '@/components/register/Register'
 import VueResource from 'vue-resource'
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/CompetitionInfo',
       name: 'CompetitionInfo',
       component: CompetitionInfo
+    },
+    {
+      path: '/GroupInfo',
+      name: 'GroupInfo',
+      component: GroupInfo
     },
     {
       path: '/userpage',
