@@ -2,7 +2,7 @@
   <div id="GroupInfo">
     <div id="nav">
       <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">首页</el-menu-item>
+        <el-menu-item index="1"><router-link to="./">首页</router-link></el-menu-item>
         <el-submenu index="2">
           <template slot="title">项目列表</template>
           <el-menu-item index="2-1">项目报名</el-menu-item>
@@ -17,34 +17,27 @@
         </el-menu-item>
       </el-menu>
     </div>
-
     <div id="compinfo">
-      <h1 align="left">{{name}}</h1>
-      <div id="basic">
+      <h1 align="left">{{pageInfo.project_name}}</h1>
+      <div id="basic" >
         <p align="left">
-          比赛时间: {{competitionTime}}
+          比赛时间: {{pageInfo.competitionTime}}
         </p>
         <p align="left">
-          报名时间: {{registerTime}}
+          报名时间: {{pageInfo.pub_date}}--{{pageInfo.ddl_date}}
         </p>
         <p align="left">
-          紧急联系人姓名：{{contanct}}
+          报名人数限制: {{pageInfo.max_reg}}
         </p>
         <p align="left">
-          紧急联系人电话: {{contanctphone}}
+          紧急联系人姓名: {{pageInfo.contact_name}}
         </p>
         <p align="left">
-          竞赛类别: {{catagory}}
-        </p>
-        <p align="left">
-          主办单位: {{host}}
-        </p>
-        <p>
-          参赛资格: {{qualification}}
+          紧急联系人电话: {{pageInfo.contact_tel}}
         </p>
       </div>
       <div class="status">
-        <el-progress :show-text="false" :stroke-width="18" :percentage="30"></el-progress>
+        <el-progress :show-text="false" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
         <h3>{{attend}}人報名</h3>
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
@@ -109,17 +102,18 @@
 export default {
   data () {
     return {
-      name: '2017年清华大学校园马拉松',
-      competitionTime: '2017／03／06 14：00',
-      registerTime: '2017-03-02  --  2017-03-05',
-      contact: '郭志芃',
-      contactphone: '18813040000',
-      catagory: '團體',
-      host: '计算机系',
-      qualification: '计算机系同学',
-      attend: '30',
-      date: '1',
-      detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛',
+      pageInfo: {
+        project_name: '',
+        competitionTime: '',
+        pub_date: '',
+        ddl_date: '',
+        max_reg: '',
+        contact_name: '',
+        contact_tel: '',
+        attend: '30',
+        date: '1',
+        project_text: ''
+      },
       dialogFormVisible: false,
       ruleForm: {
         faculty: '',
@@ -164,6 +158,14 @@ export default {
       formLabelWidth: '120px'
     }
   },
+  computed: {
+    attendPercent: function () {
+      return parseFloat(this.pageInfo.attend) / parseFloat(this.pageInfo.max_reg)
+    }
+  },
+  created: function () {
+    this.project_info_request(this.$route.params.pk)
+  },
   methods: {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -177,6 +179,19 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    project_info_request (pk) {
+      this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
+        var res = JSON.parse(response.bodyText)
+        console.log(res)
+        if (res.error_num === 0) {
+          this.pageInfo = res.list[0].fields
+          this.pageInfo.attend = '30'
+        } else {
+          this.$message.error('获取项目列表失败"')
+          console.log(res['msg'])
+        }
+      })
     },
     user_info_request (username) {
       this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + username).then((response) => {

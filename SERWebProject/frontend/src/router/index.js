@@ -29,12 +29,12 @@ export default new Router({
       component: Login
     },
     {
-      path: '/CompetitionInfo',
+      path: '/CompetitionInfo/:pk',
       name: 'CompetitionInfo',
       component: CompetitionInfo
     },
     {
-      path: '/GroupInfo',
+      path: '/GroupInfo/:pk',
       name: 'GroupInfo',
       component: GroupInfo
     },
