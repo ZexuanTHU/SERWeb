@@ -1,20 +1,27 @@
+<!-- 温家尊: 添加 auth.js，判断登录状态-->
+
 <template>
   <div>
     <div id="nav">
       <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">首页</el-menu-item>
-        <el-submenu index="2">
+        <el-menu-item index="1"><router-link to="./">首页</router-link></el-menu-item>
+        <!--<el-submenu index="2">
           <template slot="title">项目列表</template>
           <el-menu-item index="2-1">项目报名</el-menu-item>
           <el-menu-item index="2-2">比赛日程</el-menu-item>
-        </el-submenu>
-        <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">历史沿革</a></el-menu-item>
-        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">院系荣誉</a></el-menu-item>
-        <el-menu-item index="5"><a href="https://www.ele.me" target="_blank">突出个人</a></el-menu-item>
-        <el-menu-item index="6"><a href="https://www.ele.me" target="_blank">加入院队</a></el-menu-item>
-        <el-menu-item id="user" index="7">
+        </el-submenu>-->
+        <el-menu-item index="2">赛事信息</el-menu-item>
+        <el-menu-item index="3">酒井名人堂</el-menu-item>
+        <el-menu-item index="4">系代表队宣传</el-menu-item>
+        <el-menu-item id="user" index="5">
           <!--<router-link to="Login">登录/新用户认证</router-link>-->
-          <el-button type="text" @click="dialogVisible = true">登录/新用户认证</el-button>
+          <el-submenu index="6" v-if="user.authenticated">
+            <template slot="title">this.loginForm.username</template>
+            <el-menu-item index="6-1"><router-link to="userpage">用户信息</router-link></el-menu-item>
+            <el-menu-item index="6-2" @click="logout()">登出</el-menu-item>
+          </el-submenu>
+
+          <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
 
           <el-dialog
             :visible.sync="dialogVisible"
@@ -31,15 +38,15 @@
                 <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
               </el-form-item>
 
-              <el-collapse v-model="activeName2" accordion @change="handleChange">
+              <el-collapse v-model="activeName2">
                 <el-collapse-item title="新用户认证">
                   <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="120px" class="login">
                     <el-form-item prop="username">
                       <el-input placeholder="Account9 用户名" v-model="registerForm.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <!--<el-form-item prop="email">
-					  <el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
-					</el-form-item>-->
+						<el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
+					  </el-form-item>-->
                     <el-form-item prop="pass">
                       <el-input placeholder="Account9 密码" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
                     </el-form-item>
@@ -53,8 +60,8 @@
                   </el-form>
                 </el-collapse-item>
               </el-collapse>
-              <!--<el-button  @click="dialogVisible2 = true">新用户认证</el-button>-->
-              <!--<router-link to="Register">新用户认证</router-link>-->
+                <!--<el-button  @click="dialogVisible2 = true">新用户认证</el-button>-->
+                <!--<router-link to="Register">新用户认证</router-link>-->
             </el-form>
           </el-dialog>
         </el-menu-item>
@@ -64,7 +71,7 @@
     <div id="carousel">
       <el-carousel :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
-          <h3>test</h3>
+          <img src="../assets/slider1.jpg">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -157,6 +164,8 @@
 
 
 <script>
+  import auth from '../auth'
+
   export default {
     data () {
       var validateUsername = (rule, value, callback) => {
@@ -204,6 +213,7 @@
         }
       }
       return {
+        user: auth.user,
         dialogVisible: false,
         dialogVisible2: false,
         activeIndex: '1',
@@ -268,6 +278,9 @@
       }
     },
     methods: {
+      logout () {
+        auth.logout()
+      },
       handleClose (done) {
         done()
       },
@@ -295,6 +308,8 @@
                   alert('登录成功，返回首页')
                   this.dialogVisible = false
 //                  this.$router.push('/')
+//                  this.user.authenticated = true
+                  auth.login(this, this.loginForm, 'userpage')
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
                 }
