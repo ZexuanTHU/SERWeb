@@ -79,13 +79,13 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
-
-      <el-row>
+      <el-row  :data="hot_project_card">
         <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
+            <template scope="scope"> {{ scope.fields.project_name1 }} </template>
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-              <template scope="scope"> {{ scope.column.pk }}</template>
+
               <div class="bottom clearfix">
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
@@ -248,10 +248,10 @@
         currentDate: new Date(),
         hot_project_card: {
           fields: [{
-            project_name: '',
-            project_hot: ''
+            project_name1: '',
+            project_hot1: ''
           }],
-          pk: ''
+          pk1: ''
         },
         latest_project_list: [{
           fields: [{
