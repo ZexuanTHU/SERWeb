@@ -1,8 +1,8 @@
 <template>
-  <div id="CompetitionInfo">
+  <div id="GroupInfo">
     <div id="nav">
       <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><router-link to="./">首页</router-link></el-menu-item>
+        <el-menu-item index="1">首页</el-menu-item>
         <el-submenu index="2">
           <template slot="title">项目列表</template>
           <el-menu-item index="2-1">项目报名</el-menu-item>
@@ -28,7 +28,10 @@
           报名时间: {{registerTime}}
         </p>
         <p align="left">
-          地点: {{location}}
+          紧急联系人姓名：{{contanct}}
+        </p>
+        <p align="left">
+          紧急联系人电话: {{contanctphone}}
         </p>
         <p align="left">
           竞赛类别: {{catagory}}
@@ -47,10 +50,10 @@
         <h3>剩下{{date}}天</h3>
       </div>
       <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <el-dialog title="报名资料填写" :visible.sync="dialogFormVisible">
+      <el-dialog title="隊長资料填写" :visible.sync="dialogFormVisible">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="院系" prop="department">
-            <el-select v-model="ruleForm.faculty" placeholder="选择院系">
+            <el-select v-model="ruleForm.department" placeholder="选择院系">
               <el-option label="计算机" value="cs"></el-option>
               <el-option label="自动化" value="auto"></el-option>
               <el-option label="电子" value="ee"></el-option>
@@ -66,16 +69,16 @@
             </el-select>
           </el-form-item>
           <el-form-item label="证件号码" prop="idNumber">
-            <el-input v-model="ruleForm.id_card"></el-input>
+            <el-input v-model="ruleForm.idNumber"></el-input>
           </el-form-item>
           <el-form-item label="学号" prop="studentId">
-            <el-input v-model="ruleForm.student_id"></el-input>
+            <el-input v-model="ruleForm.studentId"></el-input>
           </el-form-item>
           <el-form-item prop="birth">
-            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth_date" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth" style="width: 100%;"></el-date-picker>
           </el-form-item>
           <el-form-item label="服装号码" prop="clothSize">
-            <el-select v-model="ruleForm.clothes_size" placeholder="选择号码">
+            <el-select v-model="ruleForm.clothSize" placeholder="选择号码">
               <el-option label="S" value="s"></el-option>
               <el-option label="M" value="m"></el-option>
               <el-option label="L" value="l"></el-option>
@@ -83,7 +86,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="移动电话" prop="phone">
-            <el-input v-model="ruleForm.cellphone_num"></el-input>
+            <el-input v-model="ruleForm.phone"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -109,8 +112,9 @@ export default {
       name: '2017年清华大学校园马拉松',
       competitionTime: '2017／03／06 14：00',
       registerTime: '2017-03-02  --  2017-03-05',
-      location: '操场',
-      catagory: '径赛',
+      contact: '郭志芃',
+      contactphone: '18813040000',
+      catagory: '團體',
       host: '计算机系',
       qualification: '计算机系同学',
       attend: '30',
@@ -118,17 +122,17 @@ export default {
       detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛',
       dialogFormVisible: false,
       ruleForm: {
-        faculty: '',
+        department: '',
         name: '',
         gender: '',
-        id_card: '',
-        student_id: '',
-        birth_date: '',
-        clothes_size: '',
-        cellphone_num: ''
+        idNumber: '',
+        studentId: '',
+        birth: '',
+        clothSize: '',
+        phone: ''
       },
       rules: {
-        faculty: [
+        department: [
           { required: true, message: '请选择院系', trigger: 'change' }
         ],
         name: [
@@ -138,21 +142,21 @@ export default {
         gender: [
           { required: true, message: '请选性别', trigger: 'change' }
         ],
-        id_card: [
+        idNumber: [
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        student_id: [
+        studentId: [
           { required: true, message: '请输入学号', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        birth_date: [
+        birth: [
           { required: true, message: '请选择生日', trigger: 'change' }
         ],
-        clothes_size: [
+        clothSize: [
           { required: true, message: '请选择衣服号码', trigger: 'change' }
         ],
-        cellphone_num: [
+        phone: [
           { required: true, message: '请输入学号', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]
@@ -179,11 +183,6 @@ export default {
 </script>
 
 <style scoped>
-
-  a {
-    text-decoration: none;
-  }
-
   #login {
     float: right;
   }

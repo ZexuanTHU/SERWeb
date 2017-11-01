@@ -1,20 +1,27 @@
+<!-- 温家尊: 添加 auth.js，判断登录状态-->
+
 <template>
   <div>
     <div id="nav">
       <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">首页</el-menu-item>
-        <el-submenu index="2">
+        <el-menu-item index="1"><router-link to="./">首页</router-link></el-menu-item>
+        <!--<el-submenu index="2">
           <template slot="title">项目列表</template>
           <el-menu-item index="2-1">项目报名</el-menu-item>
           <el-menu-item index="2-2">比赛日程</el-menu-item>
-        </el-submenu>
-        <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">历史沿革</a></el-menu-item>
-        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">院系荣誉</a></el-menu-item>
-        <el-menu-item index="5"><a href="https://www.ele.me" target="_blank">突出个人</a></el-menu-item>
-        <el-menu-item index="6"><a href="https://www.ele.me" target="_blank">加入院队</a></el-menu-item>
-        <el-menu-item id="user" index="7">
+        </el-submenu>-->
+        <el-menu-item index="2">赛事信息</el-menu-item>
+        <el-menu-item index="3">酒井名人堂</el-menu-item>
+        <el-menu-item index="4">系代表队宣传</el-menu-item>
+        <el-menu-item id="user" index="5">
           <!--<router-link to="Login">登录/新用户认证</router-link>-->
-          <el-button type="text" @click="dialogVisible = true">登录/新用户认证</el-button>
+          <el-submenu index="6" v-if="user.authenticated">
+            <template slot="title">this.loginForm.username</template>
+            <el-menu-item index="6-1"><router-link to="userpage">用户信息</router-link></el-menu-item>
+            <el-menu-item index="6-2" @click="logout()">登出</el-menu-item>
+          </el-submenu>
+
+          <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
 
           <el-dialog
             :visible.sync="dialogVisible"
@@ -31,15 +38,15 @@
                 <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
               </el-form-item>
 
-              <el-collapse v-model="activeName2" accordion @change="handleChange">
+              <el-collapse v-model="activeName2">
                 <el-collapse-item title="新用户认证">
                   <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="120px" class="login">
                     <el-form-item prop="username">
                       <el-input placeholder="Account9 用户名" v-model="registerForm.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <!--<el-form-item prop="email">
-					  <el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
-					</el-form-item>-->
+						<el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
+					  </el-form-item>-->
                     <el-form-item prop="pass">
                       <el-input placeholder="Account9 密码" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
                     </el-form-item>
@@ -53,8 +60,8 @@
                   </el-form>
                 </el-collapse-item>
               </el-collapse>
-              <!--<el-button  @click="dialogVisible2 = true">新用户认证</el-button>-->
-              <!--<router-link to="Register">新用户认证</router-link>-->
+                <!--<el-button  @click="dialogVisible2 = true">新用户认证</el-button>-->
+                <!--<router-link to="Register">新用户认证</router-link>-->
             </el-form>
           </el-dialog>
         </el-menu-item>
@@ -64,7 +71,7 @@
     <div id="carousel">
       <el-carousel :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
-          <h3>test</h3>
+          <img src="../assets/slider1.jpg">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -72,14 +79,14 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
-      <el-row>
+      <el-row  :data="hot_project_card">
         <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
+            <template scope="scope"> {{ scope.fields.project_name1 }} </template>
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-              <span>清华大学校园马拉松</span>
+
               <div class="bottom clearfix">
-                <time class="time">{{ currentDate }}</time>
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
@@ -94,32 +101,57 @@
     <div id="more news">
       <h1 align="left">其他赛事</h1>
       <el-table
-        :data="tableData"
+        :data="latest_project_list"
         height="200"
         border
         style="width: 100%">
         <el-table-column
-          prop="event"
+          prop="project_name"
           label="赛事名称"
-          sortable
           align="center">
+          <template scope="scope"> {{ scope.row.fields.project_name }} </template>
         </el-table-column>
         <el-table-column
-          prop="time"
-          label="时间"
+          prop="project_text"
+          label="赛事简介"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.project_text }} </template>
         </el-table-column>
         <el-table-column
-          prop="host"
-          label="主办单位"
+          prop="date"
+          label="报名起止时间"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="种类"
+          prop="max_reg"
+          label="报名人数限制"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.max_reg }} </template>
         </el-table-column>
         <el-table-column
+          prop="contact_name"
+          label="紧急联系人姓名"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.contact_name }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="contact_tel"
+          label="紧急联系人电话"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.contact_tel }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="register"
+          label="赛事报名"
+          align="center">
+          <template scope="scope">
+            <el-button  type="text" size="small">
+              <router-link to="CompetitionInfo">报名</router-link>
+            </el-button>
+          </template>
+        </el-table-column>
+        <!--<el-table-column
           prop="tag"
           label="Tag"
           align="center"
@@ -131,7 +163,7 @@
               :type="scope.row.tag === 'Home' ? 'primary' : 'success'"
               close-transition>{{scope.row.tag}}</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column>-->
       </el-table>
     </div>
 
@@ -157,6 +189,8 @@
 
 
 <script>
+  import auth from '../auth'
+
   export default {
     data () {
       var validateUsername = (rule, value, callback) => {
@@ -204,6 +238,7 @@
         }
       }
       return {
+        user: auth.user,
         dialogVisible: false,
         dialogVisible2: false,
         activeIndex: '1',
@@ -211,30 +246,24 @@
         activeName: 'first',
         activeName2: '10',
         currentDate: new Date(),
-        tableData: [{
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
+        hot_project_card: {
+          fields: [{
+            project_name1: '',
+            project_hot1: ''
+          }],
+          pk1: ''
+        },
+        latest_project_list: [{
+          fields: [{
+            project_name: '',
+            project_text: '',
+            ddl_date: '',
+            pub_date: '',
+            max_reg: '',
+            contact_name: '',
+            contact_tel: ''
+          }],
+          pk: ''
         }],
         loginForm: {
           username: '',
@@ -267,7 +296,14 @@
         }
       }
     },
+    created: function () {
+      this.project_list_display()
+      this.project_card_display()
+    },
     methods: {
+      logout () {
+        auth.logout()
+      },
       handleClose (done) {
         done()
       },
@@ -295,6 +331,8 @@
                   alert('登录成功，返回首页')
                   this.dialogVisible = false
 //                  this.$router.push('/')
+//                  this.user.authenticated = true
+                  auth.login(this, this.loginForm, 'userpage')
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
                 }
@@ -341,6 +379,30 @@
           } else {
             console.log('error submit!!')
             return false
+          }
+        })
+      },
+      project_list_display () {
+        this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            this.latest_project_list = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+      },
+      project_card_display () {
+        this.$http.get('http://127.0.0.1:8000/api/project_card_display').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            this.hot_project_card = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
           }
         })
       }
