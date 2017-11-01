@@ -30,8 +30,7 @@
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
           <div id="register" class="w3-container panel"
                :style="{display:openedPanle==='0'?'inline-block':'none'}">
-
-            <h1 style="font-size: large;margin: auto">regiser</h1>
+            <projRegister></projRegister>
           </div>
           <div id="saved_event" class="w3-container panel"
                :style="{display:openedPanle==='1'?'inline-block':'none'}">
@@ -45,6 +44,7 @@
           <div id="modify" class="w3-container panel" style="display: inline-block"
                :style="{display:openedPanle==='3'?'inline-block':'none'}">
             <infoRegister :inline='false'></infoRegister>
+
 
             <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
               <img class="icon" :src="imageUrl"
@@ -78,6 +78,7 @@
   import mheader from '../components/header'
   import mfooter from '../components/mfooter'
   import infoRegister from '../components/UserPage/infoRegister.vue'
+  import projRegister from '../components/UserPage/projRegister.vue'
 
   export default {
     name: 'test',
@@ -174,7 +175,8 @@
     components: {
       'mheader': mheader,
       'mfooter': mfooter,
-      'infoRegister': infoRegister
+      'infoRegister': infoRegister,
+      'projRegister': projRegister
     }
   }
 </script>
