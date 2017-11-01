@@ -67,6 +67,7 @@ class User(AbstractUser):
         ('XL', 'XL')
     }
 
+    name = models.CharField('姓名', max_length=10)
     student_id = models.CharField('学号', max_length=10)
     id_card = models.CharField('身份证号', max_length=18)
     gender = models.CharField('性别', choices=GENDER, max_length=1)
