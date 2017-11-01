@@ -43,6 +43,42 @@ class Choice(models.Model):
 
 class User(AbstractUser):
     # email = models.EmailField()
+    MALE = 'M'
+    FEMALE = 'F'
+    GENDER = (
+        (MALE, '男'),
+        (FEMALE, '女')
+    )
+
+    BACHELOR = 'BS'
+    MASTER = 'MS'
+    DOCTOR = 'PhD'
+    READING_DEGREE = (
+        (BACHELOR, '本科生'),
+        (MASTER, '硕士'),
+        (DOCTOR, '博士')
+    )
+
+    CLOTHES_SIZE = {
+        ('XS', 'XS'),
+        ('S', 'S'),
+        ('M', 'M'),
+        ('L', 'L'),
+        ('XL', 'XL')
+    }
+
+    name = models.CharField('姓名', max_length=10)
+    student_id = models.CharField('学号', max_length=10)
+    id_card = models.CharField('身份证号', max_length=18)
+    gender = models.CharField('性别', choices=GENDER, max_length=1)
+    birth_date = models.TimeField('出生日期', default=timezone.now())
+    reading_degree = models.CharField('攻读学位', choices=READING_DEGREE, max_length=3)
+    faculty = models.CharField('院系', max_length=20)
+    class_id = models.CharField('班级', max_length=10)
+    clothes_size = models.CharField('衣服尺寸', choices=CLOTHES_SIZE, max_length=2)
+    email = models.EmailField()
+    cellphone_num = models.CharField('手机号码', max_length=11)
+    dormitory = models.CharField('寝室号码', max_length=20)
 
     def __str__(self):
         return self.username

@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, UserInfoForm
 from .models import Project
 from django.contrib import auth
 from django.core import serializers
@@ -94,3 +94,17 @@ def project_card_display(request):
         response['error_num'] = 0
 
     return JsonResponse(response)
+
+
+def user_info_submit(request):
+    if request.method == 'GET':
+        form = UserInfoForm(request.GET)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    else:
+        form = RegisterForm()
+
+    return render(request, 'backend/register.html', context={'form': form})
