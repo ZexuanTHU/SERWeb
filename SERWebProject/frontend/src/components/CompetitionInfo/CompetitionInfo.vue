@@ -50,7 +50,7 @@
       <el-dialog title="报名资料填写" :visible.sync="dialogFormVisible">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="院系" prop="department">
-            <el-select v-model="ruleForm.department" placeholder="选择院系">
+            <el-select v-model="ruleForm.faculty" placeholder="选择院系">
               <el-option label="计算机" value="cs"></el-option>
               <el-option label="自动化" value="auto"></el-option>
               <el-option label="电子" value="ee"></el-option>
@@ -66,16 +66,16 @@
             </el-select>
           </el-form-item>
           <el-form-item label="证件号码" prop="idNumber">
-            <el-input v-model="ruleForm.idNumber"></el-input>
+            <el-input v-model="ruleForm.id_card"></el-input>
           </el-form-item>
           <el-form-item label="学号" prop="studentId">
-            <el-input v-model="ruleForm.studentId"></el-input>
+            <el-input v-model="ruleForm.student_id"></el-input>
           </el-form-item>
           <el-form-item prop="birth">
-            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth_date" style="width: 100%;"></el-date-picker>
           </el-form-item>
           <el-form-item label="服装号码" prop="clothSize">
-            <el-select v-model="ruleForm.clothSize" placeholder="选择号码">
+            <el-select v-model="ruleForm.clothes_size" placeholder="选择号码">
               <el-option label="S" value="s"></el-option>
               <el-option label="M" value="m"></el-option>
               <el-option label="L" value="l"></el-option>
@@ -83,7 +83,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="移动电话" prop="phone">
-            <el-input v-model="ruleForm.phone"></el-input>
+            <el-input v-model="ruleForm.cellphone_num"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -118,17 +118,17 @@ export default {
       detail: '足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛足球比赛',
       dialogFormVisible: false,
       ruleForm: {
-        department: '',
+        faculty: '',
         name: '',
         gender: '',
-        idNumber: '',
-        studentId: '',
-        birth: '',
-        clothSize: '',
-        phone: ''
+        id_card: '',
+        student_id: '',
+        birth_date: '',
+        clothes_size: '',
+        cellphone_num: ''
       },
       rules: {
-        department: [
+        faculty: [
           { required: true, message: '请选择院系', trigger: 'change' }
         ],
         name: [
@@ -138,21 +138,21 @@ export default {
         gender: [
           { required: true, message: '请选性别', trigger: 'change' }
         ],
-        idNumber: [
+        id_card: [
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        studentId: [
+        student_id: [
           { required: true, message: '请输入学号', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        birth: [
+        birth_date: [
           { required: true, message: '请选择生日', trigger: 'change' }
         ],
-        clothSize: [
+        clothes_size: [
           { required: true, message: '请选择衣服号码', trigger: 'change' }
         ],
-        phone: [
+        cellphone_num: [
           { required: true, message: '请输入学号', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]

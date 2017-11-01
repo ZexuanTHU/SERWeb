@@ -1,52 +1,50 @@
 <template>
   <div>
-
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      title="第一次登陆个人信息修改"
+      :visible.sync="registerVisible"
+      width="60%"
+      :show-close="false"
+      :before-close="handleClose">
+      <infoRegister @submit="registerVisible=false" :inline='true'></infoRegister>
+    </el-dialog>
     <mheader></mheader>
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:46px">
       <div class="w3-container" style="width: 100%;min-height: 650px">
         <div class="w3-left" style="width: 200px;height: 100% ">
-          <div class="w3-card-2 w3-left leftbar"
-               style="width:200px;height: 420px;margin-top: 20px;display: block;background:#eef1f6;text-align:center;">
-            <div class="w3-card" style="border: solid 1px;background:#4d65fc;height: 20px">
-            </div>
-            <p @click="openPanle('register')" class="tablink" href="#" :class="{'pressed':(openedPanle==='register')}"
-               style="margin-top:10px">比赛报名</p>
-            <p v-on:click="openPanle('view_register')" class="tablink" href="#"
-               :class="{'pressed':(openedPanle==='view_register')}">报名结果</p>
-            <p v-on:click="openPanle('saved_event')" class="tablink" :class="{'pressed':(openedPanle==='saved_event')}">
-              比赛收藏</p>
-            <p v-on:click="openPanle('modify')" class="tablink" :class="{'pressed':(openedPanle==='modify')}">个人信息</p>
-            <p v-on:click="openPanle('add_event')" class="tablink" :class="{'pressed':(openedPanle==='add_event')}">
-              创建比赛</p>
-          </div>
-        </div>
-        <div class="panel_content" style="margin-left:200px;display: block; ">
+          <el-col :span="8">
+            <h5></h5>
+            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanle">
 
+              <el-menu-item index="0">比赛报名</el-menu-item>
+              <el-menu-item index="1">报名结果</el-menu-item>
+              <el-menu-item index="2">比赛收藏</el-menu-item>
+              <el-menu-item index="3">个人信息</el-menu-item>
+              <el-menu-item index="4">创建比赛</el-menu-item>
+            </el-menu>
+          </el-col>
+        </div>
+        <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
           <div id="register" class="w3-container panel"
-               :style="{display:openedPanle==='register'?'inline-block':'none'}">
+               :style="{display:openedPanle==='0'?'inline-block':'none'}">
+
             <h1 style="font-size: large;margin: auto">regiser</h1>
           </div>
           <div id="saved_event" class="w3-container panel"
-               :style="{display:openedPanle==='saved_event'?'inline-block':'none'}">
+               :style="{display:openedPanle==='1'?'inline-block':'none'}">
             <h1 style="font-size: large;margin: auto">saved_event</h1>
+            <infoChange></infoChange>
           </div>
           <div id="view_register" class="w3-container panel "
-               :style="{display:openedPanle==='view_register'?'inline-block':'none'}">
+               :style="{display:openedPanle==='2'?'inline-block':'none'}">
             <h1 style="font-size: large;margin: auto">view_regiser</h1>
           </div>
           <div id="modify" class="w3-container panel" style="display: inline-block"
-               :style="{display:openedPanle==='modify'?'inline-block':'none'}">
-            <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
-              <p style="margin-top: 40px"><span class="input-tag">姓名:</span> <input type="text" name="modi-name" >
-              </p>
-              <p><span class="input-tag">电话:</span> <input type="text" name="modi-phone" ></p>
-              <p><span class="input-tag">邮箱:</span> <input type="text" name="modi-email" ></p>
-              <p><span class="input-tag">学号:</span> <input type="text" name="modi-stu-id" ></p>
-              <p style="height: 200px"><span class="input-tag" style="vertical-align: middle">备注:</span>
-                <textarea style="margin-left:10px;width: 400px;height:200px;vertical-align: middle" name="modi-extra"
-                          type="text"></textarea></p>
-            </form>
+               :style="{display:openedPanle==='3'?'inline-block':'none'}">
+            <infoRegister :inline='false'></infoRegister>
 
             <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
               <img class="icon" :src="imageUrl"
@@ -59,7 +57,7 @@
             </div>
           </div>
           <div id="add_event" class="w3-container panel"
-               :style="{display:openedPanle==='add_event'?'inline-block':'none'}">
+               :style="{display:openedPanle==='4'?'inline-block':'none'}">
             <h1 style="border-bottom:2px solid #72beff;margin-left: 1em ">新比赛</h1>
             <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
               <p><span style="width: 100px">时间:</span> <input type="date" name="add-time">
@@ -79,11 +77,13 @@
 <script>
   import mheader from '../components/header'
   import mfooter from '../components/mfooter'
+  import infoRegister from '../components/UserPage/infoRegister.vue'
 
   export default {
     name: 'test',
     data () {
       return {
+        registerVisible: true,
         imageUrl: require('../image/icon.jpg'),
         openedPanle: 'modify_info',
         applyState: JSON.stringify({ddl: 'ddl'})
@@ -91,8 +91,8 @@
       }
     },
     methods: {
-      openPanle: function openPanle (option) {
-        this.openedPanle = option
+      openPanle: function (evt) {
+        this.openedPanle = evt
       },
       onFileChange (e) {
         var files = e.target.files || e.dataTransfer.files
@@ -141,10 +141,13 @@
           state: '通过'
         }]
       },
+      handleOpen (key, p) {
+        console.log(key, p)
+      },
       ajaxpoll () {
         var self = this
         setInterval(function () {
-          console.log('start')
+//          console.log('start')
           var newState = self.getstate()
           var change = self.compareState(newState)
           if (change !== null) {
@@ -156,21 +159,22 @@
 
     },
     mounted: function () {
-      var input = document.getElementsByTagName('input')
-      console.log(input)
-      for (var i = 0; i < input.length; i++) {
-        console.log(input[i])
-        input[i].value = localStorage.getItem(input[i].name) || ''
-      }
-      var textarea = document.getElementsByTagName('textarea')
-      for (i = 0; i < textarea.length; i++) {
-        textarea[i].value = localStorage.getItem(textarea[i].name) || ''
-      }
-      this.ajaxpoll()
+//      var input = document.getElementsByTagName('input')
+//      console.log(input)
+//      for (var i = 0; i < input.length; i++) {
+//        console.log(input[i])
+//        input[i].value = localStorage.getItem(input[i].name) || ''
+//      }
+//      var textarea = document.getElementsByTagName('textarea')
+//      for (i = 0; i < textarea.length; i++) {
+//        textarea[i].value = localStorage.getItem(textarea[i].name) || ''
+//      }
+//      this.ajaxpoll()
     },
     components: {
       'mheader': mheader,
-      'mfooter': mfooter
+      'mfooter': mfooter,
+      'infoRegister': infoRegister
     }
   }
 </script>
@@ -185,4 +189,11 @@
     text-decoration: none;
   }
 
+  #leftnav {
+    margin-top: 40px;
+    width: 200px;
+  }
+
 </style>
+
+

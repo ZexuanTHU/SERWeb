@@ -28,23 +28,23 @@ div.panel{
   display: inline-block;
   position: relative;
 }
-#modify,#add_event p{
-  font-size: medium;
-  height:40px;
-  margin-top: 20px;
-  margin-left:30px;
-}
-#modify input{
-  width: 300px;
-  margin-left: 10px;
-}
-#add_event input{
-  width: 300px;
-  margin-left: 10px;
-}
-#modify{
-  position: relative;
-}
+/*#modify,#add_event p{*/
+  /*font-size: medium;*/
+  /*height:40px;*/
+  /*margin-top: 20px;*/
+  /*margin-left:30px;*/
+/*}*/
+/*#modify input{*/
+  /*width: 300px;*/
+  /*margin-left: 10px;*/
+/*}*/
+/*#add_event input{*/
+  /*width: 300px;*/
+  /*margin-left: 10px;*/
+/*}*/
+/*#modify{*/
+  /*position: relative;*/
+/*}*/
 .mboarderbtn{
   border:1px solid #b1a2a2;
   border-radius:3px;
