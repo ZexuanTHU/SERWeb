@@ -79,14 +79,14 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
+
       <el-row>
         <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-              <span>清华大学校园马拉松</span>
+              <template scope="scope"> {{ scope.column.pk }}</template>
               <div class="bottom clearfix">
-                <time class="time">{{ currentDate }}</time>
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
@@ -101,32 +101,57 @@
     <div id="more news">
       <h1 align="left">其他赛事</h1>
       <el-table
-        :data="tableData"
+        :data="latest_project_list"
         height="200"
         border
         style="width: 100%">
         <el-table-column
-          prop="event"
+          prop="project_name"
           label="赛事名称"
-          sortable
           align="center">
+          <template scope="scope"> {{ scope.row.fields.project_name }} </template>
         </el-table-column>
         <el-table-column
-          prop="time"
-          label="时间"
+          prop="project_text"
+          label="赛事简介"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.project_text }} </template>
         </el-table-column>
         <el-table-column
-          prop="host"
-          label="主办单位"
+          prop="date"
+          label="报名起止时间"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="种类"
+          prop="max_reg"
+          label="报名人数限制"
           align="center">
+          <template scope="scope"> {{ scope.row.fields.max_reg }} </template>
         </el-table-column>
         <el-table-column
+          prop="contact_name"
+          label="紧急联系人姓名"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.contact_name }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="contact_tel"
+          label="紧急联系人电话"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.contact_tel }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="register"
+          label="赛事报名"
+          align="center">
+          <template scope="scope">
+            <el-button  type="text" size="small">
+              <router-link to="CompetitionInfo">报名</router-link>
+            </el-button>
+          </template>
+        </el-table-column>
+        <!--<el-table-column
           prop="tag"
           label="Tag"
           align="center"
@@ -138,7 +163,7 @@
               :type="scope.row.tag === 'Home' ? 'primary' : 'success'"
               close-transition>{{scope.row.tag}}</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column>-->
       </el-table>
     </div>
 
@@ -221,30 +246,24 @@
         activeName: 'first',
         activeName2: '10',
         currentDate: new Date(),
-        tableData: [{
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
-        }, {
-          event: 'event',
-          time: '111',
-          host: '学生会',
-          type: '篮球',
-          tag: '立即报名'
+        hot_project_card: {
+          fields: [{
+            project_name: '',
+            project_hot: ''
+          }],
+          pk: ''
+        },
+        latest_project_list: [{
+          fields: [{
+            project_name: '',
+            project_text: '',
+            ddl_date: '',
+            pub_date: '',
+            max_reg: '',
+            contact_name: '',
+            contact_tel: ''
+          }],
+          pk: ''
         }],
         loginForm: {
           username: '',
@@ -276,6 +295,10 @@
           ]
         }
       }
+    },
+    created: function () {
+      this.project_list_display()
+      this.project_card_display()
     },
     methods: {
       logout () {
@@ -356,6 +379,30 @@
           } else {
             console.log('error submit!!')
             return false
+          }
+        })
+      },
+      project_list_display () {
+        this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            this.latest_project_list = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+      },
+      project_card_display () {
+        this.$http.get('http://127.0.0.1:8000/api/project_card_display').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            this.hot_project_card = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
           }
         })
       }
