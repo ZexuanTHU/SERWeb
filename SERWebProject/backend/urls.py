@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^project_card_display', views.project_card_display, name='project_card_display'),
     url(r'^user_info_submit', views.user_info_submit, name='user_info_submit'),
     url(r'^user_info_request', views.user_info_request, name='user_info_request'),
+    url(r'^project_info_request/(?P<project_id>[0-9]+)', views.project_info_request, name='project_info_request'),
 ]

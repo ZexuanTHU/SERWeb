@@ -123,3 +123,17 @@ def user_info_request(request):
             raise Http404("User does not exist")
 
     return JsonResponse(response)
+
+
+def project_info_request(request, project_id):
+    response = {}
+    if request.method == 'GET':
+        try:
+            project_info = Project.objects.filter(pk=project_id)
+            response['list'] = json.loads(serializers.serialize("json", project_info))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+        except:
+            raise Http404("Project does not exist")
+
+    return JsonResponse(response)
