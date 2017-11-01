@@ -25,7 +25,7 @@
 
           <div id="register" class="w3-container panel"
                :style="{display:openedPanle==='register'?'inline-block':'none'}">
-            <h1 style="font-size: large;margin: auto">regiser</h1>
+            <projRegister></projRegister>
           </div>
           <div id="saved_event" class="w3-container panel"
                :style="{display:openedPanle==='saved_event'?'inline-block':'none'}">
@@ -38,11 +38,11 @@
           <div id="modify" class="w3-container panel" style="display: inline-block"
                :style="{display:openedPanle==='modify'?'inline-block':'none'}">
             <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
-              <p style="margin-top: 40px"><span class="input-tag">姓名:</span> <input type="text" name="modi-name" >
+              <p style="margin-top: 40px"><span class="input-tag">姓名:</span> <input type="text" name="modi-name">
               </p>
-              <p><span class="input-tag">电话:</span> <input type="text" name="modi-phone" ></p>
-              <p><span class="input-tag">邮箱:</span> <input type="text" name="modi-email" ></p>
-              <p><span class="input-tag">学号:</span> <input type="text" name="modi-stu-id" ></p>
+              <p><span class="input-tag">电话:</span> <input type="text" name="modi-phone"></p>
+              <p><span class="input-tag">邮箱:</span> <input type="text" name="modi-email"></p>
+              <p><span class="input-tag">学号:</span> <input type="text" name="modi-stu-id"></p>
               <p style="height: 200px"><span class="input-tag" style="vertical-align: middle">备注:</span>
                 <textarea style="margin-left:10px;width: 400px;height:200px;vertical-align: middle" name="modi-extra"
                           type="text"></textarea></p>
@@ -79,6 +79,7 @@
 <script>
   import mheader from '../components/header'
   import mfooter from '../components/mfooter'
+  import projRegister from '../components/UserPage/projRegister.vue'
 
   export default {
     name: 'test',
@@ -170,7 +171,8 @@
     },
     components: {
       'mheader': mheader,
-      'mfooter': mfooter
+      'mfooter': mfooter,
+      'projRegister': projRegister
     }
   }
 </script>
