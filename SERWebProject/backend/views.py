@@ -129,7 +129,7 @@ def project_info_request(request, project_id):
     response = {}
     if request.method == 'GET':
         try:
-            project_info = User.objects.filter(pk=project_id)
+            project_info = Project.objects.filter(pk=project_id)
             response['list'] = json.loads(serializers.serialize("json", project_info))
             response['msg'] = 'success'
             response['error_num'] = 0
