@@ -1,8 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404
 from django.template import loader
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, UserInfoForm
-from .models import Project
+from .models import Project, User
 from django.contrib import auth
 from django.core import serializers
 import json
@@ -108,3 +108,18 @@ def user_info_submit(request):
         form = RegisterForm()
 
     return render(request, 'backend/register.html', context={'form': form})
+
+
+def user_info_request(request):
+    response = {}
+    if request.method == 'GET':
+        username = request.GET['username']
+        try:
+            user_info = User.objects.filter(username=username)
+            response['list'] = json.loads(serializers.serialize("json", user_info))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+        except:
+            raise Http404("User does not exist")
+
+    return JsonResponse(response)

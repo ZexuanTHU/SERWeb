@@ -5,12 +5,16 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
+import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import Register from '@/components/register/Register'
 import VueResource from 'vue-resource'
+import auth from '../auth'
 
 Vue.use(Router)
 Vue.use(Element)
 Vue.use(VueResource)
+
+auth.checkAuth()
 
 export default new Router({
   routes: [
@@ -28,6 +32,11 @@ export default new Router({
       path: '/CompetitionInfo',
       name: 'CompetitionInfo',
       component: CompetitionInfo
+    },
+    {
+      path: '/GroupInfo',
+      name: 'GroupInfo',
+      component: GroupInfo
     },
     {
       path: '/userpage',
