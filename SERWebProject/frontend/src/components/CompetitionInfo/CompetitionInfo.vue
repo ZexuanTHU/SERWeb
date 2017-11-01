@@ -46,14 +46,14 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <el-dialog title="报名资料填写" :visible.sync="dialogFormVisible">
+      <el-button id="submit" @click="dialogFormVisible = true, user_info_request('skyrealmz')" type="primary">立即报名</el-button>
+      <el-dialog title="报名资料确认" :visible.sync="dialogFormVisible">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="院系" prop="department">
+          <el-form-item label="院系" prop="faculty">
             <el-select v-model="ruleForm.faculty" placeholder="选择院系">
-              <el-option label="计算机" value="cs"></el-option>
-              <el-option label="自动化" value="auto"></el-option>
-              <el-option label="电子" value="ee"></el-option>
+              <el-option label="计算机" value="CS"></el-option>
+              <el-option label="自动化" value="AUTO"></el-option>
+              <el-option label="电子" value="EE"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="名字" prop="name">
@@ -61,32 +61,32 @@
           </el-form-item>
           <el-form-item label="性别" prop="gender">
             <el-select v-model="ruleForm.gender" placeholder="选择性别">
-              <el-option label="男" value="male"></el-option>
-              <el-option label="女" value="female"></el-option>
+              <el-option label="男" value="M"></el-option>
+              <el-option label="女" value="F"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="证件号码" prop="idNumber">
+          <el-form-item label="证件号码" prop="id_card">
             <el-input v-model="ruleForm.id_card"></el-input>
           </el-form-item>
-          <el-form-item label="学号" prop="studentId">
+          <el-form-item label="学号" prop="student_id">
             <el-input v-model="ruleForm.student_id"></el-input>
           </el-form-item>
-          <el-form-item prop="birth">
+          <el-form-item prop="birth_date">
             <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth_date" style="width: 100%;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="服装号码" prop="clothSize">
+          <el-form-item label="服装号码" prop="clothes_size">
             <el-select v-model="ruleForm.clothes_size" placeholder="选择号码">
-              <el-option label="S" value="s"></el-option>
-              <el-option label="M" value="m"></el-option>
-              <el-option label="L" value="l"></el-option>
-              <el-option label="XL" value="xl"></el-option>
+              <el-option label="S" value="S"></el-option>
+              <el-option label="M" value="M"></el-option>
+              <el-option label="L" value="L"></el-option>
+              <el-option label="XL" value="XL"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="移动电话" prop="phone">
+          <el-form-item label="移动电话" prop="cellphone_num">
             <el-input v-model="ruleForm.cellphone_num"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">报名</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -140,11 +140,11 @@ export default {
         ],
         id_card: [
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 0, max: 20, message: '长度在 x 到 x 个字符', trigger: 'blur' }
         ],
         student_id: [
           { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { legth: 10, message: '长度10个字符', trigger: 'blur' }
         ],
         birth_date: [
           { required: true, message: '请选择生日', trigger: 'change' }
@@ -154,7 +154,7 @@ export default {
         ],
         cellphone_num: [
           { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 12, max: 12, message: '长度12个字符', trigger: 'blur' }
         ]
       },
       formLabelWidth: '120px'
@@ -173,6 +173,19 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    user_info_request (username) {
+      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + username).then((response) => {
+        var res = JSON.parse(response.bodyText)
+        console.log(res)
+        if (res.error_num === 0) {
+          this.ruleForm = res.list[0].fields
+          this.ruleForm.birth_date = ''
+        } else {
+          this.$message.error('获取项目列表失败"')
+          console.log(res['msg'])
+        }
+      })
     }
   }
 }
