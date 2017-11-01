@@ -12,3 +12,9 @@ class RegisterForm(UserCreationForm):
     def account9auth():
         redirect('https://accounts.net9.org/api/authorize')
 
+
+class UserInfoForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ("student_id", "id_card", "gender", "birth_date", "reading_degree", "faculty", "class_id",
+                  "clothes_size", "email", "cellphone_num", "dormitory")
