@@ -13,14 +13,13 @@
         <el-menu-item index="2">赛事信息</el-menu-item>
         <el-menu-item index="3">酒井名人堂</el-menu-item>
         <el-menu-item index="4">系代表队宣传</el-menu-item>
-        <el-menu-item id="user" index="5">
+        <el-submenu class="user" index="5" v-if="user.authenticated">
+          <template slot="title">this.loginForm.username</template>
+          <el-menu-item index="5-1"><router-link to="userpage">用户信息</router-link></el-menu-item>
+          <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
+        </el-submenu>
+        <el-menu-item class="user" index="5">
           <!--<router-link to="Login">登录/新用户认证</router-link>-->
-          <el-submenu index="6" v-if="user.authenticated">
-            <template slot="title">this.loginForm.username</template>
-            <el-menu-item index="6-1"><router-link to="userpage">用户信息</router-link></el-menu-item>
-            <el-menu-item index="6-2" @click="logout()">登出</el-menu-item>
-          </el-submenu>
-
           <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
 
           <el-dialog
@@ -146,8 +145,8 @@
           label="赛事报名"
           align="center">
           <template scope="scope">
-            <el-button type="text" size="small">
-             <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">报名</router-link>
+            <el-button  type="text" size="small">
+              <router-link to="CompetitionInfo">报名</router-link>
             </el-button>
           </template>
         </el-table-column>
@@ -418,7 +417,7 @@
     text-decoration: none;
   }
 
-  #user {
+  .user {
     float: right;
   }
 
