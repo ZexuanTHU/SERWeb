@@ -83,3 +83,6 @@ class ProjectRegisterRelationship(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     register_datetime = models.DateTimeField()
+
+    def __str__(self):
+        return self.project.project_name + ' ' + self.user.username
