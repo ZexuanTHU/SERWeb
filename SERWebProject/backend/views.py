@@ -2,9 +2,10 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 from django.template import loader
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User
+from .models import Project, User, ProjectRegisterRelationship
 from django.contrib import auth
 from django.core import serializers
+from django.utils import timezone
 import json
 
 
@@ -137,3 +138,26 @@ def project_info_request(request, project_id):
             raise Http404("Project does not exist")
 
     return JsonResponse(response)
+
+
+def project_register(request, user_id, project_id):
+    if request.method == 'GET':
+        # username = request.GET['username']
+        user = User.objects.get(pk=user_id)
+        project = Project.objects.get(pk=project_id)
+        project_register_form = ProjectRegisterRelationship(user=user, project=project,
+                                                            register_datetime=timezone.now())
+        try:
+            # user = User.objects.get(username=username)
+            # project = Project.objects.get(pk=project_id)
+            # project_register_form = ProjectRegisterRelationship(user=user, project=project,
+            #                                                     register_datetime=timezone.now())
+            project_register_form.save()
+            return HttpResponse("Success!")
+
+        except:
+            raise Http404("Register error!")
+
+    return render(request, 'backend/register.html', context={'form': ProjectRegisterRelationship})
+
+
