@@ -2,71 +2,7 @@
 
 <template>
   <div>
-    <div id="nav">
-      <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><router-link to="./">首页</router-link></el-menu-item>
-        <!--<el-submenu index="2">
-          <template slot="title">项目列表</template>
-          <el-menu-item index="2-1">项目报名</el-menu-item>
-          <el-menu-item index="2-2">比赛日程</el-menu-item>
-        </el-submenu>-->
-        <el-menu-item index="2">赛事信息</el-menu-item>
-        <el-menu-item index="3">酒井名人堂</el-menu-item>
-        <el-menu-item index="4">系代表队宣传</el-menu-item>
-        <el-submenu class="user" index="5" v-if="user.authenticated">
-          <template slot="title">this.loginForm.username</template>
-          <el-menu-item index="5-1"><router-link to="userpage">用户信息</router-link></el-menu-item>
-          <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
-        </el-submenu>
-        <el-menu-item class="user" index="5">
-          <!--<router-link to="Login">登录/新用户认证</router-link>-->
-          <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
-
-          <el-dialog
-            :visible.sync="dialogVisible"
-            size="tiny"
-            :before-close="handleClose">
-            <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="120px" class="login">
-              <el-form-item  prop="username">
-                <el-input placeholder="Account9 用户名"  v-model="loginForm.username" auto-complete="off"></el-input>
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input placeholder="Account9 密码" type="password" v-model="loginForm.password" auto-complete="off"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-              </el-form-item>
-
-              <el-collapse v-model="activeName2">
-                <el-collapse-item title="新用户认证">
-                  <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="120px" class="login">
-                    <el-form-item prop="username">
-                      <el-input placeholder="Account9 用户名" v-model="registerForm.username" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <!--<el-form-item prop="email">
-						<el-input placeholder="E-mail" type="email" v-model="registerForm.email" auto-complete="off"></el-input>
-					  </el-form-item>-->
-                    <el-form-item prop="pass">
-                      <el-input placeholder="Account9 密码" type="password" v-model="registerForm.pass" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="checkPass">
-                      <el-input placeholder="请再次确认 Account9 密码" type="password" v-model="registerForm.checkPass"
-                                auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                      <el-button type="primary" @click="register('registerForm')">认证</el-button>
-                    </el-form-item>
-                  </el-form>
-                </el-collapse-item>
-              </el-collapse>
-                <!--<el-button  @click="dialogVisible2 = true">新用户认证</el-button>-->
-                <!--<router-link to="Register">新用户认证</router-link>-->
-            </el-form>
-          </el-dialog>
-        </el-menu-item>
-      </el-menu>
-    </div>
-
+    <mheader></mheader>
     <div id="carousel">
       <el-carousel :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
@@ -78,7 +14,7 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
-      <el-row  :data="hot_project_card">
+      <el-row :data="hot_project_card">
         <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
           <el-card :body-style="{ padding: '0px' }">
             <template scope="scope"> {{ scope.fields.project_name1 }} </template>
@@ -145,7 +81,7 @@
           label="赛事报名"
           align="center">
           <template scope="scope">
-            <el-button  type="text" size="small">
+            <el-button type="text" size="small">
               <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">报名</router-link>
             </el-button>
           </template>
@@ -170,16 +106,20 @@
 
     <div id="statistics">
       <div class="container">
-        <el-progress type="circle" :percentage="0"></el-progress><h1>event1</h1>
+        <el-progress type="circle" :percentage="0"></el-progress>
+        <h1>event1</h1>
       </div>
       <div class="container">
-        <el-progress type="circle" :percentage="25"></el-progress><h1>event2</h1>
+        <el-progress type="circle" :percentage="25"></el-progress>
+        <h1>event2</h1>
       </div>
       <div class="container">
-        <el-progress type="circle" :percentage="50"></el-progress><h1>event3</h1>
+        <el-progress type="circle" :percentage="50"></el-progress>
+        <h1>event3</h1>
       </div>
       <div class="container">
-        <el-progress type="circle" :percentage="100"></el-progress><h1>event4</h1>
+        <el-progress type="circle" :percentage="100"></el-progress>
+        <h1>event4</h1>
       </div>
 
     </div>
@@ -189,6 +129,7 @@
 
 <script>
   import auth from '../auth'
+  import mheader from './header.vue'
 
   export default {
     data () {
@@ -270,10 +211,10 @@
         },
         loginRules: {
           username: [
-            { validator: validateUsername, trigger: 'blur' }
+            {validator: validateUsername, trigger: 'blur'}
           ],
           password: [
-            { validator: validatePassword, trigger: 'blur' }
+            {validator: validatePassword, trigger: 'blur'}
           ]
         },
         registerForm: {
@@ -365,7 +306,7 @@
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
                       this.$http.get('http://localhost:8000/api/register?username=' + uname +
-//                        '&email=' + email +
+                        //                        '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)
                       alert('认证成功！')
@@ -405,6 +346,9 @@
           }
         })
       }
+    },
+    components: {
+      'mheader': mheader
     }
   }
 </script>
