@@ -146,7 +146,7 @@
           align="center">
           <template scope="scope">
             <el-button  type="text" size="small">
-              <router-link to="CompetitionInfo">报名</router-link>
+              <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">报名</router-link>
             </el-button>
           </template>
         </el-table-column>
