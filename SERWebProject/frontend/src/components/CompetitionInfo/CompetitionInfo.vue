@@ -115,6 +115,8 @@ export default {
         project_text: ''
       },
       dialogFormVisible: false,
+      user_pk: '',
+      project_pk: '',
       ruleForm: {
         faculty: '',
         name: '',
@@ -145,7 +147,7 @@ export default {
           { legth: 10, message: '长度10个字符', trigger: 'blur' }
         ],
         birth_date: [
-          { required: true, message: '请选择生日', trigger: 'change' }
+          { type: 'date', message: '请选择生日', trigger: 'change' }
         ],
         clothes_size: [
           { required: true, message: '请选择衣服号码', trigger: 'change' }
@@ -174,6 +176,7 @@ export default {
         if (res.error_num === 0) {
           this.pageInfo = res.list[0].fields
           this.pageInfo.attend = '30'
+          this.project_pk = res.list[0].pk
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
@@ -187,6 +190,7 @@ export default {
         if (res.error_num === 0) {
           this.ruleForm = res.list[0].fields
           this.ruleForm.birth_date = ''
+          this.user_pk = res.list[0].pk
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
@@ -196,7 +200,9 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.user_pk + '/' + this.project_pk)
+          this.dialogFormVisible = false
+          alert('報名成功')
         } else {
           console.log('error submit!!')
           return false
