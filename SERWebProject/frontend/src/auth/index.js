@@ -27,7 +27,7 @@ export default {
 //        router.push(redirect)
 //      }
 //    }, function (response) {
-      // Error
+    // Error
 //      console.log(response.data)
 //    })
     Vue.$http.headers.common['Authorization'] = this.getAuthHeader()
@@ -45,9 +45,9 @@ export default {
     })
   },
   logout () {
-    window.localStorage.removeItem('token')
+    localStorage.removeItem('token')
     this.user.authenticated = false
-    delete Vue.$http.headers.common['Authorization']
+    // delete Vue.$http.headers.common['Authorization']
   },
   checkAuth () {
     var jwt = localStorage.getItem('id_token')
@@ -59,5 +59,8 @@ export default {
   },
   getAuthHeader () {
     return 'Bearer ' + window.localStorage.getItem('token')
+  },
+  test () {
+    alert('yes')
   }
 }

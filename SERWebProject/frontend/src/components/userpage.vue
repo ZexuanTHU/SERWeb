@@ -12,7 +12,7 @@
     </el-dialog>
     <mheader></mheader>
     <!-- Page content -->
-    <div class="w3-content" style="max-width:2000px;margin-top:46px">
+    <div class="w3-content" style="max-width:2000px;margin-top:6px">
       <div class="w3-container" style="width: 100%;min-height: 650px">
         <div class="w3-left" style="width: 200px;height: 100% ">
           <el-col :span="8">
@@ -91,8 +91,8 @@
       }
     },
     methods: {
-      openPanle: function (evt) {
-        this.openedPanle = evt
+      openPanle: function (index) {
+        this.openedPanle = index
       },
       onFileChange (e) {
         var files = e.target.files || e.dataTransfer.files

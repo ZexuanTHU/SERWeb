@@ -119,7 +119,7 @@
       </div>
       <div class="container">
         <el-progress type="circle" :percentage="100"></el-progress>
-        <h1>event4</h1>
+        <h1 @click="console.log(auth)">event4</h1>
       </div>
 
     </div>
