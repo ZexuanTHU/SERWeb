@@ -21,9 +21,9 @@
     <el-form-item label="名字" prop="name">
       <el-input v-model="infoForm.name" class="mid"></el-input>
     </el-form-item>
-    <br   v-if="inline">
+    <br v-if="inline">
     <el-form-item label="性别" prop="gender">
-      <el-select v-model="infoForm.gender" placeholder="选择性别" class="mid">
+      <el-select v-model="infoForm.gender" placeholder="选择" class="min">
         <el-option label="男" value="male"></el-option>
         <el-option label="女" value="female"></el-option>
       </el-select>
@@ -32,15 +32,15 @@
       <el-input v-model="infoForm.id_card" class="mid"></el-input>
     </el-form-item>
     <br v-if="inline">
-    <el-form-item label="学号" prop="stustudent_id">
+    <el-form-item label="学号" prop="student_id">
       <el-input v-model="infoForm.student_id" class="mid"></el-input>
     </el-form-item>
-    <el-form-item prop="birth" label="生日" >
+    <el-form-item prop="birth" label="生日">
       <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birth_date" class="mid"></el-date-picker>
     </el-form-item>
     <br v-if="inline">
     <el-form-item label="服装号码" prop="clothes_size">
-      <el-select v-model="infoForm.clothes_size" placeholder="选择号码" class="mid">
+      <el-select v-model="infoForm.clothes_size" placeholder="选择" class="min">
         <el-option label="S" value="s"></el-option>
         <el-option label="M" value="m"></el-option>
         <el-option label="L" value="l"></el-option>
@@ -84,6 +84,15 @@
           cellphone_num: '',
           email: '',
           dormitory: ''
+        },
+        rules: {
+          name: [
+            {required: true, message: '请输入名字'}
+          ],
+          student_id: [
+            {type: 'number', message: '学号为数字'},
+            {required: true, message: '请输入学号'}
+          ]
         }
       }
     },

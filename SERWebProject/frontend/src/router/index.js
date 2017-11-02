@@ -9,7 +9,7 @@ import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import Register from '@/components/register/Register'
 import VueResource from 'vue-resource'
 import auth from '../auth'
-
+// import mheader from '@/components/header'
 Vue.use(Router)
 Vue.use(Element)
 Vue.use(VueResource)

@@ -78,6 +78,7 @@
   import infoRegister from '../components/UserPage/infoRegister.vue'
   import projRegister from '../components/UserPage/projRegister.vue'
   import viewRegister from '../components/UserPage/viewRegister.vue'
+
   export default {
     name: 'test',
     data () {
