@@ -133,59 +133,7 @@
 
   export default {
     data () {
-      var validateUsername = (rule, value, callback) => {
-//        var pattern = /^[\w\u4e00-\u9fa5]{3,10}!$/g
-        if (value === '') {
-          callback(new Error('请输入用户名'))
-        } else {
-          callback()
-        }
-      }
-      var validatePassword = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else {
-          callback()
-        }
-      }
-      var validateUsername2 = (rule, value, callback) => {
-        var pattern = /^[\w\u4e00-\u9fa5]{3,10}$/g
-        if (value === '') {
-          callback(new Error('请输入用户名'))
-        } else if (!pattern.test(value)) {
-          callback(new Error('请输入3-10个字母/汉字/数字/下划线'))
-        } else {
-          callback()
-        }
-      }
-      var validatePass1 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else {
-          if (this.registerForm.checkPass !== '') {
-            this.$refs.registerForm.validateField('checkPass')
-          }
-          callback()
-        }
-      }
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'))
-        } else if (value !== this.registerForm.pass) {
-          callback(new Error('两次输入密码不一致!'))
-        } else {
-          callback()
-        }
-      }
       return {
-        user: auth.user,
-        dialogVisible: false,
-        dialogVisible2: false,
-        activeIndex: '1',
-        activeIndex2: '1',
-        activeName: 'first',
-        activeName2: '10',
-        currentDate: new Date(),
         hot_project_card: {
           fields: [{
             project_name1: '',
@@ -204,36 +152,7 @@
             contact_tel: ''
           }],
           pk: ''
-        }],
-        loginForm: {
-          username: '',
-          password: ''
-        },
-        loginRules: {
-          username: [
-            {validator: validateUsername, trigger: 'blur'}
-          ],
-          password: [
-            {validator: validatePassword, trigger: 'blur'}
-          ]
-        },
-        registerForm: {
-          username: '',
-          email: '',
-          pass: '',
-          checkPass: ''
-        },
-        registerRules: {
-          username: [
-            {validator: validateUsername2, trigger: 'blur'}
-          ],
-          pass: [
-            {validator: validatePass1, trigger: 'blur'}
-          ],
-          checkPass: [
-            {validator: validatePass2, trigger: 'blur'}
-          ]
-        }
+        }]
       }
     },
     created: function () {
