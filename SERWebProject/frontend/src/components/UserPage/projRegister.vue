@@ -1,6 +1,6 @@
 <template>
   <div id="more news">
-    <h1 align="mid">其他赛事</h1>
+    <h1 align="center">比赛列表</h1>
     <el-table
       :data="latest_project_list"
       height="200"

@@ -1,7 +1,7 @@
 <!--主界面上未使用此模板-->
 <template>
-  <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo w3-top" mode="horizontal"
-           style="position: fixed;z-index: 3"
+  <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
+           style="position: absolute;z-index: 3;width: 100%;top: 0;"
            @select="handleSelect">
     <el-menu-item style="margin-left:10px " index="1">首页</el-menu-item>
     <el-menu-item index='3'><a href="#" target="_blank">历史沿革</a></el-menu-item>

@@ -32,20 +32,17 @@
                :style="{display:openedPanle==='0'?'inline-block':'none'}">
             <projRegister></projRegister>
           </div>
-          <div id="saved_event" class="w3-container panel"
-               :style="{display:openedPanle==='1'?'inline-block':'none'}">
-            <h1 style="font-size: large;margin: auto">saved_event</h1>
-            <infoChange></infoChange>
-          </div>
           <div id="view_register" class="w3-container panel "
+               :style="{display:openedPanle==='1'?'inline-block':'none'}">
+            <viewRegister></viewRegister>
+          </div>
+          <div id="saved_event" class="w3-container panel"
                :style="{display:openedPanle==='2'?'inline-block':'none'}">
-            <h1 style="font-size: large;margin: auto">view_regiser</h1>
+            <h1 style="font-size: large;margin: auto">saved_event</h1>
           </div>
           <div id="modify" class="w3-container panel" style="display: inline-block"
                :style="{display:openedPanle==='3'?'inline-block':'none'}">
             <infoRegister :inline='false'></infoRegister>
-
-
             <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
               <img class="icon" :src="imageUrl"
                    style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"
@@ -64,6 +61,7 @@
                 <span style="padding-left: 20px">地点：</span><input style="left: 500px" type="text" name="add-place"></p>
             </form>
 
+
           </div>
         </div>
       </div>
@@ -79,14 +77,14 @@
   import mfooter from '../components/mfooter'
   import infoRegister from '../components/UserPage/infoRegister.vue'
   import projRegister from '../components/UserPage/projRegister.vue'
-
+  import viewRegister from '../components/UserPage/viewRegister.vue'
   export default {
     name: 'test',
     data () {
       return {
         registerVisible: true,
         imageUrl: require('../image/icon.jpg'),
-        openedPanle: 'modify_info',
+        openedPanle: '0',
         applyState: JSON.stringify({ddl: 'ddl'})
 
       }
@@ -176,7 +174,8 @@
       'mheader': mheader,
       'mfooter': mfooter,
       'infoRegister': infoRegister,
-      'projRegister': projRegister
+      'projRegister': projRegister,
+      'viewRegister': viewRegister
     }
   }
 </script>
