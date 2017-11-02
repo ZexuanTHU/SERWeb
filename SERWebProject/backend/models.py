@@ -5,42 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
-class Project(models.Model):
-    project_name = models.CharField(max_length=30)  # 项目名称
-    project_text = models.CharField(max_length=200)  # 项目描述
-    pub_date = models.DateTimeField('date published')  # 发布时间
-    ddl_date = models.DateTimeField('registration deadline')  # 发布时间
-    max_reg = models.IntegerField(default=100)
-    contact_name = models.CharField(max_length=30, default='郭志芃')
-    contact_tel = models.CharField(max_length=30, default='18813040000')
-    project_hot = models.IntegerField(default=0)
-    group_project = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.project_name
-
-    def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
-    def was_below_max_reg(self):
-        if self.max_reg - self.project_hot >= 0:
-            return True
-        else:
-            return False
-
-    def show_project_hot(self):
-        return self.project_hot
-
-
-class Choice(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=10)
-    votes = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.choice_text
-
-
 class User(AbstractUser):
     # email = models.EmailField()
     MALE = 'M'
@@ -85,3 +49,37 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         pass
+
+
+class Project(models.Model):
+    project_name = models.CharField(max_length=30)  # 项目名称
+    project_text = models.CharField(max_length=200)  # 项目描述
+    pub_date = models.DateTimeField('date published')  # 发布时间
+    ddl_date = models.DateTimeField('registration deadline')  # 发布时间
+    max_reg = models.IntegerField(default=100)
+    contact_name = models.CharField(max_length=30, default='郭志芃')
+    contact_tel = models.CharField(max_length=30, default='18813040000')
+    project_hot = models.IntegerField(default=0)
+    group_project = models.BooleanField(default=False)
+    registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
+
+    def __str__(self):
+        return self.project_name
+
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    def was_below_max_reg(self):
+        if self.max_reg - self.project_hot >= 0:
+            return True
+        else:
+            return False
+
+    def show_project_hot(self):
+        return self.project_hot
+
+
+class ProjectRegisterRelationship(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    register_datetime = models.DateTimeField()
