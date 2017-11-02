@@ -38,7 +38,7 @@
       </div>
       <div class="status">
         <el-progress :show-text="false" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
-        <h3>{{attend}}人報名</h3>
+        <h3>{{pageInfo.attend}}人報名</h3>
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
@@ -89,7 +89,7 @@
       </el-dialog>
       <div id="detail">
         <hr>
-        <h2 :id="basic" align="left">详细介绍</h2>
+        <h2 align="left">详细介绍</h2>
         <p>
           {{pageInfo.project_text}}
         </p>

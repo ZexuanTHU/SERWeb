@@ -38,52 +38,40 @@
       </div>
       <div class="status">
         <el-progress :show-text="false" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
-        <h3>{{attend}}人報名</h3>
+        <h3>{{pageInfo.attend}}人報名</h3>
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
       <el-button id="submit" @click="dialogFormVisible = true, user_info_request('skyrealmz')" type="primary">立即报名</el-button>
-      <el-dialog title="隊長资料填写" :visible.sync="dialogFormVisible">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="院系" prop="faculty">
-            <el-select v-model="ruleForm.faculty" placeholder="选择院系">
-              <el-option label="计算机" value="CS"></el-option>
-              <el-option label="自动化" value="AUTO"></el-option>
-              <el-option label="电子" value="EE"></el-option>
-            </el-select>
+      <el-dialog title="團隊報名" :visible.sync="dialogFormVisible">
+        <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+          <el-form-item
+            prop="name"
+            label="隊長姓名"
+            :rules="[
+              { required: true, message: '请输入隊長姓名', trigger: 'blur' },
+              { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ]"
+          >
+            <el-input v-model="dynamicValidateForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="名字" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-select v-model="ruleForm.gender" placeholder="选择性别">
-              <el-option label="男" value="M"></el-option>
-              <el-option label="女" value="F"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="证件号码" prop="id_card">
-            <el-input v-model="ruleForm.id_card"></el-input>
-          </el-form-item>
-          <el-form-item label="学号" prop="student_id">
-            <el-input v-model="ruleForm.student_id"></el-input>
-          </el-form-item>
-          <el-form-item prop="birth_date">
-            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth_date" style="width: 100%;"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="服装号码" prop="clothes_size">
-            <el-select v-model="ruleForm.clothes_size" placeholder="选择号码">
-              <el-option label="S" value="S"></el-option>
-              <el-option label="M" value="M"></el-option>
-              <el-option label="L" value="L"></el-option>
-              <el-option label="XL" value="XL"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="移动电话" prop="cellphone_num">
-            <el-input v-model="ruleForm.cellphone_num"></el-input>
+          <el-form-item
+            v-for="(teamate, index) in dynamicValidateForm.teamates"
+            :label="'队员' + index"
+            :key="teamate.key"
+            :prop="'teamates.' + index + '.value'"
+            :rules="[
+            {required: true, message: '队员不能为空', trigger: 'blur'},
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ]"
+          >
+            <el-input v-model="teamate.value"></el-input>
+            <el-button @click.prevent="removeteamate(teamate)">删除</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">报名</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
+            <el-button @click="addteamate">新增队友</el-button>
+            <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -91,7 +79,7 @@
         <hr>
         <h2 align="left">详细介绍</h2>
         <p>
-          {{detail}}
+          {{pageInfo.project_text}}
         </p>
       </div>
     </div>
@@ -102,6 +90,12 @@
 export default {
   data () {
     return {
+      dynamicValidateForm: {
+        teamates: [{
+          value: ''
+        }],
+        name: ''
+      },
       pageInfo: {
         project_name: '',
         competitionTime: '',
@@ -124,36 +118,6 @@ export default {
         birth_date: '',
         clothes_size: '',
         cellphone_num: ''
-      },
-      rules: {
-        faculty: [
-          { required: true, message: '请选择院系' }
-        ],
-        name: [
-          { required: true, message: '请输入名字', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
-        gender: [
-          { required: true, message: '请选性别' }
-        ],
-        id_card: [
-          { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { min: 0, max: 20, message: '长度在 x 到 x 个字符', trigger: 'blur' }
-        ],
-        student_id: [
-          { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 10, max: 10, message: '长度10个字符', trigger: 'blur' }
-        ],
-        birth_date: [
-          { required: true, message: '请选择生日' }
-        ],
-        clothes_size: [
-          { required: true, message: '请选择衣服号码' }
-        ],
-        cellphone_num: [
-          { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 12, max: 12, message: '长度12个字符', trigger: 'blur' }
-        ]
       },
       formLabelWidth: '120px'
     }
@@ -180,6 +144,18 @@ export default {
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
+    removeteamate (item) {
+      var index = this.dynamicValidateForm.teamates.indexOf(item)
+      if (index !== -1) {
+        this.dynamicValidateForm.teamates.splice(index, 1)
+      }
+    },
+    addteamate () {
+      this.dynamicValidateForm.teamates.push({
+        value: '',
+        key: Date.now()
+      })
+    },
     project_info_request (pk) {
       this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
         var res = JSON.parse(response.bodyText)
@@ -198,7 +174,7 @@ export default {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
-          this.ruleForm = res.list[0].fields
+          this.dynamicValidateForm.name = res.list[0].fields.name
           this.ruleForm.birth_date = ''
         } else {
           this.$message.error('获取项目列表失败"')
@@ -234,5 +210,4 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
   }
-
 </style>
