@@ -1,4 +1,4 @@
-<!--主界面上未使用此模板-->
+
 <template>
   <div id="nav">
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -13,7 +13,7 @@
       <el-menu-item index="2">赛事信息</el-menu-item>
       <el-menu-item index="3">酒井名人堂</el-menu-item>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
-      <el-submenu class="user" index="5" v-if="user.authenticated">
+      <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right">
         <template slot="title">this.loginForm.username</template>
         <el-menu-item index="5-1">
           <router-link to="userpage">用户信息</router-link>
@@ -75,10 +75,28 @@
 
 <style scoped>
   @import url("//unpkg.com/element-ui@1.4.6/lib/theme-default/index.css");
-  @import url("../css/w3.css");
 
   a {
     text-decoration: none;
+  }
+
+  .user {
+    float: right;
+  }
+
+  .login {
+    max-width: 350px;
+    margin: auto;
+    padding: 50px;
+    /*box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/
+  }
+
+  .el-form-item {
+    margin-left: -120px;
+  }
+
+  .el-button {
+    width: 100%;
   }
 </style>
 
@@ -131,6 +149,14 @@
         }
       }
       return {
+        user: auth.user,
+        dialogVisible: false,
+        dialogVisible2: false,
+        activeIndex: '1',
+        activeIndex2: '1',
+        activeName: 'first',
+        activeName2: '10',
+        currentDate: new Date(),
         loginForm: {
           username: '',
           password: ''
