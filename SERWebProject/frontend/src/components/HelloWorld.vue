@@ -14,20 +14,23 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
-      <el-row :data="hot_project_card">
-        <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+      <br/>
+      <el-row>
+        <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }">
-            <template scope="scope"> {{ scope.fields.project_name1 }} </template>
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-
-              <div class="bottom clearfix">
+              <p>{{ field.fields.project_name }}</p>
+            </div>
+            <div style="width: 100%; position: relative; overflow: hidden">
+              <div style="width: 100px; float: left">
+                <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress></div>
+              <div  style="position: absolute; bottom: 0; right: 0">
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
               </div>
             </div>
-            <el-progress type="circle" :percentage="0"></el-progress>
           </el-card>
         </el-col>
       </el-row>
@@ -104,25 +107,25 @@
 
     <br/>
 
-    <div id="statistics">
-      <div class="container">
-        <el-progress type="circle" :percentage="0"></el-progress>
-        <h1>event1</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="25"></el-progress>
-        <h1>event2</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="50"></el-progress>
-        <h1>event3</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="100"></el-progress>
-        <h1>event4</h1>
-      </div>
+    <!--<div id="statistics">-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="0"></el-progress>-->
+        <!--<h1>event1</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="25"></el-progress>-->
+        <!--<h1>event2</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="50"></el-progress>-->
+        <!--<h1>event3</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="100"></el-progress>-->
+        <!--<h1 @click="console.log(auth)">event4</h1>-->
+      <!--</div>
 
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -134,13 +137,14 @@
   export default {
     data () {
       return {
-        hot_project_card: {
+        hot_project_card: [{
           fields: [{
-            project_name1: '',
-            project_hot1: ''
+            project_name: '',
+            project_hot: ''
           }],
-          pk1: ''
-        },
+          pk: '',
+          model: ''
+        }],
         latest_project_list: [{
           fields: [{
             project_name: '',

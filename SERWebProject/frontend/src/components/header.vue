@@ -1,9 +1,8 @@
-
 <template>
   <div id="nav">
-    <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="min-width: 1000px">
       <el-menu-item index="1">
-        <router-link to="./">首页</router-link>
+        首页
       </el-menu-item>
       <!--<el-submenu index="2">
         <template slot="title">项目列表</template>
@@ -13,14 +12,25 @@
       <el-menu-item index="2">赛事信息</el-menu-item>
       <el-menu-item index="3">酒井名人堂</el-menu-item>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
-      <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right">
-        <template slot="title">this.loginForm.username</template>
+      <!--<el-dropdown style="margin-right: 100px;float: right;margin-top: 8px">-->
+      <!--<span class="el-dropdown-link" >-->
+      <!--ssss-->
+      <!--&lt;!&ndash;<img class="icon" :src="imageUrl" style="width: 40px;height:40px;border-radius: 30%;" alt="">&ndash;&gt;-->
+      <!--&lt;!&ndash;{{ loginForm.username }}&ndash;&gt;-->
+      <!--</span>-->
+      <!--<el-dropdown-menu slot="dropdown">-->
+      <!--<el-dropdown-item>注销</el-dropdown-item>-->
+      <!--<el-dropdown-item divided>切换账号</el-dropdown-item>-->
+      <!--</el-dropdown-menu>-->
+      <!--</el-dropdown>-->
+      <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 30px">
+        <template slot="title">{{username}}</template>
         <el-menu-item index="5-1">
-          <router-link to="userpage">用户信息</router-link>
+          用户信息
         </el-menu-item>
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
-      <el-menu-item class="user" index="5">
+      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px">
         <!--<router-link to="Login">登录/新用户认证</router-link>-->
         <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
 
@@ -102,6 +112,7 @@
 
 <script>
   import auth from '../auth'
+
   export default {
     data () {
       var validateUsername = (rule, value, callback) => {
@@ -149,6 +160,9 @@
         }
       }
       return {
+        test1: {
+          one: 1
+        },
         user: auth.user,
         dialogVisible: false,
         dialogVisible2: false,
@@ -188,7 +202,33 @@
         }
       }
     },
+    computed: {
+      username: function () {
+        return localStorage.getItem('id_token')
+      }
+    },
     methods: {
+      handleSelect (index) {
+        switch (index) {
+          case '1':
+//            console.log(index)
+            this.$router.push('/')
+            break
+          case '2':
+            console.log(this.loginForm)
+            break
+          case '5-1':
+            this.$router.push('userpage')
+        }
+      },
+      logout () {
+        console.log(auth)
+//        this.$router.push('/')
+//        auth.test()
+        auth.logout()
+        this.user.authenticated = false
+        this.$router.push('/')
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -198,10 +238,11 @@
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 if (res.status === 0) {
-                  alert('登录成功，返回首页')
+//                  alert('登录成功，返回首页')
                   this.dialogVisible = false
 //                  this.$router.push('/')
 //                  this.user.authenticated = true
+                  this.user.authenticated = true
                   auth.login(this, this.loginForm, 'userpage')
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
@@ -236,7 +277,7 @@
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
                       this.$http.get('http://localhost:8000/api/register?username=' + uname +
-//                        '&email=' + email +
+                        //                        '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)
                       alert('认证成功！')
