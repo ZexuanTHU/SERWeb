@@ -16,18 +16,21 @@
       <a href="" target="_blank" id="more">查看更多 ></a>
       <br/>
       <el-row>
-        <el-col :span="8" v-for="field in hot_project_card">
+        <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }">
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-                <p>{{ field.fields.project_name }}</p>
-              <div class="bottom clearfix">
+              <p>{{ field.fields.project_name }}</p>
+            </div>
+            <div style="width: 100%; position: relative; overflow: hidden">
+              <div style="width: 100px; float: left">
+                <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress></div>
+              <div  style="position: absolute; bottom: 0; right: 0">
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
               </div>
             </div>
-            <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress>
           </el-card>
         </el-col>
       </el-row>
