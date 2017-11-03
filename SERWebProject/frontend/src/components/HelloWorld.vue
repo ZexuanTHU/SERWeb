@@ -14,20 +14,20 @@
     <div id="hot news">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
-      <el-row :data="hot_project_card">
-        <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+      <br/>
+      <el-row>
+        <el-col :span="8" v-for="field in hot_project_card">
           <el-card :body-style="{ padding: '0px' }">
-            <template scope="scope"> {{ scope.fields.project_name1 }} </template>
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
-
+                <p>{{ field.fields.project_name }}</p>
               <div class="bottom clearfix">
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
                 </el-button>
               </div>
             </div>
-            <el-progress type="circle" :percentage="0"></el-progress>
+            <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress>
           </el-card>
         </el-col>
       </el-row>
@@ -134,13 +134,14 @@
   export default {
     data () {
       return {
-        hot_project_card: {
+        hot_project_card: [{
           fields: [{
-            project_name1: '',
-            project_hot1: ''
+            project_name: '',
+            project_hot: ''
           }],
-          pk1: ''
-        },
+          pk: '',
+          model: ''
+        }],
         latest_project_list: [{
           fields: [{
             project_name: '',
