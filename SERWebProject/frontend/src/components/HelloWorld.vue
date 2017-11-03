@@ -107,25 +107,25 @@
 
     <br/>
 
-    <div id="statistics">
-      <div class="container">
-        <el-progress type="circle" :percentage="0"></el-progress>
-        <h1>event1</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="25"></el-progress>
-        <h1>event2</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="50"></el-progress>
-        <h1>event3</h1>
-      </div>
-      <div class="container">
-        <el-progress type="circle" :percentage="100"></el-progress>
-        <h1 @click="console.log(auth)">event4</h1>
-      </div>
+    <!--<div id="statistics">-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="0"></el-progress>-->
+        <!--<h1>event1</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="25"></el-progress>-->
+        <!--<h1>event2</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="50"></el-progress>-->
+        <!--<h1>event3</h1>-->
+      <!--</div>-->
+      <!--<div class="container">-->
+        <!--<el-progress type="circle" :percentage="100"></el-progress>-->
+        <!--<h1 @click="console.log(auth)">event4</h1>-->
+      <!--</div>
 
-    </div>
+    </div>-->
   </div>
 </template>
 
