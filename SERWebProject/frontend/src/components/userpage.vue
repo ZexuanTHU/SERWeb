@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-dialog
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      title="第一次登陆个人信息修改"
-      :visible.sync="registerVisible"
-      width="60%"
-      :show-close="false"
-      :before-close="handleClose">
-      <infoRegister @submit="registerVisible=false" :inline='true'></infoRegister>
-    </el-dialog>
+    <!--<el-dialog-->
+      <!--:close-on-click-modal="false"-->
+      <!--:close-on-press-escape="false"-->
+      <!--title="第一次登陆个人信息修改"-->
+      <!--:visible.sync="registerVisible"-->
+      <!--width="60%"-->
+      <!--:show-close="false"-->
+      <!--:before-close="handleClose">-->
+      <!--<infoRegister @submit="registerVisible=false" :inline='true'></infoRegister>-->
+    <!--</el-dialog>-->
     <mheader></mheader>
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:6px">

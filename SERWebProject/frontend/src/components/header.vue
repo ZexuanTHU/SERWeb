@@ -1,6 +1,18 @@
 <template>
   <div id="nav">
-    <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="min-width: 1000px">
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      title="第一次登陆个人信息修改"
+      :visible.sync="registerVisible"
+      width="100"
+      :show-close="false"
+      :before-close="handleClose">
+      <infoRegister @submit="handlesubmit" :inline='true'></infoRegister>
+
+    </el-dialog>
+    <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+             style="min-width: 1000px">
       <el-menu-item index="1">
         首页
       </el-menu-item>
@@ -112,6 +124,7 @@
 
 <script>
   import auth from '../auth'
+  import infoRegister from './UserPage/infoRegister.vue'
 
   export default {
     data () {
@@ -160,9 +173,7 @@
         }
       }
       return {
-        test1: {
-          one: 1
-        },
+        registerVisible: false,
         user: auth.user,
         dialogVisible: false,
         dialogVisible2: false,
@@ -208,6 +219,11 @@
       }
     },
     methods: {
+      handlesubmit () {
+        this.registerVisible = false
+        console.log(this.$route.fullPath)
+        auth.login(this, this.loginForm, this.$route.path)
+      },
       handleSelect (index) {
         switch (index) {
           case '1':
@@ -222,12 +238,14 @@
         }
       },
       logout () {
-        console.log(auth)
-//        this.$router.push('/')
+//        console.log(auth)
 //        auth.test()
         auth.logout()
         this.user.authenticated = false
-        this.$router.push('/')
+        var reg = new RegExp('userpage')
+        if (reg.test(this.$route.fullPath)) {
+          this.$router.push('/')
+        }
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -237,13 +255,15 @@
             this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
+                console.log('response', res)
                 if (res.status === 0) {
 //                  alert('登录成功，返回首页')
                   this.dialogVisible = false
-//                  this.$router.push('/')
-//                  this.user.authenticated = true
                   this.user.authenticated = true
-                  auth.login(this, this.loginForm, 'userpage')
+//                  this.$router.push('/')
+                  this.registerVisible = true
+                  console.log(this.registerVisible, 'regi')
+//                  auth.login(this, this.loginForm, 'userpage')
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
                 }
@@ -282,6 +302,7 @@
                         '&password2=' + pwd)
                       alert('认证成功！')
                       alert('你今后可以直接使用 Account9 账户登录 SERWeb 体育赛事报名平台！')
+
                       this.activeName2 = 10
 //                      this.$router.push('Login')
                     })
@@ -293,6 +314,9 @@
           }
         })
       }
+    },
+    components: {
+      'infoRegister': infoRegister
     }
   }
 </script>
