@@ -3,7 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import RegisterForm, UserInfoForm, LoginForm
+from .forms import RegisterForm, UserInfoForm
 from .models import Project, User, ProjectRegisterRelationship
 from django.contrib import auth
 from django.core import serializers
