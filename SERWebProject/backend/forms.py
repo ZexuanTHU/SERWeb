@@ -18,6 +18,6 @@ class RegisterForm(UserCreationForm):
 class UserInfoForm(ModelForm):
     class Meta(ModelForm):
         model = UserInfo
-        fields = ("user_id_num", "name", "student_id", "id_card", "gender", "birth_date", "reading_degree", "faculty", "class_id",
+        fields = ("name", "student_id", "id_card", "gender", "birth_date", "reading_degree", "faculty", "class_id",
                   "clothes_size", "email", "cellphone_num", "dormitory")
         # fields = ("name", "student_id")

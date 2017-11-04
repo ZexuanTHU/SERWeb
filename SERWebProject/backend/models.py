@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     # email = models.EmailField()
+    submit_info = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -41,7 +42,6 @@ class UserInfo(models.Model):
     }
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    user_id_num = models.CharField(max_length=1000000)
     name = models.CharField('姓名', max_length=10)
     student_id = models.CharField('学号', max_length=10)
     id_card = models.CharField('身份证号', max_length=18)
