@@ -7,6 +7,16 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     # email = models.EmailField()
+    submit_info = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
+
+    class Meta(AbstractUser.Meta):
+        pass
+
+
+class UserInfo(models.Model):
     MALE = 'M'
     FEMALE = 'F'
     GENDER = (
@@ -31,11 +41,12 @@ class User(AbstractUser):
         ('XL', 'XL')
     }
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField('姓名', max_length=10)
     student_id = models.CharField('学号', max_length=10)
     id_card = models.CharField('身份证号', max_length=18)
     gender = models.CharField('性别', choices=GENDER, max_length=1)
-    birth_date = models.TimeField('出生日期', default=timezone.now())
+    birth_date = models.DateField('出生日期', default=timezone.now())
     reading_degree = models.CharField('攻读学位', choices=READING_DEGREE, max_length=3)
     faculty = models.CharField('院系', max_length=20)
     class_id = models.CharField('班级', max_length=10)
@@ -45,10 +56,7 @@ class User(AbstractUser):
     dormitory = models.CharField('寝室号码', max_length=20)
 
     def __str__(self):
-        return self.username
-
-    class Meta(AbstractUser.Meta):
-        pass
+        return self.name
 
 
 class Project(models.Model):

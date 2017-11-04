@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship
+from .models import Project, User, ProjectRegisterRelationship, UserInfo
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -27,8 +27,9 @@ def register(request):
         # 验证数据的合法性
         if form.is_valid():
             # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
-            form.save()
-
+            new_user = form.save()
+            # 用户认证后创建未激活用户信息页
+            new_user.userinfo_set.create(user=new_user, name=new_user.username + ' 未激活用户信息')
             # 注册成功，跳转回首页
             return HttpResponse('register success!')
     else:
@@ -84,16 +85,26 @@ def project_card_display(request):
     return JsonResponse(response)
 
 
-def user_info_submit(request):
-    if request.method == 'GET':
-        form = UserInfoForm(request.GET)
+@csrf_exempt
+def user_info_submit(request, user_id):
+    if request.method == 'POST':
+        # 用户
+        user = User.objects.get(pk=user_id)
+        # 用户信息表
+        user_info = UserInfo.objects.get(user=user)
+        # 更新用户信息表
+        form = UserInfoForm(request.POST, instance=user_info)
 
         if form.is_valid():
-            form.save()
-            return redirect('/')
+            user_info = form.save(commit=False)
+            user_info.save()
+            user.submit_info = True
+            user.save()
+
+            return HttpResponse('submit user info success')
 
     else:
-        form = RegisterForm()
+        form = UserInfoForm()
 
     return render(request, 'backend/register.html', context={'form': form})
 
