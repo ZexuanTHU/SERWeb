@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship
+from .models import Project, User, ProjectRegisterRelationship, UserInfo
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -84,16 +84,22 @@ def project_card_display(request):
     return JsonResponse(response)
 
 
-def user_info_submit(request):
-    if request.method == 'GET':
-        form = UserInfoForm(request.GET)
+@csrf_exempt
+def user_info_submit(request, user_id):
+    if request.method == 'POST':
+        user = User.objects.get(pk=user_id)
+        form = UserInfoForm(request.POST)
 
         if form.is_valid():
             form.save()
-            return redirect('/')
+            user_info = UserInfo.objects.get(user_id_num=user_id)
+            user_info.user = user
+            user_info.save()
+
+            return HttpResponse('submit user info success')
 
     else:
-        form = RegisterForm()
+        form = UserInfoForm()
 
     return render(request, 'backend/register.html', context={'form': form})
 
