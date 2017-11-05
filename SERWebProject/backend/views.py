@@ -109,12 +109,12 @@ def user_info_submit(request, user_id):
     return render(request, 'backend/register.html', context={'form': form})
 
 
-def user_info_request(request):
+def user_info_request(request, user_id):
     response = {}
     if request.method == 'GET':
-        username = request.GET['username']
         try:
-            user_info = User.objects.filter(username=username)
+            user = User.objects.filter(pk=user_id)
+            user_info = UserInfo.objects.filter(user=user)
             response['list'] = json.loads(serializers.serialize("json", user_info))
             response['msg'] = 'success'
             response['error_num'] = 0
