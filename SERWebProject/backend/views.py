@@ -143,9 +143,10 @@ def project_register(request, user_id, project_id):
     if request.method == 'POST':
         try:
             user = User.objects.get(pk=user_id)
+            user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
             if project.was_below_max_reg():
-                project_register_form = ProjectRegisterRelationship(user=user, project=project, register_datetime=timezone.now())
+                project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info, project=project, register_datetime=timezone.now())
                 project_register_form.save()
                 project.project_hot = project.project_hot + 1
                 project.save()
@@ -172,6 +173,25 @@ def project_register_relationship_request(request, user_id):
             raise Http404('请求用户已报名项目列表失败！')
     else:
         raise Http404('请求用户已报名项目列表失败！')
+
+
+def project_grade_request(request, project_id):
+    response = {}
+    if request.method == 'GET':
+        try:
+            project = Project.objects.get(pk=project_id)
+            try:
+                project_grade = ProjectRegisterRelationship.objects.filter(project=project)
+                response['list'] = json.loads(serializers.serialize("json", project_grade))
+                response['msg'] = 'success'
+                response['error_num'] = 0
+                return JsonResponse(response)
+            except:
+                return HttpResponse('project grade does not exist')
+        except:
+            return HttpResponse('project does not exist!')
+    else:
+        raise Http404('request project grade error!')
 
 
 

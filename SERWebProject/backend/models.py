@@ -56,7 +56,7 @@ class UserInfo(models.Model):
     dormitory = models.CharField('寝室号码', max_length=20)
 
     def __str__(self):
-        return self.name
+        return self.name + '(' + self.user.username + ')' + ' 个人信息表'
 
 
 class Project(models.Model):
@@ -72,6 +72,7 @@ class Project(models.Model):
     project_hot = models.IntegerField('当前报名人数', default=0)
     group_project = models.BooleanField('是否为团体项目', default=False)
     registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
+    registered_user_info = models.ManyToManyField(UserInfo, through='ProjectRegisterRelationship')
 
     def __str__(self):
         return self.project_name
@@ -100,6 +101,7 @@ class ProjectRegisterRelationship(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
@@ -107,4 +109,4 @@ class ProjectRegisterRelationship(models.Model):
     if_finished = models.BooleanField('比赛已结束', default=False)
 
     def __str__(self):
-        return self.approval_status + ' ' + self.project.project_name + ' ' + self.user.username
+        return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
