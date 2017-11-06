@@ -113,3 +113,22 @@ class ProjectRegisterRelationship(models.Model):
 
     def __str__(self):
         return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
+
+    def __str__(self):
+        return self.name
+
+
+class Membership(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group)
+    team_leader = models.ForeignKey(User, related_name="membership_invites")
+    teammate = models.ForeignKey(User)
+    invite_reason = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.project.project_name + ' ' + self.group.name + ' ' + self.team_leader.username + ' ' + self.teammate.username
