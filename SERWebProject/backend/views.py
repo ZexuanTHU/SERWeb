@@ -138,12 +138,13 @@ def project_info_request(request, project_id):
     return JsonResponse(response)
 
 
+@csrf_exempt
 def project_register(request, user_id, project_id):
-    if request.method == 'GET':
+    if request.method == 'POST':
         # username = request.GET['username']
         user = User.objects.get(pk=user_id)
         project = Project.objects.get(pk=project_id)
-        project_register_form = ProjectRegisterRelationship(user=user, project=project,
+        project_register_form = ProjectRegisterRelationship(user=user, project=project, approval_status='PE',
                                                             register_datetime=timezone.now())
         try:
             # user = User.objects.get(username=username)
