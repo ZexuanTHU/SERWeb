@@ -66,7 +66,8 @@ class Project(models.Model):
     ddl_date = models.DateTimeField('报名截止日期', default=timezone.now())  # 发布时间
     match_data_time = models.DateTimeField('比赛时间', default=timezone.now())
     match_venue = models.CharField('比赛地点', max_length=30, default='清华大学')
-    max_reg = models.IntegerField('报名人数限制', default=100)
+    min_reg = models.IntegerField('报名人数下限', default=0)
+    max_reg = models.IntegerField('报名人数上限', default=100)
     contact_name = models.CharField('紧急联系人姓名', max_length=30, default='郭志芃')
     contact_tel = models.CharField('紧急联系人电话', max_length=30, default='18813040000')
     project_hot = models.IntegerField('当前报名人数', default=0)
@@ -105,7 +106,7 @@ class ProjectRegisterRelationship(models.Model):
     register_name = models.CharField('选手姓名', max_length=10, default='选手')
     student_id = models.CharField('学号', max_length=10, default='2014000000')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    registed_project_name = models.CharField('项目名称', max_length=20, default='项目')
+    registered_project_name = models.CharField('项目名称', max_length=20, default='项目')
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     grade = models.CharField('比赛成绩', max_length=100, default='完赛')

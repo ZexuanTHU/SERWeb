@@ -199,5 +199,19 @@ def project_grade_request(request, project_id):
         raise Http404('request project grade error!')
 
 
+@csrf_exempt
+def add_teammate(request):
+    name = request.POST['name']
+    if request.method == 'POST':
+        try:
+            user_info = UserInfo.objects.get(name=name)
+            if user_info is not None:
+                return JsonResponse({'status': 0, 'msg': '添加成功！'})
+        except:
+            return JsonResponse({'status': 1, 'msg': '用户不存在或未激活！'})
+    else:
+        return HttpResponse('add teammate request error!')
+
+
 
 
