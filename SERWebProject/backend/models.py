@@ -56,20 +56,23 @@ class UserInfo(models.Model):
     dormitory = models.CharField('寝室号码', max_length=20)
 
     def __str__(self):
-        return self.name
+        return self.name + '(' + self.user.username + ')' + ' 个人信息表'
 
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=30)  # 项目名称
-    project_text = models.CharField(max_length=200)  # 项目描述
-    pub_date = models.DateTimeField('date published')  # 发布时间
-    ddl_date = models.DateTimeField('registration deadline')  # 发布时间
-    max_reg = models.IntegerField(default=100)
-    contact_name = models.CharField(max_length=30, default='郭志芃')
-    contact_tel = models.CharField(max_length=30, default='18813040000')
-    project_hot = models.IntegerField(default=0)
-    group_project = models.BooleanField(default=False)
+    project_name = models.CharField('项目名称', max_length=30)  # 项目名称
+    project_text = models.CharField('项目描述', max_length=200)  # 项目描述
+    pub_date = models.DateTimeField('发布时间', default=timezone.now())  # 发布时间
+    ddl_date = models.DateTimeField('报名截止日期', default=timezone.now())  # 发布时间
+    match_data_time = models.DateTimeField('比赛时间', default=timezone.now())
+    match_venue = models.CharField('比赛地点', max_length=30, default='清华大学')
+    max_reg = models.IntegerField('报名人数限制', default=100)
+    contact_name = models.CharField('紧急联系人姓名', max_length=30, default='郭志芃')
+    contact_tel = models.CharField('紧急联系人电话', max_length=30, default='18813040000')
+    project_hot = models.IntegerField('当前报名人数', default=0)
+    group_project = models.BooleanField('是否为团体项目', default=False)
     registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
+    registered_user_info = models.ManyToManyField(UserInfo, through='ProjectRegisterRelationship')
 
     def __str__(self):
         return self.project_name
@@ -78,7 +81,7 @@ class Project(models.Model):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def was_below_max_reg(self):
-        if self.max_reg - self.project_hot >= 0:
+        if self.max_reg - self.project_hot > 0:
             return True
         else:
             return False
@@ -88,9 +91,24 @@ class Project(models.Model):
 
 
 class ProjectRegisterRelationship(models.Model):
+    PENDING = 'PE'
+    APPROVED = 'AP'
+    REJECTED = 'RE'
+    APPROVAL_STATUS = (
+        (PENDING, '审核中'),
+        (APPROVED, '已通过'),
+        (REJECTED, '未通过')
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    register_name = models.CharField('选手姓名', max_length=10, default='选手')
+    student_id = models.CharField('学号', max_length=10, default='2014000000')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    register_datetime = models.DateTimeField()
+    register_datetime = models.DateTimeField('报名时间')
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    grade = models.CharField('比赛成绩', max_length=100, default='完赛')
+    if_finished = models.BooleanField('比赛已结束', default=False)
 
     def __str__(self):
-        return self.project.project_name + ' ' + self.user.username
+        return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
