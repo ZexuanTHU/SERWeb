@@ -106,19 +106,6 @@
 
           </template>
         </el-table-column>
-        <!--<el-table-column
-          prop="tag"
-          label="Tag"
-          align="center"
-          :filters="[{ text: '已报名', value: '已报名' }, { text: '还没报名', value: '立即报名' }]"
-          :filter-method="filterTag"
-          filter-placement="bottom-end">
-          <template scope="scope">
-            <el-tag
-              :type="scope.row.tag === 'Home' ? 'primary' : 'success'"
-              close-transition>{{scope.row.tag}}</el-tag>
-          </template>
-        </el-table-column>-->
       </el-table>
     </div>
 
