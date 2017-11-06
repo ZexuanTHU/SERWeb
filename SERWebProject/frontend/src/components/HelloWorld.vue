@@ -1,46 +1,55 @@
-<!-- 温家尊: 添加 auth.js，判断登录状态-->
-
 <template>
   <div>
     <mheader></mheader>
-    <div id="carousel">
-      <el-carousel :interval="5000" arrow="always">
-        <el-carousel-item v-for="item in 4" :key="item">
-          <img src="../assets/slider1.jpg">
+    <div id="carousel" align="center" style="margin-bottom: 50px">
+      <el-carousel :interval="5000" type="card" height="500px">
+        <el-carousel-item v-for="pic in pics" :key="pic" style="height: 500px">
+          <img :src="getImage(pic)" v-bind:alt="pic" style="height: 100%; width: 100%">
         </el-carousel-item>
       </el-carousel>
     </div>
 
-    <div id="hot news">
+    <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
       <br/>
       <el-row>
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
-          <el-card :body-style="{ padding: '0px' }">
+          <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
               <p>{{ field.fields.project_name }}</p>
             </div>
             <div style="width: 100%; position: relative; overflow: hidden">
               <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress></div>
-              <div  style="position: absolute; bottom: 0; right: 0">
-                <el-button type="text" class="button">
-                  <router-link to="CompetitionInfo">赛事报名</router-link>
-                </el-button>
+                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress>
+              </div>
+              <div style="float: right; margin-right: 5%">
+                <div style="margin-bottom: 5%">
+                  <el-button style="width: 150px">
+                    <p>一键报名</p>
+                  </el-button>
+                </div>
+                <div  style="margin-bottom: 5%;">
+                  <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}">
+                    <el-button type="primary" style="width: 150px">
+                      <p style="color: white">赛事详情</p>
+                    </el-button>
+                  </router-link>
+                </div>
               </div>
             </div>
           </el-card>
         </el-col>
       </el-row>
     </div>
-
-    <div id="more news">
+    <br/>
+    <div id="more news"  style="margin-left: 5%; margin-right: 6.5%">
       <h1 align="left">其他赛事</h1>
+      <br/>
       <el-table
         :data="latest_project_list"
-        height="200"
+        height="600"
         border
         style="width: 100%">
         <el-table-column
@@ -60,6 +69,12 @@
           label="报名起止时间"
           align="center">
           <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="project_hot"
+          label="当前报名人数"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.project_hot }} </template>
         </el-table-column>
         <el-table-column
           prop="max_reg"
@@ -84,48 +99,21 @@
           label="赛事报名"
           align="center">
           <template scope="scope">
-            <el-button type="text" size="small">
-              <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">报名</router-link>
+            <el-button  size="mini">
+              <p>一键报名</p>
             </el-button>
+            <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">
+              <el-button type="primary" size="mini">
+                <p style="color: white">赛事详情</p>
+              </el-button>
+            </router-link>
+
           </template>
         </el-table-column>
-        <!--<el-table-column
-          prop="tag"
-          label="Tag"
-          align="center"
-          :filters="[{ text: '已报名', value: '已报名' }, { text: '还没报名', value: '立即报名' }]"
-          :filter-method="filterTag"
-          filter-placement="bottom-end">
-          <template scope="scope">
-            <el-tag
-              :type="scope.row.tag === 'Home' ? 'primary' : 'success'"
-              close-transition>{{scope.row.tag}}</el-tag>
-          </template>
-        </el-table-column>-->
       </el-table>
     </div>
 
     <br/>
-
-    <!--<div id="statistics">-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="0"></el-progress>-->
-        <!--<h1>event1</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="25"></el-progress>-->
-        <!--<h1>event2</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="50"></el-progress>-->
-        <!--<h1>event3</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="100"></el-progress>-->
-        <!--<h1 @click="console.log(auth)">event4</h1>-->
-      <!--</div>
-
-    </div>-->
   </div>
 </template>
 
@@ -137,10 +125,16 @@
   export default {
     data () {
       return {
+        pics: [
+          'slider1',
+          'slider2',
+          'card1'
+        ],
         hot_project_card: [{
           fields: [{
             project_name: '',
-            project_hot: ''
+            project_hot: '',
+            max_reg: ''
           }],
           pk: '',
           model: ''
@@ -149,6 +143,7 @@
           fields: [{
             project_name: '',
             project_text: '',
+            project_hot: '',
             ddl_date: '',
             pub_date: '',
             max_reg: '',
@@ -164,6 +159,10 @@
       this.project_card_display()
     },
     methods: {
+      getImage (index) {
+        var images = require.context('../assets/', false, /\.jpg$/)
+        return images('./' + index + '.jpg')
+      },
       logout () {
         auth.logout()
       },
@@ -293,15 +292,10 @@
     font-size: 18px;
     opacity: 0.75;
     line-height: 300px;
-    margin: 0;
   }
 
-  .el-carousel__item:nth-child(2n) {
+  .el-carousel__item:nth-child(n) {
     background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
   }
 
   #hot {
@@ -314,7 +308,7 @@
     font-size: 12px;
     font-family: sans-serif;
     color: #999999;
-    margin-right: 22px;
+    margin-right: 30px;
   }
 
   .time {
@@ -368,9 +362,5 @@
 
   .el-form-item {
     margin-left: -120px;
-  }
-
-  .el-button {
-    width: 100%;
   }
 </style>
