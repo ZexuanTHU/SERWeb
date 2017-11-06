@@ -80,7 +80,7 @@ class Project(models.Model):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def was_below_max_reg(self):
-        if self.max_reg - self.project_hot >= 0:
+        if self.max_reg - self.project_hot > 0:
             return True
         else:
             return False

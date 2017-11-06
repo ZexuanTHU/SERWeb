@@ -141,18 +141,17 @@ def project_info_request(request, project_id):
 @csrf_exempt
 def project_register(request, user_id, project_id):
     if request.method == 'POST':
-        # username = request.GET['username']
-        user = User.objects.get(pk=user_id)
-        project = Project.objects.get(pk=project_id)
-        project_register_form = ProjectRegisterRelationship(user=user, project=project, register_datetime=timezone.now())
         try:
-            # user = User.objects.get(username=username)
-            # project = Project.objects.get(pk=project_id)
-            # project_register_form = ProjectRegisterRelationship(user=user, project=project,
-            #                                                     register_datetime=timezone.now())
-            project_register_form.save()
-            return HttpResponse("Success!")
-
+            user = User.objects.get(pk=user_id)
+            project = Project.objects.get(pk=project_id)
+            if project.was_below_max_reg():
+                project_register_form = ProjectRegisterRelationship(user=user, project=project, register_datetime=timezone.now())
+                project_register_form.save()
+                project.project_hot = project.project_hot + 1
+                project.save()
+                return HttpResponse("Success!")
+            else:
+                return HttpResponse("This project already reach its register max")
         except:
             raise Http404("Register error!")
 
