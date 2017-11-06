@@ -3,8 +3,8 @@
     <mheader></mheader>
     <div id="carousel" align="center" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
-        <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
-          <img src="../assets/slider1.jpg" style="height: 100%; width: 100%">
+        <el-carousel-item v-for="pic in pics" :key="pic" style="height: 500px">
+          <img :src="getImage(pic)" v-bind:alt="pic" style="height: 100%; width: 100%">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -24,8 +24,8 @@
               <div style="width: 100px; float: left">
                 <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100"></el-progress></div>
               <div  style="position: absolute; bottom: 0; right: 0">
-                <el-button type="text" class="button">
-                  <router-link to="CompetitionInfo">赛事报名</router-link>
+                <el-button type="primary">
+                  <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}"><p style="color: white">赛事报名</p></router-link>
                 </el-button>
               </div>
             </div>
@@ -110,26 +110,6 @@
     </div>
 
     <br/>
-
-    <!--<div id="statistics">-->
-    <!--<div class="container">-->
-    <!--<el-progress type="circle" :percentage="0"></el-progress>-->
-    <!--<h1>event1</h1>-->
-    <!--</div>-->
-    <!--<div class="container">-->
-    <!--<el-progress type="circle" :percentage="25"></el-progress>-->
-    <!--<h1>event2</h1>-->
-    <!--</div>-->
-    <!--<div class="container">-->
-    <!--<el-progress type="circle" :percentage="50"></el-progress>-->
-    <!--<h1>event3</h1>-->
-    <!--</div>-->
-    <!--<div class="container">-->
-    <!--<el-progress type="circle" :percentage="100"></el-progress>-->
-    <!--<h1 @click="console.log(auth)">event4</h1>-->
-    <!--</div>
-
-  </div>-->
   </div>
 </template>
 
@@ -141,6 +121,11 @@
   export default {
     data () {
       return {
+        pics: [
+          'slider1',
+          'slider2',
+          'card1'
+        ],
         hot_project_card: [{
           fields: [{
             project_name: '',
@@ -170,6 +155,10 @@
       this.project_card_display()
     },
     methods: {
+      getImage (index) {
+        var images = require.context('../assets/', false, /\.jpg$/)
+        return images('./' + index + '.jpg')
+      },
       logout () {
         auth.logout()
       },
