@@ -146,7 +146,10 @@ def project_register(request, user_id, project_id):
             user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
             if project.was_below_max_reg():
-                project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info, project=project, register_datetime=timezone.now())
+                project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
+                                                                    register_name = user_info.name,
+                                                                    student_id=user_info.student_id,
+                                                                    project=project, register_datetime=timezone.now())
                 project_register_form.save()
                 project.project_hot = project.project_hot + 1
                 project.save()

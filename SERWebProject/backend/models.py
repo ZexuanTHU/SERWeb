@@ -102,6 +102,8 @@ class ProjectRegisterRelationship(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    register_name = models.CharField('选手姓名', max_length=10, default='选手')
+    student_id = models.CharField('学号', max_length=10, default='2014000000')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
