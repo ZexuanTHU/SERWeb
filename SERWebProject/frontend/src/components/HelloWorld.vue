@@ -11,38 +11,42 @@
 
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left">热门赛事</h1>
-      <a href="" target="_blank" id="more" style="margin-right: 50px">查看更多 ></a>
+      <a href="" target="_blank" id="more">查看更多 ></a>
       <br/>
       <el-row>
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
-          <el-card :body-style="{ padding: '0px' }"  style="margin-right: 50px">
+          <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
               <p>{{ field.fields.project_name }}</p>
             </div>
             <div style="width: 100%; position: relative; overflow: hidden">
               <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress></div>
-              <div  style="position: absolute; bottom: 0; right: 0; margin-bottom: 5%; margin-right: 5%">
-                <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}">
-                  <el-button type="primary" style="width: 150px">
-                    <p style="color: white">赛事详情</p>
-                  </el-button>
-                </router-link>
+                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress>
               </div>
-              <div style="position: absolute; bottom: 0; right: 100px; margin-bottom: 5%; margin-right: 20%">
-                <el-button style="width: 150px">
-                  <p>一键报名</p>
-                </el-button>
+              <div style="float: right; margin-right: 5%">
+                <div style="margin-bottom: 5%">
+                  <el-button style="width: 150px">
+                    <p>一键报名</p>
+                  </el-button>
+                </div>
+                <div  style="margin-bottom: 5%;">
+                  <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}">
+                    <el-button type="primary" style="width: 150px">
+                      <p style="color: white">赛事详情</p>
+                    </el-button>
+                  </router-link>
+                </div>
               </div>
             </div>
           </el-card>
         </el-col>
       </el-row>
     </div>
-
-    <div id="more news"  style="margin-left: 5%; margin-right: 5%">
+    <br/>
+    <div id="more news"  style="margin-left: 5%; margin-right: 6.5%">
       <h1 align="left">其他赛事</h1>
+      <br/>
       <el-table
         :data="latest_project_list"
         height="600"
@@ -304,7 +308,7 @@
     font-size: 12px;
     font-family: sans-serif;
     color: #999999;
-    margin-right: 22px;
+    margin-right: 30px;
   }
 
   .time {
