@@ -1,8 +1,8 @@
 <template>
   <div>
     <mheader></mheader>
-    <div id="carousel" align="center">
-      <el-carousel :interval="5000" type="card" style="height: 500px">
+    <div id="carousel" align="center" style="margin-bottom: 50px">
+      <el-carousel :interval="5000" type="card" height="500px">
         <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
           <img src="../assets/slider1.jpg" style="height: 100%; width: 100%">
         </el-carousel-item>
@@ -38,7 +38,7 @@
       <h1 align="left">其他赛事</h1>
       <el-table
         :data="latest_project_list"
-        height="200"
+        height="600"
         border
         style="width: 100%">
         <el-table-column
