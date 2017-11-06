@@ -1,28 +1,28 @@
 <template>
   <div>
     <mheader></mheader>
-    <div id="carousel" align="center"  style="margin-left: 5%; margin-right: 5%">
-      <el-carousel :interval="5000" style="height: 500px">
+    <div id="carousel" align="center">
+      <el-carousel :interval="5000" type="card" style="height: 500px">
         <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
-          <img src="../assets/slider2.jpg" style="height: 100%">
+          <img src="../assets/slider1.jpg" style="height: 100%; width: 100%">
         </el-carousel-item>
       </el-carousel>
     </div>
 
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left">热门赛事</h1>
-      <a href="" target="_blank" id="more">查看更多 ></a>
+      <a href="" target="_blank" id="more" style="margin-right: 50px">查看更多 ></a>
       <br/>
       <el-row>
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
-          <el-card :body-style="{ padding: '0px' }">
+          <el-card :body-style="{ padding: '0px' }"  style="margin-right: 50px">
             <img src="../assets/card1.jpg" class="image">
             <div style="padding: 14px;">
               <p>{{ field.fields.project_name }}</p>
             </div>
             <div style="width: 100%; position: relative; overflow: hidden">
               <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot"></el-progress></div>
+                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100"></el-progress></div>
               <div  style="position: absolute; bottom: 0; right: 0">
                 <el-button type="text" class="button">
                   <router-link to="CompetitionInfo">赛事报名</router-link>
@@ -58,6 +58,12 @@
           label="报名起止时间"
           align="center">
           <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
+        </el-table-column>
+        <el-table-column
+          prop="project_hot"
+          label="当前报名人数"
+          align="center">
+          <template scope="scope"> {{ scope.row.fields.project_hot }} </template>
         </el-table-column>
         <el-table-column
           prop="max_reg"
@@ -138,7 +144,8 @@
         hot_project_card: [{
           fields: [{
             project_name: '',
-            project_hot: ''
+            project_hot: '',
+            max_reg: ''
           }],
           pk: '',
           model: ''
@@ -147,6 +154,7 @@
           fields: [{
             project_name: '',
             project_text: '',
+            project_hot: '',
             ddl_date: '',
             pub_date: '',
             max_reg: '',
