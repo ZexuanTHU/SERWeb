@@ -58,6 +58,10 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.name + '(' + self.user.username + ')' + ' 个人信息表'
 
+    class Meta:
+        verbose_name = '用户信息表 UserInfo'
+        verbose_name_plural = '用户信息表 UserInfo'
+
 
 class Project(models.Model):
     project_name = models.CharField('项目名称', max_length=30)  # 项目名称
@@ -74,6 +78,10 @@ class Project(models.Model):
     group_project = models.BooleanField('是否为团体项目', default=False)
     registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
     registered_user_info = models.ManyToManyField(UserInfo, through='ProjectRegisterRelationship')
+
+    class Meta:
+        verbose_name = '项目 Project'
+        verbose_name_plural = '项目 Project'
 
     def __str__(self):
         return self.project_name
@@ -115,6 +123,10 @@ class ProjectRegisterRelationship(models.Model):
     def __str__(self):
         return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
 
+    class Meta:
+        verbose_name = '项目报名表 ProjectRegisterRelationship'
+        verbose_name_plural = '项目报名表 ProjectRegisterRelationship'
+
 
 class Group(models.Model):
     name = models.CharField(max_length=128)
@@ -122,6 +134,10 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = '团队 Group'
+        verbose_name_plural = '团队 Group'
 
 
 class Membership(models.Model):
@@ -133,3 +149,7 @@ class Membership(models.Model):
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group.name + ' ' + self.team_leader.username + ' ' + self.teammate.username
+
+    class Meta:
+        verbose_name = '团队报名表 Membership'
+        verbose_name_plural = '团队报名表 Membership'
