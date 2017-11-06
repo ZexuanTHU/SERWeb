@@ -22,10 +22,17 @@
             </div>
             <div style="width: 100%; position: relative; overflow: hidden">
               <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100"></el-progress></div>
-              <div  style="position: absolute; bottom: 0; right: 0">
-                <el-button type="primary">
-                  <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}"><p style="color: white">赛事报名</p></router-link>
+                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress></div>
+              <div  style="position: absolute; bottom: 0; right: 0; margin-bottom: 5%; margin-right: 5%">
+                <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}">
+                  <el-button type="primary" style="width: 150px">
+                    <p style="color: white">赛事详情</p>
+                  </el-button>
+                </router-link>
+              </div>
+              <div style="position: absolute; bottom: 0; right: 100px; margin-bottom: 5%; margin-right: 20%">
+                <el-button style="width: 150px">
+                  <p>一键报名</p>
                 </el-button>
               </div>
             </div>
@@ -88,9 +95,15 @@
           label="赛事报名"
           align="center">
           <template scope="scope">
-            <el-button type="text" size="small">
-              <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">报名</router-link>
+            <el-button  size="mini">
+              <p>一键报名</p>
             </el-button>
+            <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">
+              <el-button type="primary" size="mini">
+                <p style="color: white">赛事详情</p>
+              </el-button>
+            </router-link>
+
           </template>
         </el-table-column>
         <!--<el-table-column
@@ -288,7 +301,6 @@
     font-size: 18px;
     opacity: 0.75;
     line-height: 300px;
-    margin: 0;
   }
 
   .el-carousel__item:nth-child(n) {
@@ -359,9 +371,5 @@
 
   .el-form-item {
     margin-left: -120px;
-  }
-
-  .el-button {
-    width: 100%;
   }
 </style>
