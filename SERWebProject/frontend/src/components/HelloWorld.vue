@@ -1,17 +1,15 @@
-<!-- 温家尊: 添加 auth.js，判断登录状态-->
-
 <template>
   <div>
-    <mheader></mheader>
-    <div id="carousel">
-      <el-carousel :interval="5000" arrow="always">
-        <el-carousel-item v-for="item in 4" :key="item">
-          <img src="../assets/slider1.jpg">
+    <mheader  style="margin-left: 5%; margin-right: 5%"></mheader>
+    <div id="carousel" align="center"  style="margin-left: 5%; margin-right: 5%">
+      <el-carousel :interval="5000" style="height: 500px">
+        <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
+          <img src="../assets/slider2.jpg" style="height: 100%">
         </el-carousel-item>
       </el-carousel>
     </div>
 
-    <div id="hot news">
+    <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
       <br/>
@@ -36,7 +34,7 @@
       </el-row>
     </div>
 
-    <div id="more news">
+    <div id="more news"  style="margin-left: 5%; margin-right: 5%">
       <h1 align="left">其他赛事</h1>
       <el-table
         :data="latest_project_list"
@@ -108,24 +106,24 @@
     <br/>
 
     <!--<div id="statistics">-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="0"></el-progress>-->
-        <!--<h1>event1</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="25"></el-progress>-->
-        <!--<h1>event2</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="50"></el-progress>-->
-        <!--<h1>event3</h1>-->
-      <!--</div>-->
-      <!--<div class="container">-->
-        <!--<el-progress type="circle" :percentage="100"></el-progress>-->
-        <!--<h1 @click="console.log(auth)">event4</h1>-->
-      <!--</div>
+    <!--<div class="container">-->
+    <!--<el-progress type="circle" :percentage="0"></el-progress>-->
+    <!--<h1>event1</h1>-->
+    <!--</div>-->
+    <!--<div class="container">-->
+    <!--<el-progress type="circle" :percentage="25"></el-progress>-->
+    <!--<h1>event2</h1>-->
+    <!--</div>-->
+    <!--<div class="container">-->
+    <!--<el-progress type="circle" :percentage="50"></el-progress>-->
+    <!--<h1>event3</h1>-->
+    <!--</div>-->
+    <!--<div class="container">-->
+    <!--<el-progress type="circle" :percentage="100"></el-progress>-->
+    <!--<h1 @click="console.log(auth)">event4</h1>-->
+    <!--</div>
 
-    </div>-->
+  </div>-->
   </div>
 </template>
 
@@ -296,12 +294,8 @@
     margin: 0;
   }
 
-  .el-carousel__item:nth-child(2n) {
+  .el-carousel__item:nth-child(n) {
     background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
   }
 
   #hot {
