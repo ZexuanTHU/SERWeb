@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mheader  style="margin-left: 5%; margin-right: 5%"></mheader>
+    <mheader></mheader>
     <div id="carousel" align="center"  style="margin-left: 5%; margin-right: 5%">
       <el-carousel :interval="5000" style="height: 500px">
         <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
