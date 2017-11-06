@@ -105,6 +105,7 @@ class ProjectRegisterRelationship(models.Model):
     register_name = models.CharField('选手姓名', max_length=10, default='选手')
     student_id = models.CharField('学号', max_length=10, default='2014000000')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    registed_project_name = models.CharField('项目名称', max_length=20, default='项目')
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     grade = models.CharField('比赛成绩', max_length=100, default='完赛')

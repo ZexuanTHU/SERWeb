@@ -149,7 +149,9 @@ def project_register(request, user_id, project_id):
                 project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
                                                                     register_name = user_info.name,
                                                                     student_id=user_info.student_id,
-                                                                    project=project, register_datetime=timezone.now())
+                                                                    project=project,
+                                                                    registed_project_name=project.project_name,
+                                                                    register_datetime=timezone.now())
                 project_register_form.save()
                 project.project_hot = project.project_hot + 1
                 project.save()
