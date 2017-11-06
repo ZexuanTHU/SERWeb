@@ -90,8 +90,8 @@ class Project(models.Model):
 
 
 class ProjectRegisterRelationship(models.Model):
-    PENDING = 'PE',
-    APPROVED = 'AP',
+    PENDING = 'PE'
+    APPROVED = 'AP'
     REJECTED = 'RE'
     APPROVAL_STATUS = (
         (PENDING, '审核中'),
@@ -101,9 +101,10 @@ class ProjectRegisterRelationship(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    register_datetime = models.DateTimeField()
-    approval_status = models.CharField(max_length=10, choices=APPROVAL_STATUS, default=PENDING)
-    grade = models.CharField(max_length=100, default='完赛')
+    register_datetime = models.DateTimeField('报名时间')
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    grade = models.CharField('比赛成绩', max_length=100, default='完赛')
+    if_finished = models.BooleanField('比赛已结束', default=False)
 
     def __str__(self):
-        return self.project.project_name + ' ' + self.user.username
+        return self.approval_status + ' ' + self.project.project_name + ' ' + self.user.username

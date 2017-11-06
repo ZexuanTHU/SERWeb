@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^user_info_request/(?P<user_id>[0-9]+)', views.user_info_request, name='user_info_request'),
     url(r'^project_info_request/(?P<project_id>[0-9]+)', views.project_info_request, name='project_info_request'),
     url(r'^project_register/(?P<user_id>[0-9]+)/(?P<project_id>[0-9]+)', views.project_register, name='project_register'),
+    url(r'^project_register_relationship_request/(?P<user_id>[0-9]+)', views.project_register_relationship_request,
+        name='project_register_relationship_request'),
 ]

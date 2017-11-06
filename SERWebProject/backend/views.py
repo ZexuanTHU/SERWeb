@@ -144,8 +144,7 @@ def project_register(request, user_id, project_id):
         # username = request.GET['username']
         user = User.objects.get(pk=user_id)
         project = Project.objects.get(pk=project_id)
-        project_register_form = ProjectRegisterRelationship(user=user, project=project, approval_status='PE',
-                                                            register_datetime=timezone.now())
+        project_register_form = ProjectRegisterRelationship(user=user, project=project, register_datetime=timezone.now())
         try:
             # user = User.objects.get(username=username)
             # project = Project.objects.get(pk=project_id)
@@ -158,3 +157,23 @@ def project_register(request, user_id, project_id):
             raise Http404("Register error!")
 
     return render(request, 'backend/register.html', context={'form': ProjectRegisterRelationship})
+
+
+def project_register_relationship_request(request, user_id):
+    response = {}
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=user_id)
+            latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by('-register_datetime')
+            response['list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+            return JsonResponse(response)
+        except:
+            raise Http404('请求用户已报名项目列表失败！')
+    else:
+        raise Http404('请求用户已报名项目列表失败！')
+
+
+
+
