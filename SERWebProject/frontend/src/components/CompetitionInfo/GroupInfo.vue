@@ -37,11 +37,11 @@
               { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ]"
           >
-            <el-input v-model="dynamicValidateForm.name"></el-input>
+            <el-input style="width: 70%;" v-model="dynamicValidateForm.name"></el-input>
           </el-form-item>
           <el-form-item
             v-for="(teamate, index) in dynamicValidateForm.teamates"
-            :label="'队员' + index"
+            :label="'队员 ' + (index+1)"
             :key="teamate.key"
             :prop="'teamates.' + index + '.value'"
             :rules="[
@@ -49,12 +49,12 @@
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ]"
           >
-            <el-input v-model="teamate.value"></el-input>
-            <el-button @click.prevent="removeteamate(teamate)">删除</el-button>
+            <el-input style="width: 70%;" v-model="teamate.value"></el-input>
+            <el-button style="width: 20%;" @click.prevent="removeteamate(teamate)">删除</el-button>
           </el-form-item>
           <el-form-item>
+            <el-button @click="addteamate('dynamicValidateForm')">新增队友</el-button>
             <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
-            <el-button @click="addteamate">新增队友</el-button>
             <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -138,10 +138,16 @@ export default {
         this.dynamicValidateForm.teamates.splice(index, 1)
       }
     },
-    addteamate () {
-      this.dynamicValidateForm.teamates.push({
-        value: '',
-        key: Date.now()
+    addteamate (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.dynamicValidateForm.teamates.push({
+            value: '',
+            key: Date.now()
+          })
+        } else {
+          console.log('error')
+        }
       })
     },
     project_info_request (pk) {
@@ -197,5 +203,8 @@ export default {
   #submit{
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  .el-button{
+    margin: 5px;
   }
 </style>
