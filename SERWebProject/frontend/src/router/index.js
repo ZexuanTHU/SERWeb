@@ -39,7 +39,7 @@ export default new Router({
       component: GroupInfo
     },
     {
-      path: '/userpage',
+      path: '/userpage/:id',
       name: 'userpage',
       component: userpage
     },

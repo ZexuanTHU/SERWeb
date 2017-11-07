@@ -8,7 +8,7 @@
       width="100"
       :show-close="false"
       :before-close="handleClose">
-      <infoRegister @submit="handlesubmit" :inline='true'></infoRegister>
+      <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister"></infoRegister>
 
     </el-dialog>
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
@@ -44,7 +44,7 @@
       </el-submenu>
       <el-menu-item class="user" index="5" style="float: right;margin-right: 30px">
         <!--<router-link to="Login">登录/新用户认证</router-link>-->
-        <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
+        <el-button type="text" v-if="!user.authenticated">登录/新用户认证</el-button>
 
         <el-dialog
           :visible.sync="dialogVisible"
@@ -222,6 +222,10 @@
       handlesubmit () {
         this.registerVisible = false
         console.log(this.$route.fullPath)
+        console.log(this.$refs['infoRegister'].infoForm)
+        this.$http.post(
+          'http://localhost:8000/api/user_info_submit', this.$refs['infoRegister'].infoForm, {emulateJSON: true}
+        )
         auth.login(this, this.loginForm, this.$route.path)
       },
       handleSelect (index) {
@@ -235,6 +239,9 @@
             break
           case '5-1':
             this.$router.push('userpage')
+            break
+          case '5':
+            this.dialogVisible = true
         }
       },
       logout () {
@@ -251,8 +258,15 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let username = this.loginForm.username
-            let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+//            let password = this.loginForm.password
+            console.log(username)
+            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})
+            //            {
+            //              method: 'POST',
+            //              url: 'http://localhost:8000/api/login',
+            //              body: this.loginForm,
+            //              emulateJSON: true
+            //            })
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
@@ -296,10 +310,20 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
-                        //                        '&email=' + email +
-                        '&password1=' + pwd +
-                        '&password2=' + pwd)
+//                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+//                        //                        '&email=' + email +
+//                        '&password1=' + pwd +
+//                        '&password2=' + pwd)
+                      this.$http({
+                        method: 'POST',
+                        url: 'http://localhost:8000/api/register',
+                        body: {
+                          username: uname,
+                          password1: pwd,
+                          password2: pwd
+                        },
+                        emulateJSON: true
+                      })
                       alert('认证成功！')
                       alert('你今后可以直接使用 Account9 账户登录 SERWeb 体育赛事报名平台！')
 
