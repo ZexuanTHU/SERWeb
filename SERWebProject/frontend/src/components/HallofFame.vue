@@ -6,65 +6,87 @@
         <div class="w3-left" style="width: 200px;height: 100% ">
           <el-col :span="8">
             <h5></h5>
-            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanle">
+            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanel">
 
-              <el-menu-item index="0">比赛报名</el-menu-item>
-              <el-menu-item index="1">报名结果</el-menu-item>
-              <el-menu-item index="2">比赛收藏</el-menu-item>
-              <el-menu-item index="3">个人信息</el-menu-item>
-              <el-menu-item index="4">创建比赛</el-menu-item>
+              <el-menu-item index="0">2013</el-menu-item>
+              <el-menu-item index="1"></el-menu-item>
+              <el-menu-item index="2"></el-menu-item>
+              <el-menu-item index="3"></el-menu-item>
+              <el-menu-item index="4"></el-menu-item>
             </el-menu>
           </el-col>
         </div>
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
-          <div id="register" class="w3-container panel"
-               :style="{display:openedPanle==='0'?'inline-block':'none'}">
-            <projRegister></projRegister>
-          </div>
-          <div id="view_register" class="w3-container panel "
-               :style="{display:openedPanle==='1'?'inline-block':'none'}">
-            <viewRegister></viewRegister>
-          </div>
-          <div id="saved_event" class="w3-container panel"
-               :style="{display:openedPanle==='2'?'inline-block':'none'}">
-            <h1 style="font-size: large;margin: auto">saved_event</h1>
-          </div>
-          <div id="modify" class="w3-container panel" style="display: inline-block"
-               :style="{display:openedPanle==='3'?'inline-block':'none'}">
-            <infoRegister :inline='false'></infoRegister>
-            <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
-              <img class="icon" :src="imageUrl"
-                   style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"
-                   alt="">
-              <button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"
-                      v-on:click="fileclick()">选择头像
-              </button>
-              <input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>
-            </div>
-          </div>
-          <div id="add_event" class="w3-container panel"
-               :style="{display:openedPanle==='4'?'inline-block':'none'}">
-            <h1 style="border-bottom:2px solid #72beff;margin-left: 1em ">新比赛</h1>
-            <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
-              <p><span style="width: 100px">时间:</span> <input type="date" name="add-time">
-                <span style="padding-left: 20px">地点：</span><input style="left: 500px" type="text" name="add-place"></p>
-            </form>
-
-
+          <div class="w3-container panel"
+               :style="{display:openedPanel==='0'?'inline-block':'none'}">
+            <el-row>
+              <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+                <el-card :body-style="{ padding: '0px' }" style="margin-top: 4%">
+                  <img @click="dialogVisible = true" src="../assets/halloffame.jpg" class="image">
+                  <div style="padding: 14px;">
+                    <span>李晨曦</span>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+            <el-dialog
+              title="李晨曦"
+              :visible.sync="dialogVisible"
+              size="large">
+              <div>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                  <el-tab-pane label="User" name="first">
+                    <ul v-for="item in items">
+                      <li> 性别 : {{ item.gender }} </li>
+                      <li> 级数 : {{ item.grade }} </li>
+                      <li> 班级 : {{ item.class }} </li>
+                      <li> 擅长项目 : {{ item.expertise }} </li>
+                    </ul>
+                  </el-tab-pane>
+                  <el-tab-pane label="Config" name="second">Config</el-tab-pane>
+                  <el-tab-pane label="Role" name="third">Role</el-tab-pane>
+                  <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
+                </el-tabs>
+              </div>
+            </el-dialog>
           </div>
         </div>
-      </div>
-      <mfooter></mfooter>
+        </div>
     </div>
+      <mfooter></mfooter>
   </div>
 </template>
 
 <script>
   import mheader from '@/components/header'
+  import mfooter from '../components/mfooter'
 
   export default {
+    data () {
+      return {
+        openedPanel: '0',
+        dialogVisible: false,
+        activeName: 'first',
+        items: [{
+          name: '李晨曦',
+          gender: '男',
+          grade: '2013级',
+          class: 'xx 班',
+          expertise: '中长跑'
+        }]
+      }
+    },
+    methods: {
+      openPanel: function (index) {
+        this.openedPanel = index
+      },
+      handleClick (tab, event) {
+        console.log(tab, event)
+      }
+    },
     components: {
-      'mheader': mheader
+      'mheader': mheader,
+      'mfooter': mfooter
     }
   }
 </script>
@@ -83,4 +105,28 @@
     width: 200px;
   }
 
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+    float: right;
+  }
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
+  }
 </style>
