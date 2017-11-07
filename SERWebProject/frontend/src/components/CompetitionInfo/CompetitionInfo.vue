@@ -26,8 +26,8 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogFormVisible = true" type="primary">报名</el-button>
-      <registerProject :dialogFormVisible="dialogFormVisible" :projectpk="project_pk" ></registerProject>
+      <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
+      <registerProject :dialogFormVisible="dialogFormVisible" :projectpk="project_pk"></registerProject>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -62,49 +62,7 @@ export default {
         project_text: ''
       },
       dialogFormVisible: false,
-      user_pk: '',
-      project_pk: '',
-      ruleForm: {
-        faculty: '',
-        name: '',
-        gender: '',
-        id_card: '',
-        student_id: '',
-        birth_date: '',
-        clothes_size: '',
-        cellphone_num: ''
-      },
-      rules: {
-        faculty: [
-          { required: true, message: '请选择院系', trigger: 'change' }
-        ],
-        name: [
-          { required: true, message: '请输入名字', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
-        gender: [
-          { required: true, message: '请选性别', trigger: 'change' }
-        ],
-        id_card: [
-          { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { min: 0, max: 20, message: '长度在 x 到 x 个字符', trigger: 'blur' }
-        ],
-        student_id: [
-          { required: true, message: '请输入学号', trigger: 'blur' },
-          { legth: 10, message: '长度10个字符', trigger: 'blur' }
-        ],
-        birth_date: [
-          { type: 'date', message: '请选择生日', trigger: 'change' }
-        ],
-        clothes_size: [
-          { required: true, message: '请选择衣服号码', trigger: 'change' }
-        ],
-        cellphone_num: [
-          { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 12, max: 12, message: '长度12个字符', trigger: 'blur' }
-        ]
-      },
-      formLabelWidth: '120px'
+      project_pk: ''
     }
   },
   computed: {
@@ -129,35 +87,6 @@ export default {
           console.log(res['msg'])
         }
       })
-    },
-    user_info_request (username) {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + username).then((response) => {
-        var res = JSON.parse(response.bodyText)
-        console.log(res)
-        if (res.error_num === 0) {
-          this.ruleForm = res.list[0].fields
-          this.ruleForm.birth_date = ''
-          this.user_pk = res.list[0].pk
-        } else {
-          this.$message.error('获取项目列表失败"')
-          console.log(res['msg'])
-        }
-      })
-    },
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.user_pk + '/' + this.project_pk)
-          this.dialogFormVisible = false
-          alert('報名成功')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
     }
   }
 }

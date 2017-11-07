@@ -103,9 +103,12 @@ export default {
       formLabelWidth: '120px'
     }
   },
+  created: function () {
+    this.user_info_request('skyrealmz')
+  },
   methods: {
-    user_info_request () {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=skyrealmz').then((response) => {
+    user_info_request (uid) {
+      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
