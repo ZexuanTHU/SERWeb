@@ -17,7 +17,7 @@
         <div class="w3-left" style="width: 200px;height: 100% ">
           <el-col :span="8">
             <h5></h5>
-            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanle">
+            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanel">
 
               <el-menu-item index="0">比赛报名</el-menu-item>
               <el-menu-item index="1">报名结果</el-menu-item>
@@ -29,19 +29,19 @@
         </div>
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
           <div id="register" class="w3-container panel"
-               :style="{display:openedPanle==='0'?'inline-block':'none'}">
+               :style="{display:openedPanel==='0'?'inline-block':'none'}">
             <projRegister></projRegister>
           </div>
           <div id="view_register" class="w3-container panel "
-               :style="{display:openedPanle==='1'?'inline-block':'none'}">
+               :style="{display:openedPanel==='1'?'inline-block':'none'}">
             <viewRegister></viewRegister>
           </div>
           <div id="saved_event" class="w3-container panel"
-               :style="{display:openedPanle==='2'?'inline-block':'none'}">
+               :style="{display:openedPanel==='2'?'inline-block':'none'}">
             <h1 style="font-size: large;margin: auto">saved_event</h1>
           </div>
           <div id="modify" class="w3-container panel" style="display: inline-block"
-               :style="{display:openedPanle==='3'?'inline-block':'none'}">
+               :style="{display:openedPanel==='3'?'inline-block':'none'}">
             <infoRegister :inline='false' ref="info"></infoRegister>
             <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
               <img class="icon" :src="imageUrl"
@@ -54,7 +54,7 @@
             </div>
           </div>
           <div id="add_event" class="w3-container panel"
-               :style="{display:openedPanle==='4'?'inline-block':'none'}">
+               :style="{display:openedPanel==='4'?'inline-block':'none'}">
             <h1 style="border-bottom:2px solid #72beff;margin-left: 1em ">新比赛</h1>
             <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
               <p><span style="width: 100px">时间:</span> <input type="date" name="add-time">
@@ -85,14 +85,13 @@
       return {
         registerVisible: true,
         imageUrl: require('../image/icon.jpg'),
-        openedPanle: '0',
+        openedPanel: '0',
         applyState: JSON.stringify({ddl: 'ddl'})
-
       }
     },
     methods: {
-      openPanle: function (index) {
-        this.openedPanle = index
+      openPanel: function (index) {
+        this.openedPanel = index
       },
       onFileChange (e) {
         var files = e.target.files || e.dataTransfer.files

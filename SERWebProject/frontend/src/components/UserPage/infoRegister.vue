@@ -72,6 +72,7 @@
     components: {ElInput},
     data () {
       return {
+        id: null,
         infoForm: {
           faculty: '',
           class_id: '',
@@ -103,8 +104,9 @@
 //          method: 'GET',
 //          url:''
 //        })
+        console.log(this.id)
         this.$http.post(
-          'http://localhost:8000/api/user_info_submit/' + this.$route.params.uid,
+          'http://localhost:8000/api/user_info_submit/' + this.id,
           this.infoForm, {emulateJSON: true}
         ).then((response) => {
           let res = JSON.parse(response.bodyText)
@@ -126,11 +128,17 @@
       }
     },
     props: {
-      inline: Boolean
+      inline: Boolean,
+      uid: Number
     },
-    created:
+    mounted:
       function () {
-        this.$http.get('http://localhost:8000/api/user_info_request/' + this.$route.params.uid).then((response) => {
+        if (this.uid) {
+          this.id = this.uid
+        } else {
+          this.id = this.$route.params.uid
+        }
+        this.$http.get('http://localhost:8000/api/user_info_request/' + this.id).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.error_num === 0) {
@@ -142,8 +150,7 @@
             console.log(res['msg'])
           }
         })
-      },
-    computed: {}
+      }
   }
 </script>
 

@@ -8,7 +8,7 @@
       width="100"
       :show-close="false"
       :before-close="handleClose">
-      <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister"></infoRegister>
+      <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister" :uid='user_id'></infoRegister>
 
     </el-dialog>
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
@@ -16,25 +16,11 @@
       <el-menu-item index="1">
         首页
       </el-menu-item>
-      <!--<el-submenu index="2">
-        <template slot="title">项目列表</template>
-        <el-menu-item index="2-1">项目报名</el-menu-item>
-        <el-menu-item index="2-2">比赛日程</el-menu-item>
-      </el-submenu>-->
       <el-menu-item index="2">赛事信息</el-menu-item>
-      <el-menu-item index="3">酒井名人堂</el-menu-item>
+      <router-link to="HallofFame">
+        <el-menu-item index="3">酒井名人堂</el-menu-item>
+      </router-link>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
-      <!--<el-dropdown style="margin-right: 100px;float: right;margin-top: 8px">-->
-      <!--<span class="el-dropdown-link" >-->
-      <!--ssss-->
-      <!--&lt;!&ndash;<img class="icon" :src="imageUrl" style="width: 40px;height:40px;border-radius: 30%;" alt="">&ndash;&gt;-->
-      <!--&lt;!&ndash;{{ loginForm.username }}&ndash;&gt;-->
-      <!--</span>-->
-      <!--<el-dropdown-menu slot="dropdown">-->
-      <!--<el-dropdown-item>注销</el-dropdown-item>-->
-      <!--<el-dropdown-item divided>切换账号</el-dropdown-item>-->
-      <!--</el-dropdown-menu>-->
-      <!--</el-dropdown>-->
       <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 30px">
         <template slot="title">{{username}}</template>
         <el-menu-item index="5-1">
@@ -42,8 +28,9 @@
         </el-menu-item>
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
-      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px">
-        <el-button type="text" v-if="!user.authenticated">登录/新用户认证</el-button>
+      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px" v-if="!user.authenticated"
+                    v-on:mouseup.native="dialogVisible=true">
+        <el-button type="text" >登录/新用户认证</el-button>
 
         <el-dialog
           :visible.sync="dialogVisible"
@@ -240,8 +227,8 @@
           case '5-1':
             this.$router.push('/' + this.$route.params.uid + '/userpage')
             break
-          case '5':
-            this.dialogVisible = true
+//          case '5':
+//            this.dialogVisible = true
         }
       },
       logout () {
@@ -270,16 +257,14 @@
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
                 if (res.status === 0) {
-//                  alert('登录成功，返回首页')
-//                  if(res.)
                   this.dialogVisible = false
                   this.user.authenticated = true
-//                  this.$router.push('/')
-//                  if()
                   this.user_id = res.list[0].pk
-                  this.registerVisible = true
-//                  console.log(this.registerVisible, 'regi')
-//                  auth.login(this, this.loginForm, 'userpage')
+                  if (!res.list[0].fields.submit_info) {
+                    this.registerVisible = true
+                  } else {
+                    auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
+                  }
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
                 }
