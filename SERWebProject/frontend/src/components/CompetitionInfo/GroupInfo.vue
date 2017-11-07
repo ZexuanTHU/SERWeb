@@ -97,6 +97,8 @@ export default {
         project_text: ''
       },
       dialogFormVisible: false,
+      user_pk: '',
+      project_pk: '',
       ruleForm: {
         faculty: '',
         name: '',
@@ -157,6 +159,7 @@ export default {
         if (res.error_num === 0) {
           this.pageInfo = res.list[0].fields
           this.pageInfo.attend = '30'
+          this.project_pk = res.list[0].pk
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
@@ -170,6 +173,7 @@ export default {
         if (res.error_num === 0) {
           this.dynamicValidateForm.name = res.list[0].fields.name
           this.ruleForm.birth_date = ''
+          this.user_pk = res.list[0].pk
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
