@@ -166,7 +166,7 @@ export default {
     }
   },
   created: function () {
-    this.project_info_request(this.$route.params.pk)
+    this.project_info_request(this.$route.params.pid)
   },
   methods: {
     project_info_request (pk) {

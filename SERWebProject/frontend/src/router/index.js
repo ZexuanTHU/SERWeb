@@ -2,11 +2,9 @@ import Vue from 'vue'
 import Element from 'element-ui'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
-import Register from '@/components/register/Register'
 import VueResource from 'vue-resource'
 import auth from '../auth'
 // import mheader from '@/components/header'
@@ -19,34 +17,50 @@ auth.checkAuth()
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/:uid',
       name: 'Hello',
       component: HelloWorld
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
+      path: '/',
+      name: 'Hello',
+      component: HelloWorld
     },
+    // {
+    //   path: '/login',
+    //   name: 'Login',
+    //   component: Login
+    // },
     {
-      path: '/CompetitionInfo/:pk',
+      path: '/:uid/CompetitionInfo/:pid',
       name: 'CompetitionInfo',
       component: CompetitionInfo
     },
     {
-      path: '/GroupInfo/:pk',
+      path: '/CompetitionInfo/:pid',
+      name: 'CompetitionInfo',
+      component: CompetitionInfo
+    },
+    {
+      path: '/:uid/GroupInfo/:pid',
       name: 'GroupInfo',
       component: GroupInfo
     },
     {
-      path: '/userpage/:id',
-      name: 'userpage',
-      component: userpage
+      path: '/GroupInfo/:pid',
+      name: 'GroupInfo',
+      component: GroupInfo
     },
     {
-      path: '/Register',
-      name: 'Register',
-      component: Register
+      path: '/:uid/userpage',
+      name: 'userpage',
+      component: userpage
     }
+
+    // {
+    //   path: '/Register',
+    //   name: 'Register',
+    //   component: Register
+    // }
   ]
 })

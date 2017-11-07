@@ -43,7 +43,6 @@
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
       <el-menu-item class="user" index="5" style="float: right;margin-right: 30px">
-        <!--<router-link to="Login">登录/新用户认证</router-link>-->
         <el-button type="text" v-if="!user.authenticated">登录/新用户认证</el-button>
 
         <el-dialog
@@ -174,11 +173,10 @@
       }
       return {
         registerVisible: false,
+        user_id: '',
         user: auth.user,
         dialogVisible: false,
-        dialogVisible2: false,
         activeIndex: '1',
-        activeIndex2: '1',
         activeName: 'first',
         activeName2: '10',
         currentDate: new Date(),
@@ -223,22 +221,24 @@
         this.registerVisible = false
         console.log(this.$route.fullPath)
         console.log(this.$refs['infoRegister'].infoForm)
-        this.$http.post(
-          'http://localhost:8000/api/user_info_submit', this.$refs['infoRegister'].infoForm, {emulateJSON: true}
-        )
-        auth.login(this, this.loginForm, this.$route.path)
+        auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
       },
       handleSelect (index) {
         switch (index) {
           case '1':
 //            console.log(index)
-            this.$router.push('/')
+            var uid = this.$route.params.uid
+            if (uid) {
+              this.$router.push('/' + uid)
+            } else {
+              this.$router.push('/')
+            }
             break
           case '2':
             console.log(this.loginForm)
             break
           case '5-1':
-            this.$router.push('userpage')
+            this.$router.push('/' + this.$route.params.uid + '/userpage')
             break
           case '5':
             this.dialogVisible = true
@@ -249,9 +249,14 @@
 //        auth.test()
         auth.logout()
         this.user.authenticated = false
+        var path = this.$route.path
         var reg = new RegExp('userpage')
         if (reg.test(this.$route.fullPath)) {
           this.$router.push('/')
+        } else {
+          if (path.indexOf('/', 1) === -1) {
+            this.$router.push('/')
+          } else { this.$router.push(path.slice(path.indexOf('/', 1))) }
         }
       },
       submitForm (formName) {
@@ -260,23 +265,20 @@
             let username = this.loginForm.username
 //            let password = this.loginForm.password
             console.log(username)
-            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})
-            //            {
-            //              method: 'POST',
-            //              url: 'http://localhost:8000/api/login',
-            //              body: this.loginForm,
-            //              emulateJSON: true
-            //            })
+            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
                 if (res.status === 0) {
 //                  alert('登录成功，返回首页')
+//                  if(res.)
                   this.dialogVisible = false
                   this.user.authenticated = true
 //                  this.$router.push('/')
+//                  if()
+                  this.user_id = res.list[0].pk
                   this.registerVisible = true
-                  console.log(this.registerVisible, 'regi')
+//                  console.log(this.registerVisible, 'regi')
 //                  auth.login(this, this.loginForm, 'userpage')
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
@@ -341,6 +343,12 @@
     },
     components: {
       'infoRegister': infoRegister
+    },
+    created: function () {
+      if (this.$route.params.hasOwnProperty('uid')) {
+        console.log('已登录  ', new Date())
+//        alert('已经登录')
+      }
     }
   }
 </script>
