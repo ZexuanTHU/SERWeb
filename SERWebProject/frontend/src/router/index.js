@@ -6,6 +6,7 @@ import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import HallofFame from '@/components/HallofFame'
+import SchoolTeam from '@/components/SchoolTeam'
 import VueResource from 'vue-resource'
 import auth from '../auth'
 // import mheader from '@/components/header'
@@ -46,6 +47,11 @@ export default new Router({
       path: '/:uid/HallofFame',
       name: 'HallofFame',
       component: HallofFame
+    },
+    {
+      path: '/:uid/SchoolTeam',
+      name: 'SchoolTeam',
+      component: SchoolTeam
     }
   ]
 })

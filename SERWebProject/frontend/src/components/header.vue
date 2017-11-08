@@ -220,6 +220,9 @@
           case '3':
             this.$router.push('/' + this.$route.params.uid + '/HallofFame')
             break
+          case '4':
+            this.$router.push('/' + this.$route.params.uid + '/SchoolTeam')
+            break
           case '5-1':
             this.$router.push('userpage')
         }
