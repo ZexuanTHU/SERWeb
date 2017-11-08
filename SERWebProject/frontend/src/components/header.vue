@@ -8,7 +8,7 @@
       width="100"
       :show-close="false"
       :before-close="handleClose">
-      <infoRegister @submit="handlesubmit" :inline='true'></infoRegister>
+      <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister" :uid='user_id'></infoRegister>
 
     </el-dialog>
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
@@ -17,7 +17,9 @@
         首页
       </el-menu-item>
       <el-menu-item index="2">赛事信息</el-menu-item>
-      <el-menu-item index="3">酒井名人堂</el-menu-item>
+      <router-link to="HallofFame">
+        <el-menu-item index="3">酒井名人堂</el-menu-item>
+      </router-link>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
       <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 30px">
         <template slot="title">{{username}}</template>
@@ -26,9 +28,9 @@
         </el-menu-item>
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
-      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px">
-        <!--<router-link to="Login">登录/新用户认证</router-link>-->
-        <el-button type="text" @click="dialogVisible = true" v-if="!user.authenticated">登录/新用户认证</el-button>
+      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px" v-if="!user.authenticated"
+                    v-on:mouseup.native="dialogVisible=true">
+        <el-button type="text">登录/新用户认证</el-button>
 
         <el-dialog
           :visible.sync="dialogVisible"
@@ -158,11 +160,10 @@
       }
       return {
         registerVisible: false,
+        user_id: '',
         user: auth.user,
         dialogVisible: false,
-        dialogVisible2: false,
         activeIndex: '1',
-        activeIndex2: '1',
         activeName: 'first',
         activeName2: '10',
         currentDate: new Date(),
@@ -206,13 +207,19 @@
       handlesubmit () {
         this.registerVisible = false
         console.log(this.$route.fullPath)
-        auth.login(this, this.loginForm, this.$route.path)
+        console.log(this.$refs['infoRegister'].infoForm)
+        auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
       },
       handleSelect (index) {
         switch (index) {
           case '1':
 //            console.log(index)
-            this.$router.push('/')
+            var uid = this.$route.params.uid
+            if (uid) {
+              this.$router.push('/' + uid)
+            } else {
+              this.$router.push('/')
+            }
             break
           case '2':
             console.log(this.loginForm)
@@ -221,7 +228,10 @@
             this.$router.push('/' + this.$route.params.uid + '/HallofFame')
             break
           case '5-1':
-            this.$router.push('userpage')
+            this.$router.push('/' + this.$route.params.uid + '/userpage')
+            break
+//          case '5':
+//            this.dialogVisible = true
         }
       },
       logout () {
@@ -229,28 +239,35 @@
 //        auth.test()
         auth.logout()
         this.user.authenticated = false
-        var reg = new RegExp('userpage')
-        if (reg.test(this.$route.fullPath)) {
-          this.$router.push('/')
-        }
+//        var path = this.$route.path
+//        var reg = new RegExp('userpage')
+//        if (reg.test(this.$route.fullPath)) {
+        this.$router.push('/')
+//        } else {
+//          if (path.indexOf('/', 1) === -1) {
+//            this.$router.push('/')
+//          } else { this.$router.push(path.slice(path.indexOf('/', 1))) }
+//        }
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let username = this.loginForm.username
-            let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+//            let password = this.loginForm.password
+            console.log(username)
+            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
                 if (res.status === 0) {
-//                  alert('登录成功，返回首页')
                   this.dialogVisible = false
                   this.user.authenticated = true
-//                  this.$router.push('/')
-                  this.registerVisible = true
-                  console.log(this.registerVisible, 'regi')
-//                  auth.login(this, this.loginForm, 'userpage')
+                  this.user_id = res.list[0].pk
+                  if (!res.list[0].fields.submit_info) {
+                    this.registerVisible = true
+                  } else {
+                    auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
+                  }
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
                 }
@@ -283,10 +300,20 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
-                        //                        '&email=' + email +
-                        '&password1=' + pwd +
-                        '&password2=' + pwd)
+//                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+//                        //                        '&email=' + email +
+//                        '&password1=' + pwd +
+//                        '&password2=' + pwd)
+                      this.$http({
+                        method: 'POST',
+                        url: 'http://localhost:8000/api/register',
+                        body: {
+                          username: uname,
+                          password1: pwd,
+                          password2: pwd
+                        },
+                        emulateJSON: true
+                      })
                       alert('认证成功！')
                       alert('你今后可以直接使用 Account9 账户登录 SERWeb 体育赛事报名平台！')
 
@@ -304,6 +331,12 @@
     },
     components: {
       'infoRegister': infoRegister
+    },
+    created: function () {
+      if (this.$route.params.hasOwnProperty('uid')) {
+        console.log('已登录  ', new Date())
+//        alert('已经登录')
+      }
     }
   }
 </script>
