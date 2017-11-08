@@ -45,7 +45,7 @@ export default {
     })
   },
   logout () {
-    localStorage.removeItem('token')
+    localStorage.removeItem('id_token')
     this.user.authenticated = false
     // delete Vue.$http.headers.common['Authorization']
   },
