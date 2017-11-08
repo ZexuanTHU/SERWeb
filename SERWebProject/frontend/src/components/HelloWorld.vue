@@ -47,6 +47,7 @@
     <tableList></tableList>
 
     <br/>
+    <mfooter></mfooter>
   </div>
 </template>
 
@@ -54,6 +55,7 @@
 <script>
   import auth from '../auth'
   import mheader from './header.vue'
+  import mfooter from '../components/mfooter'
   import tableList from './TableList.vue'
 
   export default {
@@ -205,6 +207,7 @@
     },
     components: {
       'mheader': mheader,
+      'mfooter': mfooter,
       'tableList': tableList
     }
   }
