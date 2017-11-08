@@ -1,5 +1,5 @@
 <template>
-  <div id="more news"  style="margin-left: 5%; margin-right: 6.5%">
+  <div id="more news" style="margin-left: 5%; margin-right: 6.5%">
     <h1 align="left">其他赛事</h1>
     <br/>
     <el-table
@@ -54,7 +54,7 @@
         label="赛事报名"
         align="center">
         <template scope="scope">
-          <el-button  size="mini">
+          <el-button size="mini">
             <p>一键报名</p>
           </el-button>
           <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">

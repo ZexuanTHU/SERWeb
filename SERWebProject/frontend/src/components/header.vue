@@ -3,7 +3,7 @@
     <el-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      title="第一次登陆个人信息修改"
+      title="第一次登录个人信息修改"
       :visible.sync="registerVisible"
       width="100"
       :show-close="false"
@@ -17,18 +17,16 @@
         首页
       </el-menu-item>
       <el-menu-item index="2">赛事信息</el-menu-item>
-      <router-link to="HallofFame">
         <el-menu-item index="3">酒井名人堂</el-menu-item>
-      </router-link>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
-      <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 30px">
+      <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 100px">
         <template slot="title">{{username}}</template>
-        <el-menu-item index="5-1">
+        <el-menu-item index="5-1" >
           用户信息
         </el-menu-item>
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
-      <el-menu-item class="user" index="5" style="float: right;margin-right: 30px" v-if="!user.authenticated"
+      <el-menu-item class="user" index="5" style="float: right;margin-right: 100px" v-if="!user.authenticated"
                     v-on:mouseup.native="dialogVisible=true">
         <el-button type="text">登录/新用户认证</el-button>
 
@@ -222,10 +220,14 @@
             }
             break
           case '2':
-            console.log(this.loginForm)
+            if (this.$route.params.uid) {
+              this.$router.push('/' + this.$route.params.uid + '/ProjectList')
+            }
             break
           case '3':
-            this.$router.push('/' + this.$route.params.uid + '/HallofFame')
+            if (this.$route.params.uid) {
+              this.$router.push('/' + this.$route.params.uid + '/HallofFame')
+            }
             break
           case '5-1':
             this.$router.push('/' + this.$route.params.uid + '/userpage')
