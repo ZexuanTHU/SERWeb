@@ -26,8 +26,8 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <registerProject :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+      <el-button id="submit" @click="dialogFormVisible = true" :dialogFormVisible="dialogFormVisible" type="primary">立即报名</el-button>
+      <registerProject @dialogStatus="dialogStatus" :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -93,6 +93,9 @@ export default {
           console.log(res['msg'])
         }
       })
+    },
+    dialogStatus (val) {
+      this.dialogFormVisible = val
     }
   }
 }
