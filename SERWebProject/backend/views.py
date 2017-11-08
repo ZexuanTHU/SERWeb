@@ -199,6 +199,7 @@ def project_grade_request(request, project_id):
         raise Http404('request project grade error!')
 
 
+# add teammate
 @csrf_exempt
 def add_teammate(request):
     name = request.POST['name']
