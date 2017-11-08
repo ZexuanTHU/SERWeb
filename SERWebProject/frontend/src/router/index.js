@@ -5,8 +5,8 @@ import HelloWorld from '@/components/HelloWorld'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
-import Register from '@/components/register/Register'
 import HallofFame from '@/components/HallofFame'
+import ProjectList from '@/components/ProjectPage'
 import VueResource from 'vue-resource'
 import auth from '../auth'
 // import mheader from '@/components/header'
@@ -19,12 +19,12 @@ auth.checkAuth()
 export default new Router({
   routes: [
     {
-      path: '/:uid',
+      path: '/',
       name: 'Hello',
       component: HelloWorld
     },
     {
-      path: '/',
+      path: '/:uid',
       name: 'Hello',
       component: HelloWorld
     },
@@ -34,34 +34,24 @@ export default new Router({
       component: CompetitionInfo
     },
     {
-      path: '/CompetitionInfo/:pid',
-      name: 'CompetitionInfo',
-      component: CompetitionInfo
-    },
-    {
       path: '/:uid/GroupInfo/:pid',
       name: 'GroupInfo',
       component: GroupInfo
     },
     {
-      path: '/GroupInfo/:pid',
-      name: 'GroupInfo',
-      component: GroupInfo
+      path: '/:uid/userpage',
+      name: 'userpage',
+      component: userpage
     },
     {
-      path: '/Register',
-      name: 'Register',
-      component: Register
-    },
-    {
-      path: '/HallofFame',
+      path: '/:uid/HallofFame',
       name: 'HallofFame',
       component: HallofFame
     },
     {
-      path: '/:uid/userpage',
-      name: 'userpage',
-      component: userpage
+      path: '/:uid/ProjectList',
+      name: 'ProjectList',
+      component: ProjectList
     }
   ]
 })
