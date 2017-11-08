@@ -218,11 +218,7 @@
             console.log(this.loginForm)
             break
           case '3':
-            if (this.$route.params.uid) {
-              this.$router.push('/' + this.$route.params.uid + '/HallofFame')
-            } else {
-              this.$router.push('/HallofFame')
-            }
+            this.$router.push('/' + this.$route.params.uid + '/HallofFame')
             break
           case '5-1':
             this.$router.push('userpage')
