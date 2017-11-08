@@ -79,6 +79,10 @@ export default {
         clothes_size: '',
         cellphone_num: ''
       },
+      registerForm: {
+        user_id: '',
+        project_id: ''
+      },
       rules: {
         faculty: [
           { required: true, message: '请选择院系', trigger: 'change' }
@@ -135,13 +139,15 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.registerForm.user_id = this.uid
+          this.registerForm.project_id = this.pid
           if (this.group === false) {
-            this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
+            this.$http.post('http://127.0.0.1:8000/api/project_register', this.loginForm, {emulateJSON: true})
             this.dialogFormVisible = false
             this.$emit('finish')
             alert('報名成功')
           } else {
-            this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
+            this.$http.get('http://127.0.0.1:8000/api/group_project_register', this.loginForm, {emulateJSON: true})
             this.dialogFormVisible = false
             alert('创建成功')
             this.$emit('finish')
