@@ -26,8 +26,10 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <registerGroup :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
+      <el-button id="submit" @click="dialogVisible = true,groupVisible = false" type="primary">创建队伍</el-button>
+      <registerProject :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+      <el-button id="groupsubmit" @click="groupVisible = true,dialogVisible = false" type="primary">修改队员</el-button>
+      <registerGroup :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -42,10 +44,12 @@
 <script>
 import mheader from '../header.vue'
 import registerGroup from './register_group.vue'
+import registerProject from './register_project.vue'
 export default {
   components: {
     'mheader': mheader,
-    'registerGroup': registerGroup
+    'registerGroup': registerGroup,
+    'registerProject': registerProject
   },
   data () {
     return {
@@ -61,9 +65,11 @@ export default {
         date: '1',
         project_text: ''
       },
-      dialogFormVisible: false,
+      dialogVisible: false,
+      groupVisible: false,
       project_pk: '',
-      user_pk: ''
+      user_pk: '',
+      group: true
     }
   },
   computed: {
@@ -84,6 +90,9 @@ export default {
           this.pageInfo = res.list[0].fields
           this.pageInfo.attend = '30'
           this.project_pk = res.list[0].pk
+          if (res.list[0].fields.group_project === true) {
+            this.group = true
+          }
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
@@ -114,7 +123,7 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  #submit{
+  #submit #group{
     margin-top: 20px;
     margin-bottom: 20px;
   }

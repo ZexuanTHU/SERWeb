@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="團隊報名" :visible.sync="dialogFormVisible">
+  <el-dialog title="團隊報名" :visible.sync="groupDialogFormVisible">
     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
       <el-form-item
         prop="name"
@@ -35,7 +35,7 @@
 <script>
 export default {
   props: {
-    dialogFormVisible: {
+    groupDialogFormVisible: {
       type: Boolean,
       default: false
     },

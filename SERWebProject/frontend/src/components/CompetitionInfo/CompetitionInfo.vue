@@ -27,7 +27,7 @@
         <h3>剩下{{date}}天</h3>
       </div>
       <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <registerProject :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk"></registerProject>
+      <registerProject :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -63,7 +63,8 @@ export default {
       },
       dialogFormVisible: false,
       project_pk: '',
-      user_pk: ''
+      user_pk: '',
+      group: false
     }
   },
   computed: {
@@ -84,6 +85,9 @@ export default {
           this.pageInfo = res.list[0].fields
           this.pageInfo.attend = '30'
           this.project_pk = res.list[0].pk
+          if (res.list[0].fields.group_project === true) {
+            this.group = true
+          }
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
