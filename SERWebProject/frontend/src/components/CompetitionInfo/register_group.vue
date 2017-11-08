@@ -56,6 +56,9 @@ export default {
         }],
         name: ''
       },
+      registerForm: {
+        name: ''
+      },
       user_pk: '',
       ruleForm: {
         faculty: '',
@@ -77,6 +80,22 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.$confirm('此操作将确定队伍, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交'
+            })
+          })
+          this.$http.post('http://127.0.0.1:8000/api/set_teammate_confirm/' + this.uid + '/' + this.pid)
           alert('submit!')
           this.$emit('finishGroup')
         } else {
@@ -97,9 +116,20 @@ export default {
     addteamate (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dynamicValidateForm.teamates.push({
-            value: '',
-            key: Date.now()
+          var i = this.dynamicValidateForm.teamates.length - 1
+          console.log(this.dynamicValidateForm.teamates[i].value)
+          this.registerForm.name = this.dynamicValidateForm.teamates[i].value
+          this.$http.post('http://127.0.0.1:8000/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
+            var res = JSON.parse(response.bodyText)
+            console.log(res)
+            if (res.status === 0) {
+              this.dynamicValidateForm.teamates.push({
+                value: '',
+                key: Date.now()
+              })
+            } else {
+              alert('User doesn\'t exsist')
+            }
           })
         } else {
           console.log('error')
