@@ -141,13 +141,14 @@ export default {
         if (valid) {
           this.registerForm.user_id = this.uid
           this.registerForm.project_id = this.pid
+          console.log(this.registerForm)
           if (this.group === false) {
-            this.$http.post('http://127.0.0.1:8000/api/project_register', this.loginForm, {emulateJSON: true})
+            this.$http.post('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
             this.dialogFormVisible = false
             this.$emit('finish')
             alert('報名成功')
           } else {
-            this.$http.get('http://127.0.0.1:8000/api/group_project_register', this.loginForm, {emulateJSON: true})
+            this.$http.post('http://127.0.0.1:8000/api/add_group/' + this.uid + '/' + this.pid)
             this.dialogFormVisible = false
             alert('创建成功')
             this.$emit('finish')
