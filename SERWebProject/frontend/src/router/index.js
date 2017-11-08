@@ -2,11 +2,9 @@ import Vue from 'vue'
 import Element from 'element-ui'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/login/Login'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
-import Register from '@/components/register/Register'
 import HallofFame from '@/components/HallofFame'
 import VueResource from 'vue-resource'
 import auth from '../auth'
@@ -25,32 +23,27 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
+      path: '/:uid',
+      name: 'Hello',
+      component: HelloWorld
     },
     {
-      path: '/CompetitionInfo/:pk',
+      path: '/:uid/CompetitionInfo/:pid',
       name: 'CompetitionInfo',
       component: CompetitionInfo
     },
     {
-      path: '/GroupInfo/:pk',
+      path: '/:uid/GroupInfo/:pid',
       name: 'GroupInfo',
       component: GroupInfo
     },
     {
-      path: '/userpage',
+      path: '/:uid/userpage',
       name: 'userpage',
       component: userpage
     },
     {
-      path: '/Register',
-      name: 'Register',
-      component: Register
-    },
-    {
-      path: '/HallofFame',
+      path: '/:uid/HallofFame',
       name: 'HallofFame',
       component: HallofFame
     }
