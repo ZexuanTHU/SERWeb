@@ -38,7 +38,7 @@
             <el-input v-model="ruleForm.cellphone_num"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">报名</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">{{groupStatus}}</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -52,14 +52,23 @@ export default {
       type: Boolean,
       default: false
     },
-    projectpk: {
+    pid: {
       type: String,
       default: ''
+    },
+    uid: {
+      type: String,
+      default: ''
+    },
+    group: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       user_pk: '',
+      groupStatus: '',
       ruleForm: {
         faculty: '',
         name: '',
@@ -89,9 +98,6 @@ export default {
           { required: true, message: '请输入学号', trigger: 'blur' },
           { legth: 10, message: '长度10个字符', trigger: 'blur' }
         ],
-        birth_date: [
-          { type: 'date', message: '请选择生日', trigger: 'change' }
-        ],
         clothes_size: [
           { required: true, message: '请选择衣服号码', trigger: 'change' }
         ],
@@ -104,17 +110,23 @@ export default {
     }
   },
   created: function () {
-    this.user_info_request('skyrealmz')
+    this.user_info_request(this.uid)
+    if (this.group === true) {
+      this.groupStatus = '建立队伍'
+    } else {
+      this.groupStatus = '报名'
+    }
+    this.$emit('test')
   },
   methods: {
     user_info_request (uid) {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + uid).then((response) => {
+      this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
           this.ruleForm = res.list[0].fields
-          this.ruleForm.birth_date = ''
           this.user_pk = res.list[0].pk
+          this.ruleForm.birth_date = this.ruleForm.birth_date + 'T00:00:00.000Z'
         } else {
           this.$message.error('获取项目列表失败"')
           console.log(res['msg'])
@@ -124,9 +136,15 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.user_pk + '/' + this.project_pk)
-          this.dialogFormVisible = false
-          alert('報名成功')
+          if (this.group === false) {
+            this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
+            this.dialogFormVisible = false
+            alert('報名成功')
+          } else {
+            this.$http.get('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
+            this.dialogFormVisible = false
+            alert('创建成功')
+          }
         } else {
           console.log('error submit!!')
           return false

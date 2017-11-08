@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="團隊報名" :visible.sync="dialogFormVisible">
+  <el-dialog title="團隊報名" :visible.sync="groupDialogFormVisible">
     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
       <el-form-item
         prop="name"
@@ -35,11 +35,11 @@
 <script>
 export default {
   props: {
-    dialogFormVisible: {
+    groupDialogFormVisible: {
       type: Boolean,
       default: false
     },
-    projectpk: {
+    pid: {
       type: String,
       default: ''
     },
@@ -71,7 +71,7 @@ export default {
     }
   },
   created: function () {
-    this.user_info_request('skyrealmz')
+    this.user_info_request(this.uid)
   },
   methods: {
     submitForm (formName) {
@@ -106,7 +106,7 @@ export default {
       })
     },
     user_info_request (username) {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + username).then((response) => {
+      this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + username).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
