@@ -27,7 +27,7 @@
         <h3>剩下{{date}}天</h3>
       </div>
       <el-button id="submit" @click="dialogFormVisible = true" type="primary">立即报名</el-button>
-      <registerProject :dialogFormVisible="dialogFormVisible" :projectpk="project_pk"></registerProject>
+      <registerProject :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk"></registerProject>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -62,7 +62,8 @@ export default {
         project_text: ''
       },
       dialogFormVisible: false,
-      project_pk: ''
+      project_pk: '',
+      user_pk: ''
     }
   },
   computed: {
@@ -71,7 +72,8 @@ export default {
     }
   },
   created: function () {
-    this.project_info_request(this.$route.params.pk)
+    this.project_info_request(this.$route.params.pid)
+    this.user_pk = this.$route.params.uid
   },
   methods: {
     project_info_request (pk) {

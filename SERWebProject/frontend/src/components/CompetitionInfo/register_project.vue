@@ -52,7 +52,11 @@ export default {
       type: Boolean,
       default: false
     },
-    projectpk: {
+    pid: {
+      type: String,
+      default: ''
+    },
+    uid: {
       type: String,
       default: ''
     }
@@ -104,11 +108,11 @@ export default {
     }
   },
   created: function () {
-    this.user_info_request('skyrealmz')
+    this.user_info_request(this.uid)
   },
   methods: {
     user_info_request (uid) {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request?username=' + uid).then((response) => {
+      this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
