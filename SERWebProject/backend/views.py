@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -199,7 +199,22 @@ def project_grade_request(request, project_id):
         raise Http404('request project grade error!')
 
 
-# add teammate
+@csrf_exempt
+def add_group(request, user_id, project_id):
+    if request.method == 'POST':
+        try:
+            group_name = request.POST['group_name']
+            project = Project.objects.get(pk=project_id)
+            team_leader = User.objects.get(pk=user_id)
+            new_group = Group(group_name=group_name, team_creator=team_leader, project=project)
+            new_group.save()
+            return HttpResponse('success!')
+        except:
+            return HttpResponse('error!')
+    else:
+        return HttpResponse('Please check request method!')
+
+
 @csrf_exempt
 def add_teammate(request):
     name = request.POST['name']

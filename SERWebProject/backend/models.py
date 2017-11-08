@@ -77,6 +77,8 @@ class Project(models.Model):
     min_reg = models.IntegerField('报名人数/队伍数下限', default=0)
     max_reg = models.IntegerField('报名人数/队伍数上限', default=100)
     project_hot = models.IntegerField('当前报名人数/队伍数', default=0)
+    team_min_reg = models.IntegerField('队伍人数下限', default=0)
+    team_max_reg = models.IntegerField('队伍人数上限', default=0)
     registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
     registered_user_info = models.ManyToManyField(UserInfo, through='ProjectRegisterRelationship')
 
@@ -132,10 +134,11 @@ class ProjectRegisterRelationship(models.Model):
 class Group(models.Model):
     group_name = models.CharField(max_length=128, default='队伍')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    team_creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_creator')
     members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
 
     def __str__(self):
-        return self.project.project_name + self.group_name
+        return self.project.project_name + ' ' + self.group_name + ' ' + self.team_creator.username
 
     class Meta:
         verbose_name = '团队 Group'
@@ -145,11 +148,14 @@ class Group(models.Model):
 class Membership(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     group = models.ForeignKey(Group)
-    team_leader = models.ForeignKey(User, related_name="membership_invites")
-    teammate = models.ForeignKey(User)
+    team_leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_leader_created_this_team")
+    team_leader_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="team_leader_info")
+    teammate = models.ForeignKey(User, on_delete=models.CASCADE)
+    teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.project.project_name + ' ' + self.group.group_name + ' ' + self.team_leader.username + ' ' + self.teammate.username
+        return self.project.project_name + ' ' + self.group.group_name + ' ' + \
+               self.team_leader_info.name + ' ' + self.teammate_info.name
 
     class Meta:
         verbose_name = '团队报名表 Membership'
