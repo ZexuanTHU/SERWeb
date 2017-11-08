@@ -17,7 +17,7 @@
         首页
       </el-menu-item>
       <el-menu-item index="2">赛事信息</el-menu-item>
-      <router-link to="HallofFame"><el-menu-item index="3">酒井名人堂</el-menu-item></router-link>
+      <el-menu-item index="3">酒井名人堂</el-menu-item>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
       <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 30px">
         <template slot="title">{{username}}</template>
@@ -216,6 +216,9 @@
             break
           case '2':
             console.log(this.loginForm)
+            break
+          case '3':
+            this.$router.push('HallofFame')
             break
           case '5-1':
             this.$router.push('userpage')
