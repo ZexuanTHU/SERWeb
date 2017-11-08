@@ -19,26 +19,20 @@
             <h5></h5>
             <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanel">
 
-              <el-menu-item index="0">比赛报名</el-menu-item>
               <el-menu-item index="1">报名结果</el-menu-item>
-              <!--<el-menu-item index="2">比赛收藏</el-menu-item>-->
+              <el-menu-item index="2">比赛成绩</el-menu-item>
               <el-menu-item index="3">个人信息</el-menu-item>
-              <!--<el-menu-item index="4">创建比赛</el-menu-item>-->
             </el-menu>
           </el-col>
         </div>
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
-          <div id="register" class="w3-container panel"
-               :style="{display:openedPanel==='0'?'inline-block':'none'}">
-            <projRegister></projRegister>
-          </div>
           <div id="view_register" class="w3-container panel "
                :style="{display:openedPanel==='1'?'inline-block':'none'}">
             <viewRegister></viewRegister>
           </div>
-          <div id="saved_event" class="w3-container panel"
+          <div id="view_grades" class="w3-container panel "
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
-            <h1 style="font-size: large;margin: auto">saved_event</h1>
+            <viewGrades></viewGrades>
           </div>
           <div id="modify" class="w3-container panel" style="display: inline-block"
                :style="{display:openedPanel==='3'?'inline-block':'none'}">
@@ -78,7 +72,7 @@
   import infoRegister from '../components/UserPage/infoRegister.vue'
   import projRegister from '../components/UserPage/projRegister.vue'
   import viewRegister from '../components/UserPage/viewRegister.vue'
-
+  import viewGrades from '../components/UserPage/viewGrades.vue'
   export default {
     name: 'test',
     data () {
@@ -189,7 +183,8 @@
       'mfooter': mfooter,
       'infoRegister': infoRegister,
       'projRegister': projRegister,
-      'viewRegister': viewRegister
+      'viewRegister': viewRegister,
+      'viewGrades': viewGrades
     }
   }
 </script>

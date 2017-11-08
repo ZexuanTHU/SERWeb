@@ -109,10 +109,11 @@
           'http://localhost:8000/api/user_info_submit/' + this.id,
           this.infoForm, {emulateJSON: true}
         ).then((response) => {
-          let res = JSON.parse(response.bodyText)
-          console.log('response', res)
-          if (res.status === 0) {
-
+//          let res = JSON.parse(response.body)
+          var res = response
+          console.log('response', response)
+          if (res.statusText === 'OK') {
+            alert('已经提交表单')
           } else {
             alert('失败，请检查您输入')
           }

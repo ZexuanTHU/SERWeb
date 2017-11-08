@@ -22,8 +22,7 @@
             </div>
             <div style="width: 100%; position: relative; overflow: hidden">
               <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100"
-                             style="margin-left: 10%; margin-bottom: 5%"></el-progress>
+                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress>
               </div>
               <div style="float: right; margin-right: 5%">
                 <div style="margin-bottom: 5%">
@@ -31,8 +30,8 @@
                     <p>一键报名</p>
                   </el-button>
                 </div>
-                <div style="margin-bottom: 5%;">
-                  <router-link :to="{name: 'CompetitionInfo', params: {pid: field.pk}}">
+                <div  style="margin-bottom: 5%;">
+                  <router-link :to="{name: 'CompetitionInfo', params: {pk: field.pk}}">
                     <el-button type="primary" style="width: 150px">
                       <p style="color: white">赛事详情</p>
                     </el-button>
@@ -45,74 +44,7 @@
       </el-row>
     </div>
     <br/>
-    <div id="more news" style="margin-left: 5%; margin-right: 6.5%">
-      <h1 align="left">其他赛事</h1>
-      <br/>
-      <el-table
-        :data="latest_project_list"
-        height="600"
-        border
-        style="width: 100%">
-        <el-table-column
-          prop="project_name"
-          label="赛事名称"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.project_name }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="project_text"
-          label="赛事简介"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.project_text }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="date"
-          label="报名起止时间"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="project_hot"
-          label="当前报名人数"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.project_hot }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="max_reg"
-          label="报名人数限制"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.max_reg }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="contact_name"
-          label="紧急联系人姓名"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.contact_name }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="contact_tel"
-          label="紧急联系人电话"
-          align="center">
-          <template scope="scope"> {{ scope.row.fields.contact_tel }} </template>
-        </el-table-column>
-        <el-table-column
-          prop="register"
-          label="赛事报名"
-          align="center">
-          <template scope="scope">
-            <el-button size="mini">
-              <p>一键报名</p>
-            </el-button>
-            <router-link :to="{name: 'CompetitionInfo', params: {pid: scope.row.pk}}">
-              <el-button type="primary" size="mini">
-                <p style="color: white">赛事详情</p>
-              </el-button>
-            </router-link>
-
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <tableList></tableList>
 
     <br/>
   </div>
@@ -122,6 +54,7 @@
 <script>
   import auth from '../auth'
   import mheader from './header.vue'
+  import tableList from './TableList.vue'
 
   export default {
     data () {
@@ -248,7 +181,7 @@
       project_list_display () {
         this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
-          console.log(res, 'proj_display')
+          console.log(res)
           if (res.error_num === 0) {
             this.latest_project_list = res['list']
           } else {
@@ -271,7 +204,8 @@
       }
     },
     components: {
-      'mheader': mheader
+      'mheader': mheader,
+      'tableList': tableList
     }
   }
 </script>
