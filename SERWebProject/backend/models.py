@@ -5,6 +5,15 @@ from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
+PENDING = 'PE'
+APPROVED = 'AP'
+REJECTED = 'RE'
+APPROVAL_STATUS = (
+    (PENDING, '审核中'),
+    (APPROVED, '已通过'),
+    (REJECTED, '未通过')
+)
+
 class User(AbstractUser):
     # email = models.EmailField()
     submit_info = models.BooleanField(default=False)
@@ -72,16 +81,16 @@ class Project(models.Model):
     match_venue = models.CharField('比赛地点', max_length=30, default='清华大学')
     contact_name = models.CharField('紧急联系人姓名', max_length=30, default='郭志芃')
     contact_tel = models.CharField('紧急联系人电话', max_length=30, default='18813040000')
-    group_project = models.BooleanField('是否为团体项目', default=False)
     # 个人项目字段
     min_reg = models.IntegerField('报名人数/队伍数下限', default=0)
     max_reg = models.IntegerField('报名人数/队伍数上限', default=100)
     project_hot = models.IntegerField('当前报名人数/队伍数', default=0)
-    # team_min_reg = models.IntegerField('队伍人数下限', default=0)
-    # team_max_reg = models.IntegerField('队伍人数上限', default=0)
-    # teammate_num = models.IntegerField('队伍当前')
     registered_user = models.ManyToManyField(User, through='ProjectRegisterRelationship')
     registered_user_info = models.ManyToManyField(UserInfo, through='ProjectRegisterRelationship')
+    # 团体项目字段
+    group_project = models.BooleanField('是否为团体项目', default=False)
+    team_min_reg = models.IntegerField('队伍人数下限', default=1)
+    team_max_reg = models.IntegerField('队伍人数上限', default=5)
 
     class Meta:
         verbose_name = '项目 Project'
@@ -104,15 +113,6 @@ class Project(models.Model):
 
 
 class ProjectRegisterRelationship(models.Model):
-    PENDING = 'PE'
-    APPROVED = 'AP'
-    REJECTED = 'RE'
-    APPROVAL_STATUS = (
-        (PENDING, '审核中'),
-        (APPROVED, '已通过'),
-        (REJECTED, '未通过')
-    )
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     register_name = models.CharField('选手姓名', max_length=10, default='选手')
@@ -121,7 +121,7 @@ class ProjectRegisterRelationship(models.Model):
     registered_project_name = models.CharField('项目名称', max_length=20, default='项目')
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
-    grade = models.CharField('比赛成绩', max_length=100, default='完赛')
+    grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
     if_finished = models.BooleanField('比赛已结束', default=False)
 
     def __str__(self):
@@ -136,13 +136,19 @@ class Group(models.Model):
     group_name = models.CharField(max_length=128, default='队伍')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     team_creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_creator')
-    team_min_reg = models.IntegerField('队伍人数下限', default=0)
+    team_creator_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name='team_creator_info')
+    team_min_reg = models.IntegerField('队伍人数下限', default=1)
     team_max_reg = models.IntegerField('队伍人数上限', default=0)
-    teammate_num = models.IntegerField('队伍当前人数', default=0)
+    teammate_num = models.IntegerField('队伍当前人数', default=1)
     members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
+    if_finished = models.BooleanField('比赛已结束', default=False)
+    if_teammate_finally_confirm = models.BooleanField('已提交队员名单', default=False)
 
     def __str__(self):
-        return self.project.project_name + ' ' + self.group_name + ' ' + self.team_creator.username
+        return self.project.project_name + ' ' + self.group_name + ' ' + self.team_creator_info.name + '(' + \
+               self.team_creator.username + ')'
 
     def if_exceed_team_min_reg(self):
         if self.team_min_reg - self.teammate_num < 0:
@@ -176,3 +182,23 @@ class Membership(models.Model):
     class Meta:
         verbose_name = '团队报名表 Membership'
         verbose_name_plural = '团队报名表 Membership'
+
+
+class GroupProjectRegisterRelationship(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    register_group_name = models.CharField('队伍名', max_length=10, default='队伍')
+    team_leader = models.ForeignKey(User, on_delete=models.CASCADE)
+    team_leader_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    registered_project_name = models.CharField('项目名称', max_length=20, default='项目')
+    register_datetime = models.DateTimeField('报名时间')
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    grade = models.CharField('比赛成绩', max_length=100, default='完赛')
+    if_finished = models.BooleanField('比赛已结束', default=False)
+
+    def __str__(self):
+        return self.approval_status + ' ' + self.project.project_name + ' ' + self.group.group_name
+
+    class Meta:
+        verbose_name = '项目报名表 ProjectRegisterRelationship'
+        verbose_name_plural = '项目报名表 ProjectRegisterRelationship'

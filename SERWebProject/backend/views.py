@@ -206,9 +206,16 @@ def add_group(request, user_id, project_id):
             group_name = request.POST['group_name']
             project = Project.objects.get(pk=project_id)
             team_leader = User.objects.get(pk=user_id)
-            new_group = Group(group_name=group_name, team_creator=team_leader, project=project)
-            new_group.save()
-            return HttpResponse('success!')
+            team_leader_info = UserInfo.objects.get(user=team_leader)
+            team_min_reg = project.team_min_reg
+            team_max_reg = project.team_max_reg
+            new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
+                              team_creator_info=team_leader_info, team_min_reg=team_min_reg, team_max_reg=team_max_reg)
+            if project.was_below_max_reg:
+                new_group.save()
+                return HttpResponse('success!')
+            else:
+                return HttpResponse('This project already reach its register team cap')
         except:
             return HttpResponse('error!')
     else:
