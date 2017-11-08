@@ -150,7 +150,7 @@ def project_register(request, user_id, project_id):
                                                                     register_name = user_info.name,
                                                                     student_id=user_info.student_id,
                                                                     project=project,
-                                                                    registed_project_name=project.project_name,
+                                                                    registered_project_name=project.project_name,
                                                                     register_datetime=timezone.now())
                 project_register_form.save()
                 project.project_hot = project.project_hot + 1
@@ -200,17 +200,71 @@ def project_grade_request(request, project_id):
 
 
 @csrf_exempt
-def add_teammate(request):
-    name = request.POST['name']
+def add_group(request, user_id, project_id):
     if request.method == 'POST':
         try:
-            user_info = UserInfo.objects.get(name=name)
-            if user_info is not None:
+            group_name = request.POST['group_name']
+            project = Project.objects.get(pk=project_id)
+            team_leader = User.objects.get(pk=user_id)
+            team_leader_info = UserInfo.objects.get(user=team_leader)
+            team_min_reg = project.team_min_reg
+            team_max_reg = project.team_max_reg
+            new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
+                              team_creator_info=team_leader_info, team_min_reg=team_min_reg, team_max_reg=team_max_reg)
+            if project.was_below_max_reg:
+                new_group.save()
+                project.project_hot = project.project_hot + 1
+                project.save()
+                return HttpResponse('success!')
+            else:
+                return HttpResponse('This project already reach its register team cap')
+        except:
+            return HttpResponse('error!')
+    else:
+        return HttpResponse('Please check request method!')
+
+
+@csrf_exempt
+def add_teammate(request, user_id, project_id):
+    if request.method == 'POST':
+        name = request.POST['name']
+        try:
+            team_creator = User.objects.get(pk=user_id)
+            project = Project.objects.get(pk=project_id)
+            group = Group.objects.get(team_creator=team_creator, project=project)
+            team_creator_info = UserInfo.objects.get(user=team_creator)
+            new_teammate_info = UserInfo.objects.get(name=name)
+            if new_teammate_info is not None and group.if_below_team_max_reg:
+                new_teammate = User.objects.get(belong_to=new_teammate_info)
+                new_teammate_addon = Membership(project=project, group=group, team_leader=team_creator,
+                                                team_leader_info=team_creator_info,
+                                                teammate=new_teammate, teammate_info=new_teammate_info)
+                new_teammate_addon.save()
+                group.teammate_num = group.teammate_num + 1
+                group.save()
                 return JsonResponse({'status': 0, 'msg': '添加成功！'})
         except:
             return JsonResponse({'status': 1, 'msg': '用户不存在或未激活！'})
     else:
         return HttpResponse('add teammate request error!')
+
+
+@csrf_exempt
+def set_teammate_confirm(request, user_id, project_id):
+    if request.method == 'POST':
+        try:
+            team_creator = User.objects.get(pk=user_id)
+            project = Project.objects.get(pk=project_id)
+            group = Group.objects.get(team_creator=team_creator, project=project)
+            group.if_teammate_finally_confirm = True
+            group.save()
+            return HttpResponse('confirm!')
+        except:
+            return HttpResponse('no such team!')
+    else:
+        return HttpResponse('please check request method!')
+
+
 
 
 
