@@ -26,10 +26,9 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogVisible = true,groupVisible = false" type="primary">创建队伍</el-button>
-      <registerProject :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
-      <el-button id="groupsubmit" @click="groupVisible = true,dialogVisible = false" type="primary">修改队员</el-button>
-      <registerGroup :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
+      <el-button id="submit" @click="dialogVisible = true" type="primary">创建队伍</el-button>
+      <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+      <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -98,6 +97,16 @@ export default {
           console.log(res['msg'])
         }
       })
+    },
+    dialogStatus (val) {
+      this.dialogVisible = val
+    },
+    showgroup () {
+      this.groupVisible = true
+      this.dialogVisible = false
+    },
+    hidegroup () {
+      this.groupVisible = false
     }
   }
 }

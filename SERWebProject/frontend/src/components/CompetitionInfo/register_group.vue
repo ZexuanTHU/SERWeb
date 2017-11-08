@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="團隊報名" :visible.sync="groupDialogFormVisible">
+  <el-dialog @close="closeDialog" title="加入队员" :visible.sync="groupDialogFormVisible">
     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
       <el-form-item
         prop="name"
@@ -78,6 +78,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert('submit!')
+          this.$emit('finishGroup')
         } else {
           console.log('error submit!!')
           return false
@@ -118,6 +119,9 @@ export default {
           console.log(res['msg'])
         }
       })
+    },
+    closeDialog () {
+      this.$emit('finishGroup')
     }
   }
 }
