@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone

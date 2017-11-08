@@ -133,4 +133,54 @@ class ProjectRegisterRelationship(models.Model):
         verbose_name_plural = '项目报名表 ProjectRegisterRelationship'
 
 
+class Group(models.Model):
+    group_name = models.CharField(max_length=128, default='队伍')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    team_creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_creator')
+    team_creator_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name='team_creator_info')
+    team_min_reg = models.IntegerField('队伍人数下限', default=1)
+    team_max_reg = models.IntegerField('队伍人数上限', default=0)
+    teammate_num = models.IntegerField('队伍当前人数', default=1)
+    members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
+    if_finished = models.BooleanField('比赛已结束', default=False)
+    if_teammate_finally_confirm = models.BooleanField('已提交队员名单', default=False)
 
+    def __str__(self):
+        return self.project.project_name + ' ' + self.group_name + ' ' + self.team_creator_info.name + '(' + \
+               self.team_creator.username + ')'
+
+    def if_exceed_team_min_reg(self):
+        if self.team_min_reg - self.teammate_num < 0:
+            return True
+        else:
+            return False
+
+    def if_below_team_max_reg(self):
+        if self.team_max_reg - self.teammate_num > 0:
+            return True
+        else:
+            return False
+
+    class Meta:
+        verbose_name = '团队 Group'
+        verbose_name_plural = '团队 Group'
+
+
+class Membership(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group)
+    team_leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_leader_created_this_team")
+    team_leader_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="team_leader_info")
+    teammate = models.ForeignKey(User, on_delete=models.CASCADE)
+    teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.project.project_name + ' ' + self.group.group_name + ' ' + \
+               self.team_leader_info.name + '(' + self.team_leader.username + ')' + ' ' + self.teammate_info.name + \
+               '(' + self.teammate.username + ')'
+
+    class Meta:
+        verbose_name = '团队报名表 Membership'
+        verbose_name_plural = '团队报名表 Membership'
