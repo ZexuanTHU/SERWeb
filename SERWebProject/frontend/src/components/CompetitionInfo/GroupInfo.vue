@@ -26,7 +26,7 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogVisible = true" type="primary">创建队伍</el-button>
+      <el-button id="submit" @click="dialogVisible = true" type="primary">报名</el-button>
       <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
       <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
@@ -68,7 +68,7 @@ export default {
       groupVisible: false,
       project_pk: '',
       user_pk: '',
-      group: true
+      group: false
     }
   },
   computed: {
@@ -104,9 +104,6 @@ export default {
     showgroup () {
       this.groupVisible = true
       this.dialogVisible = false
-    },
-    hidegroup () {
-      this.groupVisible = false
     }
   }
 }

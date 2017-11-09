@@ -1,5 +1,5 @@
 <template>
-  <div id="CompetitionInfo">
+  <div id="GroupInfo">
     <mheader></mheader>
     <div id="compinfo">
       <h1 align="left">{{pageInfo.project_name}}</h1>
@@ -26,8 +26,9 @@
         <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
         <h3>剩下{{date}}天</h3>
       </div>
-      <el-button id="submit" @click="dialogFormVisible = true" :dialogFormVisible="dialogFormVisible" type="primary">立即报名</el-button>
-      <registerProject @dialogStatus="dialogStatus" :dialogFormVisible="dialogFormVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+      <el-button id="submit" @click="dialogVisible = true" type="primary">报名</el-button>
+      <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+      <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
         <hr>
         <h2 align="left">详细介绍</h2>
@@ -41,10 +42,12 @@
 
 <script>
 import mheader from '../header.vue'
+import registerGroup from './register_group.vue'
 import registerProject from './register_project.vue'
 export default {
   components: {
     'mheader': mheader,
+    'registerGroup': registerGroup,
     'registerProject': registerProject
   },
   data () {
@@ -61,7 +64,8 @@ export default {
         date: '1',
         project_text: ''
       },
-      dialogFormVisible: false,
+      dialogVisible: false,
+      groupVisible: false,
       project_pk: '',
       user_pk: '',
       group: false
@@ -95,18 +99,17 @@ export default {
       })
     },
     dialogStatus (val) {
-      this.dialogFormVisible = val
+      this.dialogVisible = val
+    },
+    showgroup () {
+      this.groupVisible = true
+      this.dialogVisible = false
     }
   }
 }
 </script>
 
 <style scoped>
-
-  a {
-    text-decoration: none;
-  }
-
   #login {
     float: right;
   }
@@ -126,9 +129,8 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  #submit{
+  #submit #group{
     margin-top: 20px;
     margin-bottom: 20px;
   }
-
 </style>
