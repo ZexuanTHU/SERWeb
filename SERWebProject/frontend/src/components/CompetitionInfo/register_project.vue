@@ -1,5 +1,5 @@
 <template>
-  <el-dialog @close="closeDialog" title="报名资料确认" :visible.sync="dialogFormVisible">
+  <el-dialog @open="checkGroup" @close="closeDialog" title="报名资料确认" :visible.sync="dialogFormVisible">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="院系" prop="faculty">
           <el-select v-model="ruleForm.faculty" placeholder="选择院系">
@@ -89,7 +89,7 @@ export default {
         ],
         name: [
           { required: true, message: '请输入名字', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         gender: [
           { required: true, message: '请选性别', trigger: 'change' }
@@ -107,7 +107,7 @@ export default {
         ],
         cellphone_num: [
           { required: true, message: '请输入学号', trigger: 'blur' },
-          { min: 12, max: 12, message: '长度12个字符', trigger: 'blur' }
+          { min: 11, max: 11, message: '长度12个字符', trigger: 'blur' }
         ]
       },
       formLabelWidth: '120px'
@@ -115,14 +115,16 @@ export default {
   },
   created: function () {
     this.user_info_request(this.uid)
-    if (this.group === true) {
-      this.groupStatus = '建立队伍'
-    } else {
-      this.groupStatus = '报名'
-    }
   },
   methods: {
     user_info_request (uid) {
+      console.log('asdfasdfasdfasdfasd')
+      console.log(this.group)
+      if (this.group === true) {
+        this.groupStatus = '建立队伍'
+      } else {
+        this.groupStatus = '报名'
+      }
       this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
@@ -145,7 +147,7 @@ export default {
           if (this.group === false) {
             this.$http.post('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
             this.dialogFormVisible = false
-            this.$emit('finish')
+            this.closeDialog()
             alert('報名成功')
           } else {
             this.$http.post('http://127.0.0.1:8000/api/add_group/' + this.uid + '/' + this.pid)
@@ -164,6 +166,13 @@ export default {
     },
     closeDialog () {
       this.$emit('dialogStatus', false)
+    },
+    checkGroup () {
+      if (this.group === true) {
+        this.groupStatus = '建立队伍'
+      } else {
+        this.groupStatus = '报名'
+      }
     }
   }
 }

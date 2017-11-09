@@ -57,7 +57,7 @@
           <el-button size="mini">
             <p>一键报名</p>
           </el-button>
-          <router-link :to="{name: 'CompetitionInfo', params: {pk: scope.row.pk}}">
+          <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: scope.row.pk}}">
             <el-button type="primary" size="mini">
               <p style="color: white">赛事详情</p>
             </el-button>
