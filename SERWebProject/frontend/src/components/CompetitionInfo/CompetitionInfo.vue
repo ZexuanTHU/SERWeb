@@ -79,6 +79,9 @@ export default {
   created: function () {
     this.project_info_request(this.$route.params.pid)
     this.user_pk = this.$route.params.uid
+    if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
+      this.$router.back()
+    }
   },
   methods: {
     project_info_request (pk) {
