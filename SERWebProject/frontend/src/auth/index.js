@@ -1,6 +1,6 @@
 // src/auth/index.js
 
-import Vue from 'vue'
+// import Vue from 'vue'
 import router from '../router/index'
 
 // URL and endpoint constants
@@ -14,8 +14,9 @@ export default {
   },
   login (context, creds, redirect) {
     console.log(creds)
-    console.log(creds.username)
+    console.log(creds.user_id)
     localStorage.setItem('id_token', creds.username)
+    localStorage.setItem('user_id', creds.user_id)
     context.user.autenticated = true
     router.push(redirect)
 //    context.$http.post(LOGIN_URL, creds).then(function (response) {
@@ -30,7 +31,7 @@ export default {
     // Error
 //      console.log(response.data)
 //    })
-    Vue.$http.headers.common['Authorization'] = this.getAuthHeader()
+//     Vue.$http.headers.common['Authorization'] = this.getAuthHeader()
   },
   signup (context, creds, redirect) {
     context.$http.post(SIGNUP_URL, creds, (data) => {
@@ -46,6 +47,7 @@ export default {
   },
   logout () {
     localStorage.removeItem('id_token')
+    localStorage.removeItem('user_id')
     this.user.authenticated = false
     // delete Vue.$http.headers.common['Authorization']
   },

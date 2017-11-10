@@ -33,26 +33,26 @@
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
             <viewGrades></viewGrades>
           </div>
-          <div id="modify" class="w3-container panel" style="display: inline-block"
-               :style="{display:openedPanel==='3'?'inline-block':'none'}">
-            <infoRegister :inline='false' ref="info"></infoRegister>
-            <div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">
-              <img class="icon" :src="imageUrl"
-                   style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"
-                   alt="">
-              <button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"
-                      v-on:click="fileclick()">选择头像
-              </button>
-              <input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>
-            </div>
-          </div>
-          <div id="add_event" class="w3-container panel"
+          <!--<div id="modify" class="w3-container panel" style="display: inline-block"-->
+          <!--:style="{display:openedPanel==='3'?'inline-block':'none'}">-->
+          <!--<infoRegister :inline='false' ref="info"></infoRegister>-->
+          <!--<div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">-->
+          <!--<img class="icon" :src="imageUrl"-->
+          <!--style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"-->
+          <!--alt="">-->
+          <!--<button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"-->
+          <!--v-on:click="fileclick()">选择头像-->
+          <!--</button>-->
+          <!--<input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>-->
+          <!--</div>-->
+          <!--</div>-->
+          <div class="w3-container panel"
                :style="{display:openedPanel==='4'?'inline-block':'none'}">
             <h1 style="border-bottom:2px solid #72beff;margin-left: 1em ">新比赛</h1>
-            <form action="" @change="saveToLocal($event.target.name,$event.target.value)">
-              <p><span style="width: 100px">时间:</span> <input type="date" name="add-time">
-                <span style="padding-left: 20px">地点：</span><input style="left: 500px" type="text" name="add-place"></p>
-            </form>
+            <!--<form action="" @change="saveToLocal($event.target.name,$event.target.value)">-->
+            <!--<p><span style="width: 100px">时间:</span> <input type="date" name="add-time">-->
+            <!--<span style="padding-left: 20px">地点：</span><input style="left: 500px" type="text" name="add-place"></p>-->
+            <!--</form>-->
 
 
           </div>
@@ -77,8 +77,8 @@
     data () {
       return {
         registerVisible: true,
-        imageUrl: require('../image/icon.jpg'),
-        openedPanel: '0',
+//        imageUrl: require('../image/icon.jpg'),
+        openedPanel: '1',
         applyState: JSON.stringify({ddl: 'ddl'})
       }
     },
@@ -86,19 +86,19 @@
       openPanel: function (index) {
         this.openedPanel = index
       },
-      onFileChange (e) {
-        var files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
-        if (!/image+/.test(files[0].type)) {
-          alert('请输入一张图片')
-          return
-        }
-        var reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = e.target.result
-        }
-        reader.readAsDataURL(files[0])
-      },
+//      onFileChange (e) {
+//        var files = e.target.files || e.dataTransfer.files
+//        if (!files.length) return
+//        if (!/image+/.test(files[0].type)) {
+//          alert('请输入一张图片')
+//          return
+//        }
+//        var reader = new FileReader()
+//        reader.onload = (e) => {
+//          this.imageUrl = e.target.result
+//        }
+//        reader.readAsDataURL(files[0])
+//      },
       fileclick: function () {
         document.getElementById('filechooser').click()
         console.log(document.getElementById('filechooser'))
@@ -164,7 +164,7 @@
 //      }
 
     },
-    mounted: function () {
+    created: function () {
 //      var input = document.getElementsByTagName('input')
 //      console.log(input)
 //      for (var i = 0; i < input.length; i++) {
@@ -176,6 +176,9 @@
 //        textarea[i].value = localStorage.getItem(textarea[i].name) || ''
 //      }
 //      this.ajaxpoll()
+      if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
+        this.$router.back()
+      }
     },
     components: {
       'mheader': mheader,

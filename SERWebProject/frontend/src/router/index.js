@@ -21,8 +21,33 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
+      name: 'Hello_',
       component: HelloWorld
+    },
+    {
+      path: '/HallofFame',
+      name: 'HallofFame_',
+      component: HallofFame
+    },
+    {
+      path: '/ProjectList',
+      name: 'ProjectList_',
+      component: ProjectList
+    },
+    {
+      path: '/SchoolTeam',
+      name: 'SchoolTeam_',
+      component: SchoolTeam
+    },
+    {
+      path: '/CompetitionInfo/:pid',
+      name: 'CompetitionInfo_',
+      component: CompetitionInfo
+    },
+    {
+      path: '/GroupInfo/:pid',
+      name: 'GroupInfo_',
+      component: GroupInfo
     },
     {
       path: '/:uid',

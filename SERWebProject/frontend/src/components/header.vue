@@ -6,8 +6,7 @@
       title="第一次登录个人信息修改"
       :visible.sync="registerVisible"
       width="100"
-      :show-close="false"
-      :before-close="handleClose">
+      :show-close="false">
       <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister" :uid='user_id'></infoRegister>
 
     </el-dialog>
@@ -32,8 +31,7 @@
 
         <el-dialog
           :visible.sync="dialogVisible"
-          size="tiny"
-          :before-close="handleClose">
+          size="tiny">
           <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="120px" class="login">
             <el-form-item prop="username">
               <el-input placeholder="Account9 用户名" v-model="loginForm.username" auto-complete="off"></el-input>
@@ -161,7 +159,7 @@
         user_id: '',
         user: auth.user,
         dialogVisible: false,
-        activeIndex: '1',
+        activeIndex: '',
         activeName: 'first',
         activeName2: '10',
         currentDate: new Date(),
@@ -211,48 +209,43 @@
       handleSelect (index) {
         switch (index) {
           case '1':
-//            console.log(index)
-            var uid = this.$route.params.uid
-            if (uid) {
-              this.$router.push('/' + uid)
-            } else {
-              this.$router.push('/')
-            }
+            this.routeTo('/')
             break
           case '2':
-            if (this.$route.params.uid) {
-              this.$router.push('/' + this.$route.params.uid + '/ProjectList')
-            }
+            this.routeTo('/ProjectList')
             break
           case '3':
-            if (this.$route.params.uid) {
-              this.$router.push('/' + this.$route.params.uid + '/HallofFame')
-            }
+            this.routeTo('/HallofFame')
             break
           case '4':
-            this.$router.push('/' + this.$route.params.uid + '/SchoolTeam')
+            this.routeTo('/SchoolTeam')
             break
           case '5-1':
-            this.$router.push('/' + this.$route.params.uid + '/userpage')
+            this.routeTo('/userpage')
             break
-//          case '5':
-//            this.dialogVisible = true
+        }
+      },
+      routeTo (pagename) {      // two status: login in or not
+        var uid = this.$route.params.uid
+        if (uid) {
+          this.$router.push('/' + uid + pagename)
+        } else {
+          this.$router.push(pagename)
         }
       },
       logout () {
-//        console.log(auth)
-//        auth.test()
         auth.logout()
         this.user.authenticated = false
-//        var path = this.$route.path
+        var path = this.$route.path
 //        var reg = new RegExp('userpage')
-//        if (reg.test(this.$route.fullPath)) {
-        this.$router.push('/')
-//        } else {
-//          if (path.indexOf('/', 1) === -1) {
-//            this.$router.push('/')
-//          } else { this.$router.push(path.slice(path.indexOf('/', 1))) }
-//        }
+//        reg = /userpage/g
+        if (this.$route.name === 'userpage') {
+          this.$router.push('/')
+        } else {
+          if (path.indexOf('/', 1) === -1) {
+            this.$router.push('/')
+          } else { this.$router.push(path.slice(path.indexOf('/', 1))) }
+        }
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -271,7 +264,10 @@
                   if (!res.list[0].fields.submit_info) {
                     this.registerVisible = true
                   } else {
-                    auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
+                    auth.login(this, {
+                      user_id: this.user_id,
+                      username: this.loginForm.username
+                    }, '/' + this.user_id + this.$route.path)
                   }
                 } else {
                   alert('登录失败，请检查您输入的用户名与密码')
@@ -338,9 +334,25 @@
       'infoRegister': infoRegister
     },
     created: function () {
-      if (this.$route.params.hasOwnProperty('uid')) {
-        console.log('已登录  ', new Date())
-//        alert('已经登录')
+      if (localStorage.getItem('user_id') && !this.$route.params.uid) {
+        this.$router.push('/' + localStorage.getItem('user_id') + this.$route.path)
+      }
+      switch (this.$route.name) {
+        case 'Hello':
+        case 'Hello_':
+          this.activeIndex = '1'
+          break
+        case 'ProjectList':
+        case 'ProjectList_':
+          this.activeIndex = '2'
+          break
+        case 'HallofFame':
+        case 'HallofFame_':
+          this.activeIndex = '3'
+          break
+        case 'SchoolTeam':
+        case 'SchoolTeam_':
+          this.activeIndex = '4'
       }
     }
   }

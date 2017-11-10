@@ -75,6 +75,11 @@
     components: {
       'mheader': mheader,
       'tableList': tableList
+    },
+    created: function () {
+      if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
+        this.$router.back()
+      }
     }
   }
 </script>

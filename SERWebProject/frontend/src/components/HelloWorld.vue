@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mheader></mheader>
+    <mheader ref="header"></mheader>
     <div id="carousel" align="center" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
         <el-carousel-item v-for="pic in pics" :key="pic" style="height: 500px">
@@ -10,7 +10,7 @@
     </div>
 
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
-      <h1 align="left">热门赛事</h1>
+      <h1 align="left" @click="showLogin">热门赛事</h1>
       <a href="" target="_blank" id="more">查看更多 ></a>
       <br/>
       <el-row>
@@ -93,6 +93,9 @@
     created: function () {
       this.project_list_display()
       this.project_card_display()
+      if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
+        this.$router.back()
+      }
     },
     methods: {
       getImage (index) {
@@ -203,6 +206,9 @@
             console.log(res['msg'])
           }
         })
+      },
+      showLogin () {
+        this.$refs['header'].dialogVisible = true
       }
     },
     components: {
