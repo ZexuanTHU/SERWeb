@@ -1,44 +1,36 @@
 <template>
   <div>
     <mheader ref="header"></mheader>
-    <div id="carousel" align="center" style="margin-bottom: 50px">
+    <div id="carousel" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
-        <el-carousel-item v-for="pic in pics" :key="pic" style="height: 500px">
-          <img :src="getImage(pic)" v-bind:alt="pic" style="height: 100%; width: 100%">
+        <el-carousel-item v-for="pic in pics" :key="pic" align="center">
+          <img :src="getImage(pic)" v-bind:alt="pic" style="max-height: 90%; max-width:90%">
+          <p>test</p>
         </el-carousel-item>
       </el-carousel>
     </div>
 
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left" @click="showLogin">热门赛事</h1>
-      <a href="" target="_blank" id="more">查看更多 ></a>
+      <!--<a href="" target="_blank" id="more">查看更多 ></a>-->
       <br/>
       <el-row>
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
-            <div style="padding: 14px;">
-              <p>{{ field.fields.project_name }}</p>
-            </div>
-            <div style="width: 100%; position: relative; overflow: hidden">
-              <div style="width: 100px; float: left">
-                <el-progress type="circle" :percentage="field.fields.project_hot/field.fields.max_reg*100" style="margin-left: 10%; margin-bottom: 5%"></el-progress>
-              </div>
-              <div style="float: right; margin-right: 5%">
-                <div style="margin-bottom: 5%">
-                  <el-button style="width: 150px">
-                    <p>一键报名</p>
-                  </el-button>
-                </div>
-                <div  style="margin-bottom: 5%;">
-                  <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
-                    <el-button type="primary" style="width: 150px">
-                      <p style="color: white">赛事详情</p>
-                    </el-button>
-                  </router-link>
-                </div>
-              </div>
-            </div>
+            <header style="padding: 14px;">
+              <h3>{{ field.fields.project_name }}</h3>
+            </header>
+            <footer style="padding: 14px">
+              <el-button>
+                <p>一键报名</p>
+              </el-button>
+              <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
+                <el-button type="primary">
+                  <p style="color: white">赛事详情</p>
+                </el-button>
+              </router-link>
+            </footer>
           </el-card>
         </el-col>
       </el-row>
@@ -61,6 +53,7 @@
   export default {
     data () {
       return {
+        dialogVisible1: false,
         pics: [
           'slider1',
           'slider2',
@@ -239,7 +232,7 @@
   }
 
   .el-carousel__item:nth-child(n) {
-    background-color: #99a9bf;
+    background-color: antiquewhite;
   }
 
   #hot {
