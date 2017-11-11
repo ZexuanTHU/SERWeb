@@ -4,10 +4,13 @@
       <h1 align="left">{{pageInfo.project_name}}</h1>
       <div id="basic" >
         <p align="left">
-          比赛时间: {{pageInfo.competitionTime}}
+          比赛时间:<br>
+          {{pageInfo.match_data_time}}
         </p>
         <p align="left">
-          报名时间: {{pageInfo.pub_date}}--{{pageInfo.ddl_date}}
+          报名时间: <br>
+          from: {{pageInfo.pub_date}}<br>
+          to: {{pageInfo.ddl_date}}
         </p>
         <p align="left">
           报名人数限制: {{pageInfo.max_reg}}
@@ -20,10 +23,10 @@
         </p>
       </div>
       <div class="status">
+        <h3>{{pageInfo.project_hot}}人已報名</h3>
         <el-progress :show-text="false" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
-        <h3>{{pageInfo.attend}}人報名</h3>
-        <el-progress :show-text="false" :stroke-width="18" :percentage="90"></el-progress>
-        <h3>剩下{{date}}天</h3>
+        <h3>{{rdate}}</h3>
+        <h3>{{cdate}}</h3>
       </div>
       <el-button id="submit" @click="dialogVisible = true" type="primary">报名</el-button>
       <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
@@ -59,9 +62,10 @@ export default {
         max_reg: '',
         contact_name: '',
         contact_tel: '',
-        attend: '30',
+        project_hot: '',
         date: '1',
-        project_text: ''
+        project_text: '',
+        match_data_time: ''
       },
       dialogVisible: false,
       groupVisible: false,
@@ -72,7 +76,27 @@ export default {
   },
   computed: {
     attendPercent: function () {
-      return parseFloat(this.pageInfo.attend) / parseFloat(this.pageInfo.max_reg)
+      return parseFloat(this.pageInfo.project_hot) / parseFloat(this.pageInfo.max_reg)
+    },
+    rdate: function () {
+      var today = new Date()
+      var rday = new Date(this.pageInfo.ddl_date)
+      var day = Math.floor((rday - today) / 1000 / 3600 / 24)
+      if (day < 0) {
+        return '报名已结束'
+      } else {
+        return '报名剩' + day + '天'
+      }
+    },
+    cdate: function () {
+      var today = new Date()
+      var rday = new Date(this.pageInfo.match_data_time)
+      var day = Math.floor((rday - today) / 1000 / 3600 / 24)
+      if (day < 0) {
+        return '比赛已结束'
+      } else {
+        return '比赛剩' + day + '天'
+      }
     }
   },
   created: function () {
@@ -129,10 +153,14 @@ export default {
   #detail{
     clear: left;
   }
+  .status {
+    width: 70%;
+  }
   .status el-progress{
     padding-right: 50px;
     margin-top: 20px;
     margin-bottom: 20px;
+    width: 10px;
   }
   #submit #group{
     margin-top: 20px;
