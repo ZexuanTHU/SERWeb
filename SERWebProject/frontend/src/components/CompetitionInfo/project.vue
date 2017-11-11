@@ -20,7 +20,7 @@
           </div>
           <div id="view_grades" class="w3-container panel "
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
-            <viewGrades></viewGrades>
+            <grades></grades>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
   import mheader from '../header.vue'
   import mfooter from '../mfooter.vue'
   import competitionInfo from './CompetitionInfo.vue'
-  import viewGrades from '../UserPage/viewGrades.vue'
+  import grades from './grades.vue'
   export default {
     data () {
       return {
@@ -41,7 +41,7 @@
       }
     },
     created: function () {
-      document.body.scrollTop = 0
+      window.scrollTo(0, 0)
     },
     methods: {
       openPanel: function (index) {
@@ -52,7 +52,7 @@
       'mheader': mheader,
       'mfooter': mfooter,
       'competitionInfo': competitionInfo,
-      'viewGrades': viewGrades
+      'grades': grades
     }
   }
 </script>
