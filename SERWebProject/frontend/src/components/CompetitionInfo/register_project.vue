@@ -118,7 +118,6 @@ export default {
   },
   methods: {
     user_info_request (uid) {
-      console.log('asdfasdfasdfasdfasd')
       console.log(this.group)
       if (this.group === true) {
         this.groupStatus = '建立队伍'
