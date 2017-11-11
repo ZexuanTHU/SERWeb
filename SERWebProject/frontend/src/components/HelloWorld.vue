@@ -31,7 +31,7 @@
                   </el-button>
                 </div>
                 <div  style="margin-bottom: 5%;">
-                  <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
+                  <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: field.pk}}">
                     <el-button type="primary" style="width: 150px">
                       <p style="color: white">赛事详情</p>
                     </el-button>

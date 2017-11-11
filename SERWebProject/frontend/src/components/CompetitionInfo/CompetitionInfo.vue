@@ -1,6 +1,5 @@
 <template>
-  <div id="GroupInfo">
-    <mheader></mheader>
+  <div id="CompetitionInfo">
     <div id="compinfo">
       <h1 align="left">{{pageInfo.project_name}}</h1>
       <div id="basic" >
@@ -107,6 +106,9 @@ export default {
     showgroup () {
       this.groupVisible = true
       this.dialogVisible = false
+    },
+    hidegroup () {
+      this.groupVisible = false
     }
   }
 }

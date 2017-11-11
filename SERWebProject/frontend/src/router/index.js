@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import userpage from '@/components/userpage'
 import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
+import project from '@/components/CompetitionInfo/project'
 import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import HallofFame from '@/components/HallofFame'
 import ProjectList from '@/components/ProjectPage'
@@ -64,6 +65,11 @@ export default new Router({
       path: '/:uid/GroupInfo/:pid',
       name: 'GroupInfo',
       component: GroupInfo
+    },
+    {
+      path: '/:uid/project/:pid',
+      name: 'project',
+      component: project
     },
     {
       path: '/:uid/userpage',
