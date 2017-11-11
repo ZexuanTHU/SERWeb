@@ -18,7 +18,7 @@
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
-            <div id="container" style="height: 200px; background-color: antiquewhite">
+            <div id="container" style="background-color: antiquewhite">
               <div style="float: left">
                 <div id="left-top" style="width: 250px; padding-left: 14px; padding-top: 14px">
                   <h3> {{ field.fields.project_name }} </h3>
@@ -34,7 +34,7 @@
                   </router-link>
                 </div>
               </div>
-              <div style="padding: 14px" align="center">
+              <div style="padding: 14px">
                 <p> 当前报名人数 : {{ field.fields.project_hot }} </p>
                 <p> 报名人数限制 : {{ field.fields.max_reg }} </p>
                 <p> 比赛时间 : {{ field.fields.match_data_time | formatDate }} </p>
