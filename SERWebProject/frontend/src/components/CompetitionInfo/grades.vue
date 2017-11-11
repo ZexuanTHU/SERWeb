@@ -2,24 +2,28 @@
   <el-table
     :data="tableData"
     style="width: 100%"
-    :default-sort = "{prop: 'place', order: 'ascending'}"
+    :default-sort = "{prop: 'grade', order: 'ascending'}"
     >
     <el-table-column
-      prop="place"
+      prop="fields.grade"
       label="名次"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="fields.register_name"
       label="姓名"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="project"
+      prop="fields.registered_project_name"
       label="項目">
     </el-table-column>
     <el-table-column
-      prop="other"
+      prop="fields.student_id"
+      label="学号">
+    </el-table-column>
+    <el-table-column
+      prop="fields.other"
       label="備註">
     </el-table-column>
   </el-table>
@@ -30,31 +34,33 @@
     data () {
       return {
         tableData: [{
-          place: '1',
-          name: '王小虎',
-          project: '上海市普陀区金沙江路 1518 弄',
-          other: '無'
-        }, {
-          place: '2',
-          name: '王小虎',
-          project: '上海市普陀区金沙江路 1517 弄',
-          other: '無'
-        }, {
-          place: '3',
-          name: '王小虎',
-          project: '上海市普陀区金沙江路 1519 弄',
-          other: '無'
-        }, {
-          place: '4',
-          name: '王小虎',
-          project: '上海市普陀区金沙江路 1516 弄',
-          other: '無'
+          fields: {
+            user: '',
+            grade: '',
+            regitster_name: '',
+            registered_project_name: '',
+            other: '--',
+            student_id: ''
+          }
         }]
       }
     },
+    created: function () {
+      this.getGrade(this.$route.params.pid)
+    },
     methods: {
-      formatter (row, column) {
-        return row.project
+      getGrade (pid) {
+        this.$http.get('http://localhost:8000/api/project_grade_request/' + pid).then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            this.tableData = res['list']
+            console.log(this.tableData)
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
       }
     }
   }
