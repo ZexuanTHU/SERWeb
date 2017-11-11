@@ -18,19 +18,29 @@
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
-            <header style="padding: 14px;">
-              <h3>{{ field.fields.project_name }}</h3>
-            </header>
-            <footer style="padding: 14px">
-              <el-button>
-                <p>一键报名</p>
-              </el-button>
-              <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
-                <el-button type="primary">
-                  <p style="color: white">赛事详情</p>
-                </el-button>
-              </router-link>
-            </footer>
+            <div id="container" style="height: 200px; background-color: antiquewhite">
+              <div style="float: left">
+                <div id="left-top" style="width: 250px; padding-left: 14px; padding-top: 14px">
+                  <h3> {{ field.fields.project_name }} </h3>
+                </div>
+                <div id="left-bottom" style="width: 250px; padding-left: 14px; padding-top: 30px">
+                  <el-button>
+                    <p>一键报名</p>
+                  </el-button>
+                  <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
+                    <el-button type="primary">
+                      <p style="color: white">赛事详情</p>
+                    </el-button>
+                  </router-link>
+                </div>
+              </div>
+              <div style="padding: 14px" align="center">
+                <p> 当前报名人数 : {{ field.fields.project_hot }} </p>
+                <p> 报名人数限制 : {{ field.fields.max_reg }} </p>
+                <p> 比赛时间 : {{ field.fields.match_data_time | formatDate }} </p>
+                <p> 比赛地点 : {{ field.fields.match_venue }} </p>
+              </div>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -63,7 +73,9 @@
           fields: [{
             project_name: '',
             project_hot: '',
-            max_reg: ''
+            max_reg: '',
+            match_venue: '',
+            match_data_time: ''
           }],
           pk: '',
           model: ''
