@@ -154,7 +154,7 @@ def project_register(request, user_id, project_id):
                                                                     register_datetime=timezone.now(),
                                                                     if_group_project=project.group_project)
                 project_register_form.save()
-                project.project_hot = project.project_hot + 1
+                project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
                 project.save()
                 return HttpResponse("Success!")
             else:
@@ -230,7 +230,8 @@ def add_group(request, user_id, project_id):
                               if_group_project=if_group_project)
             if project.was_below_max_reg:
                 new_group.save()
-                project.project_hot = project.project_hot + 1
+                # project.project_hot = project.project_hot + 1
+                project.project_hot = Group.objects.filter(project=project).count()
                 project.save()
                 return HttpResponse('success!')
             else:
@@ -266,7 +267,8 @@ def add_teammate(request, user_id, project_id):
                                                 teammate_info=new_teammate_info, teammate_name=teammate_name,
                                                 rank=rank, grade=grade, if_group_project=if_group_project)
                 new_teammate_addon.save()
-                group.teammate_num = group.teammate_num + 1
+                # group.teammate_num = group.teammate_num + 1
+                group.teammate_num = Membership.objects.filter(group=group).count()
                 group.save()
                 return JsonResponse({'status': 0, 'msg': '添加成功！'})
         except:
