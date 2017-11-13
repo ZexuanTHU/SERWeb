@@ -140,6 +140,7 @@ class Group(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     team_creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_creator')
     team_creator_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name='team_creator_info')
+    team_creator_name = models.CharField("队长姓名", max_length=10, default='队长')
     team_min_reg = models.IntegerField('队伍人数下限', default=1)
     team_max_reg = models.IntegerField('队伍人数上限', default=0)
     teammate_num = models.IntegerField('队伍当前人数', default=1)
@@ -175,10 +176,13 @@ class Group(models.Model):
 class Membership(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     group = models.ForeignKey(Group)
+    group_name = models.CharField("队名", max_length=10, default='队伍')
     team_leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_leader_created_this_team")
     team_leader_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="team_leader_info")
+    team_leader_name = models.CharField("队长姓名", max_length=10, default='队长')
     teammate = models.ForeignKey(User, on_delete=models.CASCADE)
     teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    teammate_name = models.CharField("队员姓名", max_length=10, default='队员')
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group.group_name + ' ' + \
