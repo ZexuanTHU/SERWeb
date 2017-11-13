@@ -122,8 +122,10 @@ class ProjectRegisterRelationship(models.Model):
     registered_project_name = models.CharField('项目名称', max_length=20, default='项目')
     register_datetime = models.DateTimeField('报名时间')
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
     if_finished = models.BooleanField('比赛已结束', default=False)
+    if_group_project = models.BooleanField('是否为团队项目', default=False)
 
     def __str__(self):
         return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
@@ -143,9 +145,11 @@ class Group(models.Model):
     teammate_num = models.IntegerField('队伍当前人数', default=1)
     members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
+    rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
     if_finished = models.BooleanField('比赛已结束', default=False)
     if_teammate_finally_confirm = models.BooleanField('已提交队员名单', default=False)
+    if_group_project = models.BooleanField('是否团队项目', default=True)
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group_name + ' ' + self.team_creator_info.name + '(' + \
