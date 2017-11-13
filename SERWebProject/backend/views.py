@@ -187,7 +187,7 @@ def project_grade_request(request, project_id):
             project = Project.objects.get(pk=project_id)
             if project.group_project:
                 try:
-                    group_project_grade = Group.objects.filter(project=project)
+                    group_project_grade = Group.objects.filter(project=project).order_by('rank')
                     response['list'] = json.loads(serializers.serialize("json", group_project_grade))
                     response['msg'] = 'success'
                     response['error_num'] = 0
@@ -196,7 +196,7 @@ def project_grade_request(request, project_id):
                     return HttpResponse('project grade does not exist')
             else:
                 try:
-                    project_grade = ProjectRegisterRelationship.objects.filter(project=project)
+                    project_grade = ProjectRegisterRelationship.objects.filter(project=project).order_by('rank')
                     response['list'] = json.loads(serializers.serialize("json", project_grade))
                     response['msg'] = 'success'
                     response['error_num'] = 0
