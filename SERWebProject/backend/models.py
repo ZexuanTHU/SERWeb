@@ -185,6 +185,9 @@ class Membership(models.Model):
     teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     teammate_name = models.CharField("队员姓名", max_length=10, default='队员')
     register_datetime = models.DateTimeField('报名时间', default=timezone.now())
+    rank = models.IntegerField('排名', default=0)
+    grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
+    if_group_project = models.BooleanField('是否团队项目', default=True)
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group.group_name + ' ' + \

@@ -171,7 +171,7 @@ def project_register_relationship_request(request, user_id):
             user = User.objects.get(pk=user_id)
             latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by('-register_datetime')
             latest_group_project_grade = Membership.objects.filter(Q(team_leader=user) | Q(teammate=user)).order_by('-register_datetime')
-            response['personal_list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
+            response['list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
             response['group_list'] = json.loads(serializers.serialize("json", latest_group_project_grade))
             response['msg'] = 'success'
             response['error_num'] = 0
