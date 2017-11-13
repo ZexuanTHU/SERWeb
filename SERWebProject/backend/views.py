@@ -185,10 +185,10 @@ def project_grade_request(request, project_id):
     if request.method == 'GET':
         try:
             project = Project.objects.get(pk=project_id)
-            if not project.group_project:
+            if project.group_project:
                 try:
-                    project_grade = Membership.objects.get(project=project)
-                    response['list'] = json.loads(serializers.serialize("json", project_grade))
+                    group_project_grade = Group.objects.filter(project=project)
+                    response['list'] = json.loads(serializers.serialize("json", group_project_grade))
                     response['msg'] = 'success'
                     response['error_num'] = 0
                     return JsonResponse(response)
@@ -217,10 +217,12 @@ def add_group(request, user_id, project_id):
             project = Project.objects.get(pk=project_id)
             team_leader = User.objects.get(pk=user_id)
             team_leader_info = UserInfo.objects.get(user=team_leader)
+            team_leader_name = team_leader_info.name
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
             new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
-                              team_creator_info=team_leader_info, team_min_reg=team_min_reg, team_max_reg=team_max_reg)
+                              team_creator_info=team_leader_info, team_creator_name=team_leader_name,
+                              team_min_reg=team_min_reg, team_max_reg=team_max_reg)
             if project.was_below_max_reg:
                 new_group.save()
                 project.project_hot = project.project_hot + 1
