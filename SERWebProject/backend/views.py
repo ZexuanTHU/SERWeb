@@ -185,14 +185,24 @@ def project_grade_request(request, project_id):
     if request.method == 'GET':
         try:
             project = Project.objects.get(pk=project_id)
-            try:
-                project_grade = ProjectRegisterRelationship.objects.filter(project=project)
-                response['list'] = json.loads(serializers.serialize("json", project_grade))
-                response['msg'] = 'success'
-                response['error_num'] = 0
-                return JsonResponse(response)
-            except:
-                return HttpResponse('project grade does not exist')
+            if not project.group_project:
+                try:
+                    project_grade = Membership.objects.get(project=project)
+                    response['list'] = json.loads(serializers.serialize("json", project_grade))
+                    response['msg'] = 'success'
+                    response['error_num'] = 0
+                    return JsonResponse(response)
+                except:
+                    return HttpResponse('project grade does not exist')
+            else:
+                try:
+                    project_grade = ProjectRegisterRelationship.objects.filter(project=project)
+                    response['list'] = json.loads(serializers.serialize("json", project_grade))
+                    response['msg'] = 'success'
+                    response['error_num'] = 0
+                    return JsonResponse(response)
+                except:
+                    return HttpResponse('project grade does not exist')
         except:
             return HttpResponse('project does not exist!')
     else:
