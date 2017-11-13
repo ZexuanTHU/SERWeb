@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 from django.template import loader
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
 from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
 from django.contrib import auth
@@ -170,7 +170,9 @@ def project_register_relationship_request(request, user_id):
         try:
             user = User.objects.get(pk=user_id)
             latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by('-register_datetime')
-            response['list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
+            latest_group_project_grade = Membership.objects.filter(Q(team_leader=user) | Q(teammate=user)).order_by('-register_datetime')
+            response['personal_list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
+            response['group_list'] = json.loads(serializers.serialize("json", latest_group_project_grade))
             response['msg'] = 'success'
             response['error_num'] = 0
             return JsonResponse(response)
@@ -246,11 +248,16 @@ def add_teammate(request, user_id, project_id):
             group = Group.objects.get(team_creator=team_creator, project=project)
             team_creator_info = UserInfo.objects.get(user=team_creator)
             new_teammate_info = UserInfo.objects.get(name=name)
+            group_name = group.group_name
+            team_leader_name = group.team_creator_name
+            teammate_name = name
             if new_teammate_info is not None and group.if_below_team_max_reg:
                 new_teammate = User.objects.get(belong_to=new_teammate_info)
-                new_teammate_addon = Membership(project=project, group=group, team_leader=team_creator,
-                                                team_leader_info=team_creator_info,
-                                                teammate=new_teammate, teammate_info=new_teammate_info)
+                new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
+                                                team_leader=team_creator,
+                                                team_leader_info=team_creator_info, team_leader_name=team_leader_name,
+                                                teammate=new_teammate,
+                                                teammate_info=new_teammate_info, teammate_name=teammate_name)
                 new_teammate_addon.save()
                 group.teammate_num = group.teammate_num + 1
                 group.save()
