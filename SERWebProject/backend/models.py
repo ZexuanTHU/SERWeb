@@ -120,7 +120,7 @@ class ProjectRegisterRelationship(models.Model):
     student_id = models.CharField('学号', max_length=10, default='2014000000')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     registered_project_name = models.CharField('项目名称', max_length=20, default='项目')
-    register_datetime = models.DateTimeField('报名时间')
+    register_datetime = models.DateTimeField('报名时间', default=timezone.now())
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
@@ -145,6 +145,7 @@ class Group(models.Model):
     team_max_reg = models.IntegerField('队伍人数上限', default=0)
     teammate_num = models.IntegerField('队伍当前人数', default=1)
     members = models.ManyToManyField(User, through='Membership', through_fields=('group', 'teammate'))
+    register_datetime = models.DateTimeField('报名时间', default=timezone.now())
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
@@ -183,6 +184,7 @@ class Membership(models.Model):
     teammate = models.ForeignKey(User, on_delete=models.CASCADE)
     teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     teammate_name = models.CharField("队员姓名", max_length=10, default='队员')
+    register_datetime = models.DateTimeField('报名时间', default=timezone.now())
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group.group_name + ' ' + \
