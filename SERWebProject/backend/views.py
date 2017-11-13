@@ -151,9 +151,10 @@ def project_register(request, user_id, project_id):
                                                                     student_id=user_info.student_id,
                                                                     project=project,
                                                                     registered_project_name=project.project_name,
-                                                                    register_datetime=timezone.now())
+                                                                    register_datetime=timezone.now(),
+                                                                    if_group_project=project.group_project)
                 project_register_form.save()
-                project.project_hot = project.project_hot + 1
+                project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
                 project.save()
                 return HttpResponse("Success!")
             else:
@@ -171,7 +172,7 @@ def project_register_relationship_request(request, user_id):
             user = User.objects.get(pk=user_id)
             latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by('-register_datetime')
             latest_group_project_grade = Membership.objects.filter(Q(team_leader=user) | Q(teammate=user)).order_by('-register_datetime')
-            response['personal_list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
+            response['list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
             response['group_list'] = json.loads(serializers.serialize("json", latest_group_project_grade))
             response['msg'] = 'success'
             response['error_num'] = 0
@@ -222,12 +223,15 @@ def add_group(request, user_id, project_id):
             team_leader_name = team_leader_info.name
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
+            if_group_project = project.group_project
             new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
                               team_creator_info=team_leader_info, team_creator_name=team_leader_name,
-                              team_min_reg=team_min_reg, team_max_reg=team_max_reg)
+                              team_min_reg=team_min_reg, team_max_reg=team_max_reg,
+                              if_group_project=if_group_project)
             if project.was_below_max_reg:
                 new_group.save()
-                project.project_hot = project.project_hot + 1
+                # project.project_hot = project.project_hot + 1
+                project.project_hot = Group.objects.filter(project=project).count()
                 project.save()
                 return HttpResponse('success!')
             else:
@@ -251,15 +255,20 @@ def add_teammate(request, user_id, project_id):
             group_name = group.group_name
             team_leader_name = group.team_creator_name
             teammate_name = name
+            rank = group.rank
+            grade = group.grade
+            if_group_project = project.group_project
             if new_teammate_info is not None and group.if_below_team_max_reg:
                 new_teammate = User.objects.get(belong_to=new_teammate_info)
                 new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
                                                 team_leader=team_creator,
                                                 team_leader_info=team_creator_info, team_leader_name=team_leader_name,
                                                 teammate=new_teammate,
-                                                teammate_info=new_teammate_info, teammate_name=teammate_name)
+                                                teammate_info=new_teammate_info, teammate_name=teammate_name,
+                                                rank=rank, grade=grade, if_group_project=if_group_project)
                 new_teammate_addon.save()
-                group.teammate_num = group.teammate_num + 1
+                # group.teammate_num = group.teammate_num + 1
+                group.teammate_num = Membership.objects.filter(group=group).count()
                 group.save()
                 return JsonResponse({'status': 0, 'msg': '添加成功！'})
         except:

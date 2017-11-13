@@ -130,6 +130,11 @@ class ProjectRegisterRelationship(models.Model):
     def __str__(self):
         return self.approval_status + ' ' + self.project.project_name + ' ' + self.user_info.name + '(' + self.user.username + ')'
 
+    def delete(self, using=None, keep_parents=False):
+        self.project.project_hot = self.project.project_hot - 1
+        self.project.save()
+        super(ProjectRegisterRelationship, self).delete()
+
     class Meta:
         verbose_name = '项目报名表 ProjectRegisterRelationship'
         verbose_name_plural = '项目报名表 ProjectRegisterRelationship'
@@ -169,6 +174,11 @@ class Group(models.Model):
         else:
             return False
 
+    def delete(self, using=None, keep_parents=False):
+        self.project.project_hot = self.project.project_hot - 1
+        self.project.save()
+        super(Group, self).delete()
+
     class Meta:
         verbose_name = '团队 Group'
         verbose_name_plural = '团队 Group'
@@ -185,11 +195,19 @@ class Membership(models.Model):
     teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     teammate_name = models.CharField("队员姓名", max_length=10, default='队员')
     register_datetime = models.DateTimeField('报名时间', default=timezone.now())
+    rank = models.IntegerField('排名', default=0)
+    grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
+    if_group_project = models.BooleanField('是否团队项目', default=True)
 
     def __str__(self):
         return self.project.project_name + ' ' + self.group.group_name + ' ' + \
                self.team_leader_info.name + '(' + self.team_leader.username + ')' + ' ' + self.teammate_info.name + \
                '(' + self.teammate.username + ')'
+
+    def delete(self, using=None, keep_parents=False):
+        self.group.teammate_num = self.group.teammate_num - 1
+        self.group.save()
+        super(Membership, self).delete()
 
     class Meta:
         verbose_name = '团队报名表 Membership'

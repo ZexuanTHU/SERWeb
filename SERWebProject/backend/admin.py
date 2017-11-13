@@ -1,13 +1,42 @@
 from django.contrib import admin
 from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
 
+
 # Register your models here.
-
-admin.site.register(Project)
-admin.site.register(User)
-admin.site.register(UserInfo)
-admin.site.register(ProjectRegisterRelationship)
-admin.site.register(Group)
-admin.site.register(Membership)
+def delete_selected_project_register_relationship(modeladmin, request, queryset):
+    for project in queryset:
+        project.delete()
+    delete_selected_project_register_relationship.short_description = "删除选中的条目"
 
 
+class ProjectAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
+class UserAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
+class UserInfoAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
+class ProjectRegisterRelationshipAdmin(admin.ModelAdmin):
+    actions = [delete_selected_project_register_relationship]
+
+
+class GroupAdmin(admin.ModelAdmin):
+    actions = [delete_selected_project_register_relationship]
+
+
+class MembershipAdmin(admin.ModelAdmin):
+    actions = [delete_selected_project_register_relationship]
+
+
+admin.site.disable_action('delete_selected')
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(UserInfo, UserInfoAdmin)
+admin.site.register(ProjectRegisterRelationship, ProjectRegisterRelationshipAdmin)
+admin.site.register(Group, GroupAdmin)
+admin.site.register(Membership, MembershipAdmin)
