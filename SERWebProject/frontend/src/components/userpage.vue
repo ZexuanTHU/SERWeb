@@ -27,25 +27,25 @@
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
           <div id="view_register" class="w3-container panel "
                :style="{display:openedPanel==='1'?'inline-block':'none'}">
-            <viewRegister></viewRegister>
+            <viewRegister ref="viewRegister"></viewRegister>
           </div>
           <div id="view_grades" class="w3-container panel "
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
-            <viewGrades></viewGrades>
+            <viewGrades ref="viewGrades"></viewGrades>
           </div>
-          <!--<div id="modify" class="w3-container panel" style="display: inline-block"-->
-          <!--:style="{display:openedPanel==='3'?'inline-block':'none'}">-->
-          <!--<infoRegister :inline='false' ref="info"></infoRegister>-->
-          <!--<div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">-->
-          <!--<img class="icon" :src="imageUrl"-->
-          <!--style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"-->
-          <!--alt="">-->
-          <!--<button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"-->
-          <!--v-on:click="fileclick()">选择头像-->
-          <!--</button>-->
-          <!--<input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>-->
-          <!--</div>-->
-          <!--</div>-->
+          <div id="modify" class="w3-container panel" style="display: inline-block"
+               :style="{display:openedPanel==='3'?'inline-block':'none'}">
+            <infoRegister :inline='false' ref="info"></infoRegister>
+            <!--<div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">-->
+            <!--<img class="icon" :src="imageUrl"-->
+            <!--style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"-->
+            <!--alt="">-->
+            <!--<button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"-->
+            <!--v-on:click="fileclick()">选择头像-->
+            <!--</button>-->
+            <!--<input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>-->
+            <!--</div>-->
+          </div>
           <div class="w3-container panel"
                :style="{display:openedPanel==='4'?'inline-block':'none'}">
             <h1 style="border-bottom:2px solid #72beff;margin-left: 1em ">新比赛</h1>
@@ -78,6 +78,7 @@
       return {
         registerVisible: true,
 //        imageUrl: require('../image/icon.jpg'),
+        userProjects: [],
         openedPanel: '1',
         applyState: JSON.stringify({ddl: 'ddl'})
       }
@@ -164,6 +165,14 @@
 //      }
 
     },
+    watch: {
+      userProjects: function () {
+        this.$refs['viewRegister'].tableData = this.userProjects.list
+        this.$refs['viewGrades'].tableData = this.userProjects.list
+//        this.$refs['viewGrades'].tableData
+        console.log(this.$refs['viewGrades'].tableData)
+      }
+    },
     created: function () {
 //      var input = document.getElementsByTagName('input')
 //      console.log(input)
@@ -176,6 +185,16 @@
 //        textarea[i].value = localStorage.getItem(textarea[i].name) || ''
 //      }
 //      this.ajaxpoll()
+      this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.$route.params.uid).then((response) => {
+        var res = JSON.parse(response.bodyText)
+        console.log(res)
+        if (res.error_num === 0) {
+          this.userProjects = res
+        } else {
+          this.$message.error('获取个人信息列表失败"')
+          console.log(res['msg'])
+        }
+      })
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
         this.$router.back()
       }

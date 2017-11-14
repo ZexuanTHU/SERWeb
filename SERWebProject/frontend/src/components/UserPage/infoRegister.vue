@@ -104,7 +104,7 @@
 //          method: 'GET',
 //          url:''
 //        })
-        console.log(this.id)
+        console.log(this.infoForm)
         this.$http.post(
           'http://localhost:8000/api/user_info_submit/' + this.id,
           this.infoForm, {emulateJSON: true}

@@ -1,43 +1,54 @@
 <template>
   <div>
-    <h>未完成</h>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="所有报名" name="1"></el-tab-pane>
       <el-tab-pane label="审核中" name="2"></el-tab-pane>
       <el-tab-pane label="已通过" name="3"></el-tab-pane>
       <el-tab-pane label="未通过" name="4"></el-tab-pane>
     </el-tabs>
+    <!--<p>hello</p>-->
     <el-table
       :data="filteredTable"
       border
       :show-header="true"
       style="width: 100%">
       <el-table-column
-        prop="project_name"
+        prop="pk"
         label="项目名称"
-        width="180">
+        width="180px">
+        <template scope="scope"> {{ scope.row.fields.registered_project_name }} </template>
       </el-table-column>
       <el-table-column
+        prop="pk"
+        label="团队项目"
+        width="100px">
+        <template scope="scope"> {{ scope.row.fields.if_group_project ? '是' : '否' }} </template>
+      </el-table-column>
+
+      <el-table-column
         prop="contact_info"
-        label="联系人"
+        label="报名时间"
         >
+        <template scope="scope"> {{ scope.row.fields.register_datetime }} </template>
       </el-table-column>
       <el-table-column
         prop="register_state"
-        label="报名状态"
+        label="名次"
         width="100">
+        <template scope="scope">
+          {{'第'+scope.row.fields.rank+'名'}}
+          <!--{{approvalStatus(scope.row.fields.approval_status)}}-->
+        </template>
       </el-table-column>
       <el-table-column
-        label="报名状态"
-        width="100"
-        prop="register">
+        label="成绩"
+        width="110px">
         <template scope="scope">
-          <el-button @click="malert(scope.row)" type="text" size="small">查看/修改</el-button>
+          {{ scope.row.fields.grade }}
         </template>
       </el-table-column>
     </el-table>
   </div>
-
 </template>
 
 <script>
@@ -45,42 +56,7 @@
     data () {
       return {
         activeName: '1',
-        tableData: [{
-          project_name: '足球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '审核中'
-        }, {
-          project_name: '足球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '已通过'
-        }, {
-          project_name: '足球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '审核中'
-        }, {
-          project_name: '篮球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '未通过'
-        }, {
-          project_name: '足球',
-          contact_name: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '已通过'
-        }, {
-          project_name: '乒乓球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '审核中'
-        }, {
-          project_name: '足球',
-          contact_info: '郭志芃',
-          contact_tel: '18813040000',
-          register_state: '未通过'
-        }]
+        tableData: []
       }
     },
     methods: {
@@ -96,19 +72,20 @@
         switch (this.activeName.toString()) {
           case '1':
             console.log(this.activeName)
-            return this.tableData
+            return this.tableData.filter(function (item) {
+              return true
+            })
           case '2':
-            return this.tableData.filter(function (item) {
-              return item.register_state === '审核中'
-            })
-          case '3':
-            return this.tableData.filter(function (item) {
-              return item.register_state === '已通过'
-            })
-          case '4':
-            return this.tableData.filter(function (item) {
-              return item.register_state === '未通过'
-            })
+            console.log(this.tableData)
+            return null
+//          case '3':
+//            return this.tableData.filter(function (item) {
+//              return item.register_state === '已通过'
+//            })
+//          case '4':
+//            return this.tableData.filter(function (item) {
+//              return item.register_state === '未通过'
+//            })
         }
       }
     }

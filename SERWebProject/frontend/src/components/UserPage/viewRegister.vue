@@ -21,7 +21,7 @@
         prop="pk"
         label="团队项目"
         width="100px">
-        <template scope="scope"> {{ '是' }} </template>
+        <template scope="scope"> {{ scope.row.fields.if_group_project ? '是' : '否' }} </template>
       </el-table-column>
 
       <el-table-column
@@ -39,16 +39,17 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="报名状态"
-        width="100"
+        label="操作"
+        width="110px"
         prop="register">
         <template scope="scope">
           <el-button type="text" size="small">
             <router-link :to="{name: 'CompetitionInfo', params: {pid:scope.row.fields.project.toString()}}">
               查看
             </router-link>
-            /删除
           </el-button>
+          <span>/</span>
+          <el-button type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -116,22 +117,23 @@
         }
       }
     },
-    created: function () {
-      this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.id).then((response) => {
-        var res = JSON.parse(response.bodyText)
-        console.log(res)
-        if (res.error_num === 0) {
-          this.tableData = res.list
-        } else {
-          this.$message.error('获取个人信息列表失败"')
-          console.log(res['msg'])
-        }
-      })
+    mounted: function () {
+//      this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.id).then((response) => {
+//        var res = JSON.parse(response.bodyText)
+//        console.log(res)
+//        if (res.error_num === 0) {
+//          this.tableData = res.list
+//        } else {
+//          this.$message.error('获取个人信息列表失败"')
+//          console.log(res['msg'])
+//        }
+//      })
     },
     computed: {
       filteredTable: function () {
         switch (this.activeName.toString()) {
           case '1':
+//            if (!this.tableData) return null
             console.log(this.activeName, this.tableData)
             return this.tableData
           case '2':
