@@ -1,6 +1,10 @@
 <template>
   <el-dialog @open="checkGroup" @close="closeDialog" title="报名资料确认" :visible.sync="dialogFormVisible">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item v-if="this.group === true" label="队名" prop="teamname">
+          <el-input v-model="ruleForm.teamname"></el-input>
+        </el-form-item>
+        <h4>队长资料确认</h4>
         <el-form-item label="院系" prop="faculty">
           <el-select v-model="ruleForm.faculty" placeholder="选择院系">
             <el-option label="计算机" value="CS"></el-option>
@@ -77,13 +81,17 @@ export default {
         student_id: '',
         birth_date: '',
         clothes_size: '',
-        cellphone_num: ''
+        cellphone_num: '',
+        teamname: ''
       },
       registerForm: {
         user_id: '',
         project_id: ''
       },
       rules: {
+        teamname: [
+          { required: true, message: '请填队名', trigger: 'blur' }
+        ],
         faculty: [
           { required: true, message: '请选择院系', trigger: 'change' }
         ],
