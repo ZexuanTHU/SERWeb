@@ -4,7 +4,7 @@
         <el-form-item v-if="this.group === true" label="队名" prop="teamname">
           <el-input v-model="ruleForm.teamname"></el-input>
         </el-form-item>
-        <h4>队长资料确认</h4>
+        <h4 v-if="this.group === true">队长资料确认</h4>
         <el-form-item label="院系" prop="faculty">
           <el-select v-model="ruleForm.faculty" placeholder="选择院系">
             <el-option label="计算机" value="CS"></el-option>
@@ -88,6 +88,9 @@ export default {
         user_id: '',
         project_id: ''
       },
+      groupForm: {
+        group_name: ''
+      },
       rules: {
         teamname: [
           { required: true, message: '请填队名', trigger: 'blur' }
@@ -157,10 +160,12 @@ export default {
             this.closeDialog()
             alert('報名成功')
           } else {
-            this.$http.post('http://127.0.0.1:8000/api/add_group/' + this.uid + '/' + this.pid)
-            this.dialogFormVisible = false
-            alert('创建成功')
-            this.$emit('finish')
+            this.groupForm.group_name = this.ruleForm.teamname
+            this.$http.post('http://127.0.0.1:8000/api/add_group/' + this.uid + '/' + this.pid, this.groupForm, {emulateJSON: true}).then((response) => {
+              this.dialogFormVisible = false
+              alert('创建成功')
+              this.$emit('finish')
+            })
           }
         } else {
           console.log('error submit!!')
