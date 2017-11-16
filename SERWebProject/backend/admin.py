@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel
 
 
 # Register your models here.
@@ -33,6 +33,10 @@ class MembershipAdmin(admin.ModelAdmin):
     actions = [delete_selected_project_register_relationship]
 
 
+class CarouselAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
 admin.site.disable_action('delete_selected')
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(User, UserAdmin)
@@ -40,3 +44,4 @@ admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(ProjectRegisterRelationship, ProjectRegisterRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Membership, MembershipAdmin)
+admin.site.register(Carousel, CarouselAdmin)
