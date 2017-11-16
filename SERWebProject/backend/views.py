@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -147,7 +147,7 @@ def project_register(request, user_id, project_id):
             project = Project.objects.get(pk=project_id)
             if project.was_below_max_reg():
                 project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
-                                                                    register_name = user_info.name,
+                                                                    register_name=user_info.name,
                                                                     student_id=user_info.student_id,
                                                                     project=project,
                                                                     registered_project_name=project.project_name,
@@ -170,8 +170,10 @@ def project_register_relationship_request(request, user_id):
     if request.method == 'GET':
         try:
             user = User.objects.get(pk=user_id)
-            latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by('-register_datetime')
-            latest_group_project_grade = Membership.objects.filter(Q(team_leader=user) | Q(teammate=user)).order_by('-register_datetime')
+            latest_project_register_relationship_list = ProjectRegisterRelationship.objects.filter(user=user).order_by(
+                '-register_datetime')
+            latest_group_project_grade = Membership.objects.filter(Q(team_leader=user) | Q(teammate=user)).order_by(
+                '-register_datetime')
             response['list'] = json.loads(serializers.serialize("json", latest_project_register_relationship_list))
             response['group_list'] = json.loads(serializers.serialize("json", latest_group_project_grade))
             response['msg'] = 'success'
@@ -293,6 +295,16 @@ def set_teammate_confirm(request, user_id, project_id):
         return HttpResponse('please check request method!')
 
 
-
-
-
+def carousel_request(request):
+    response = {}
+    if request.method == 'GET':
+        try:
+            latest_carousel_list = Carousel.objects.filter(if_carousel_active=True).order_by('carousel_upload_time')
+            response['list'] = json.loads(serializers.serialize("json", latest_carousel_list))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+            return JsonResponse(response)
+        except:
+            return HttpResponse('carousel request error!')
+    else:
+        return HttpResponse('request method error!')

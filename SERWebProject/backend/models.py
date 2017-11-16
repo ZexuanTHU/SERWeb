@@ -212,3 +212,10 @@ class Membership(models.Model):
     class Meta:
         verbose_name = '团队报名表 Membership'
         verbose_name_plural = '团队报名表 Membership'
+
+
+class Carousel(models.Model):
+    carousel_mark = models.CharField('轮播图题注', max_length=20, default='轮播图题注')
+    carousel_image = models.ImageField(upload_to='')
+    carousel_upload_time = models.DateTimeField('上传时间', default=timezone.now())
+    if_carousel_active = models.BooleanField('是否激活', default=False)

@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^add_teammate/(?P<user_id>[0-9]+)/(?P<project_id>[0-9]+)', views.add_teammate, name='add_teammate'),
     url(r'^set_teammate_confirm/(?P<user_id>[0-9]+)/(?P<project_id>[0-9]+)', views.set_teammate_confirm,
         name='set_teammate_confirm'),
+    url(r'^carousel_request', views.carousel_request, name='carousel_request')
 ]

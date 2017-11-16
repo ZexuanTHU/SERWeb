@@ -1,8 +1,12 @@
 from django.contrib import admin
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel
+
+admin.AdminSite.site_header = '清华大学计算机系体育赛事报名系统'
+admin.AdminSite.site_title = 'SERWEb'
 
 
 # Register your models here.
+
 def delete_selected_project_register_relationship(modeladmin, request, queryset):
     for project in queryset:
         project.delete()
@@ -33,6 +37,10 @@ class MembershipAdmin(admin.ModelAdmin):
     actions = [delete_selected_project_register_relationship]
 
 
+class CarouselAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
 admin.site.disable_action('delete_selected')
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(User, UserAdmin)
@@ -40,3 +48,4 @@ admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(ProjectRegisterRelationship, ProjectRegisterRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Membership, MembershipAdmin)
+admin.site.register(Carousel, CarouselAdmin)
