@@ -23,7 +23,7 @@
         prop="date"
         label="报名起止时间"
         align="center">
-        <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
+        <template scope="scope"> {{ scope.row.fields.pub_date | formatDate }}~{{ scope.row.fields.ddl_date | formatDate }} </template>
       </el-table-column>
       <el-table-column
         prop="project_hot"

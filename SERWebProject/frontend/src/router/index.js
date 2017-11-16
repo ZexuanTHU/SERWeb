@@ -11,11 +11,18 @@ import HallofFame from '@/components/HallofFame'
 import ProjectList from '@/components/ProjectPage'
 import SchoolTeam from '@/components/SchoolTeam'
 import VueResource from 'vue-resource'
+import moment from 'moment'
 import auth from '../auth'
 // import mheader from '@/components/header'
 Vue.use(Router)
 Vue.use(Element)
 Vue.use(VueResource)
+
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return moment(String(value)).format('YYYY/MM/DD')
+  }
+})
 
 auth.checkAuth()
 
