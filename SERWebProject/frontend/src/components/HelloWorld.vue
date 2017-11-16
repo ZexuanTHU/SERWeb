@@ -27,7 +27,7 @@
                   <el-button>
                     <p style="color: black">一键报名</p>
                   </el-button>
-                  <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
+                  <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: field.pk}}">
                     <el-button type="primary">
                       <p>赛事详情</p>
                     </el-button>
