@@ -2,6 +2,8 @@
   <div id="more news" style="margin-left: 5%; margin-right: 6.5%">
     <h1 align="left">其他赛事</h1>
     <br/>
+    <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+    <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
     <el-table
       :data="latest_project_list"
       height="600"
@@ -54,7 +56,7 @@
         label="赛事报名"
         align="center">
         <template scope="scope">
-          <el-button size="mini">
+          <el-button @click="oneclick(scope.row.pk)" size="mini">
             <p>一键报名</p>
           </el-button>
           <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">
@@ -70,7 +72,13 @@
 </template>
 
 <script>
+  import registerGroup from './CompetitionInfo/register_group.vue'
+  import registerProject from './CompetitionInfo/register_project.vue'
   export default {
+    components: {
+      'registerGroup': registerGroup,
+      'registerProject': registerProject
+    },
     data () {
       return {
         latest_project_list: [{
@@ -85,11 +93,17 @@
             contact_tel: ''
           }],
           pk: ''
-        }]
+        }],
+        dialogVisible: false,
+        groupVisible: false,
+        user_pk: '',
+        project_pk: '',
+        group: false
       }
     },
     created: function () {
       this.project_list_display()
+      this.user_pk = this.$route.params.uid
     },
     methods: {
       project_list_display () {
@@ -103,6 +117,32 @@
             console.log(res['msg'])
           }
         })
+      },
+      oneclick (pk) {
+        this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            if (res.list[0].fields.group_project === true) {
+              this.group = true
+            }
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+        this.project_pk = pk
+        this.dialogVisible = true
+      },
+      dialogStatus (val) {
+        this.dialogVisible = val
+      },
+      showgroup () {
+        this.groupVisible = true
+        this.dialogVisible = false
+      },
+      hidegroup () {
+        this.groupVisible = false
       }
     }
   }
