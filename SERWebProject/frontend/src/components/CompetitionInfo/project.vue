@@ -1,6 +1,6 @@
 <template>
   <div id="project">
-    <mheader></mheader>
+    <mheader ref="header"></mheader>
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:6px">
       <div class="w3-container" style="width: 100%;min-height: 650px">
@@ -16,7 +16,7 @@
         <div class="panel_content" style="margin-left:200px;display: block;padding-top:30px">
           <div id="view_register" class="w3-container panel "
                :style="{display:openedPanel==='1'?'inline-block':'none'}">
-            <competitionInfo></competitionInfo>
+            <competitionInfo @showLogin="showLogin"></competitionInfo>
           </div>
           <div id="view_grades" class="w3-container panel "
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
@@ -42,11 +42,18 @@
       }
     },
     created: function () {
+      if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
+        this.$router.back()
+      }
       window.scrollTo(0, 0)
     },
     methods: {
       openPanel: function (index) {
         this.openedPanel = index
+      },
+      showLogin () {
+        this.$refs['header'].showMessage = true
+        this.$refs['header'].dialogVisible = true
       }
     },
     components: {

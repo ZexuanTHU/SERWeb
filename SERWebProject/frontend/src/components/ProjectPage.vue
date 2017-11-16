@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%">
-    <mheader></mheader>
+    <mheader ref="header"></mheader>
     <!--<h2 align="center">赛事查询</h2>-->
     <div class="selector" style="border: 2px #edf0f5;border-style: double;    border-radius: 20px;    position: relative;
     padding-top: 10px;">
@@ -14,6 +14,11 @@
             <el-option label="否" value="false"></el-option>
         </el-select>
       </el-form-item>
+        <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible"
+        :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+        <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk"
+        :uid="user_pk"></registerGroup>
+
         <!--<br>-->
         <!--<el-form-item label="活动时间">-->
         <!--<el-col :span="11">-->
@@ -110,27 +115,30 @@
           label="赛事报名"
           align="center">
           <template scope="scope">
-            <el-button size="mini">
+            <el-button size="mini" @click="oneclick(scope.row.pk)">
               <p>一键报名</p>
             </el-button>
-            <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">
-              <el-button type="primary" size="mini">
+            <!--<router-link :to="{name: 'project'+$route.params.uid?'':'_', params: {uid:$route.params.uid, pid: scope.row.pk}}">-->
+            <el-button type="primary" size="mini" @click="routeTo('/project/'+scope.row.pk)">
                 <p style="color: white">赛事详情</p>
               </el-button>
-            </router-link>
+            <!--</router-link>-->
 
           </template>
         </el-table-column>
       </el-table>
+      <mfooter></mfooter>
     </div>
 
   </div>
 </template>
 
 <script>
-  import mheader from '../components/header'
-  import tableList from './TableList.vue'
-
+  import mheader from './header.vue'
+  import mfooter from './mfooter.vue'
+  //  import tableList from './TableList.vue'
+  import registerGroup from './CompetitionInfo/register_group.vue'
+  import registerProject from './CompetitionInfo/register_project.vue'
   export default {
     data () {
       return {
@@ -159,7 +167,12 @@
           pk: ''
         }],
         filterName: '',
-        afterFiteredList: []
+        afterFiteredList: [],
+        dialogVisible: false,
+        groupVisible: false,
+        user_pk: this.$route.params.uid,
+        project_pk: '',
+        group: false
       }
     },
     methods: {
@@ -178,6 +191,39 @@
             console.log(res['msg'])
           }
         })
+      },
+      routeTo (pagename) {      // two status: login in or not
+        var uid = this.$route.params.uid
+        if (uid) {
+          this.$router.push('/' + uid + pagename)
+        } else {
+          this.$router.push(pagename)
+        }
+      },
+      oneclick (pk) {
+        if (!this.$route.params.uid) {
+          this.showLogin()
+          return
+        }
+        this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            if (res.list[0].fields.group_project === true) {
+              this.group = true
+            }
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+        this.project_pk = pk.toString()
+        console.log(typeof (pk.toString()))
+        this.dialogVisible = true
+      },
+      showLogin () {
+        this.$refs['header'].showMessage = true
+        this.$refs['header'].dialogVisible = true
       },
       search () {
         var self = this
@@ -211,6 +257,16 @@
           return correct
         })
         console.log(this.afterFiteredList)
+      },
+      dialogStatus (val) {
+        this.dialogVisible = val
+      },
+      showgroup () {
+        this.groupVisible = true
+        this.dialogVisible = false
+      },
+      hidegroup () {
+        this.groupVisible = false
       }
 //      resetForm(formName) {
 //        this.$refs[formName].resetFields()
@@ -218,11 +274,6 @@
 //      }
 
     },
-//    computed: {
-//      after_fitered_list: function () {
-//        return
-//      }
-//    },
     created: function () {
       this.project_list_display()
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
@@ -231,7 +282,9 @@
     },
     components: {
       'mheader': mheader,
-      'tableList': tableList
+      'mfooter': mfooter,
+      'registerGroup': registerGroup,
+      'registerProject': registerProject
     }
   }
 </script>

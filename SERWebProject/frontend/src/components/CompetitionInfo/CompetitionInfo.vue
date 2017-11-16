@@ -28,7 +28,7 @@
         <h3>{{rdate}}</h3>
         <h3>{{cdate}}</h3>
       </div>
-      <el-button id="submit" @click="dialogVisible = true" type="primary">报名</el-button>
+      <el-button id="submit" @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">报名</el-button>
       <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
       <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
@@ -102,9 +102,6 @@ export default {
   created: function () {
     this.project_info_request(this.$route.params.pid)
     this.user_pk = this.$route.params.uid
-    if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
-      this.$router.back()
-    }
   },
   methods: {
     project_info_request (pk) {

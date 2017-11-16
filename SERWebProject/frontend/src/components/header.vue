@@ -26,13 +26,16 @@
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
       </el-submenu>
       <el-menu-item class="user" index="5" style="float: right;margin-right: 100px" v-if="!user.authenticated"
-                    v-on:mouseup.native="dialogVisible=true">
+                    v-on:mouseup.native="showMessage=false;dialogVisible=true">
         <el-button type="text">登录/新用户认证</el-button>
 
         <el-dialog
           :visible.sync="dialogVisible"
           size="tiny">
+          <p v-if="showMessage" align="center" style="position:absolute;width: 100%;top: 40px;left: 0px;z-index: -1;font-size:1.5em">
+            请先登陆后再报名</p>
           <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="120px" class="login">
+
             <el-form-item prop="username">
               <el-input placeholder="Account9 用户名" v-model="loginForm.username" auto-complete="off"></el-input>
             </el-form-item>
@@ -157,6 +160,7 @@
       return {
         registerVisible: false,
         user_id: '',
+        showMessage: true,
         user: auth.user,
         dialogVisible: false,
         activeIndex: '',

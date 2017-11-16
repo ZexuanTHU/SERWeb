@@ -4,9 +4,9 @@ import Element from 'element-ui'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import userpage from '@/components/userpage'
-import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
+// import CompetitionInfo from '@/components/CompetitionInfo/CompetitionInfo'
 import project from '@/components/CompetitionInfo/project'
-import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
+// import GroupInfo from '@/components/CompetitionInfo/GroupInfo'
 import HallofFame from '@/components/HallofFame'
 import ProjectList from '@/components/ProjectPage'
 import SchoolTeam from '@/components/SchoolTeam'
@@ -26,6 +26,7 @@ Vue.filter('formatDate', function (value) {
 
 auth.checkAuth()
 
+// noinspection JSAnnotator
 export default new Router({
   routes: [
     {
@@ -48,31 +49,36 @@ export default new Router({
       name: 'SchoolTeam_',
       component: SchoolTeam
     },
+    // {
+    //   path: '/CompetitionInfo/:pid',
+    //   name: 'CompetitionInfo_',
+    //   component: CompetitionInfo
+    // },
+    // {
+    //   path: '/GroupInfo/:pid',
+    //   name: 'GroupInfo_',
+    //   component: GroupInfo
+    // },
     {
-      path: '/CompetitionInfo/:pid',
-      name: 'CompetitionInfo_',
-      component: CompetitionInfo
-    },
-    {
-      path: '/GroupInfo/:pid',
-      name: 'GroupInfo_',
-      component: GroupInfo
+      path: '/project/:pid',
+      name: 'project_',
+      component: project
     },
     {
       path: '/:uid',
       name: 'Hello',
       component: HelloWorld
     },
-    {
-      path: '/:uid/CompetitionInfo/:pid',
-      name: 'CompetitionInfo',
-      component: CompetitionInfo
-    },
-    {
-      path: '/:uid/GroupInfo/:pid',
-      name: 'GroupInfo',
-      component: GroupInfo
-    },
+    // {
+    //   path: '/:uid/CompetitionInfo/:pid',
+    //   name: 'CompetitionInfo',
+    //   component: CompetitionInfo
+    // },
+    // {
+    //   path: '/:uid/GroupInfo/:pid',
+    //   name: 'GroupInfo',
+    //   component: GroupInfo
+    // },
     {
       path: '/:uid/project/:pid',
       name: 'project',

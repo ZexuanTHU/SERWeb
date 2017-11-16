@@ -19,7 +19,7 @@
       </el-carousel>
     </div>
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
-      <h1 align="left" @click="showLogin">热门赛事</h1>
+      <h1 align="left">热门赛事</h1>
       <!--<a href="" target="_blank" id="more">查看更多 ></a>-->
       <br/>
       <el-row>
@@ -35,11 +35,11 @@
                   <el-button @click="oneclick(field.pk)" >
                     <p style="color: black">一键报名</p>
                   </el-button>
-                  <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: field.pk}}">
-                    <el-button type="primary">
-                      <p>赛事详情</p>
+                  <!--<router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: field.pk}}">-->
+                  <el-button type="primary" @click="routeTo('/project/'+field.pk)">
+                    <p>赛事详情</p>
                     </el-button>
-                  </router-link>
+                  <!--</router-link>-->
                 </div>
               </div>
               <div style="padding: 14px">
@@ -56,7 +56,7 @@
       </el-row>
     </div>
     <br/>
-    <tableList></tableList>
+    <tableList @showLogin="showLogin"></tableList>
 
     <br/>
     <mfooter></mfooter>
@@ -138,6 +138,14 @@
       },
       handleClose (done) {
         done()
+      },
+      routeTo (pagename) {      // two status: login in or not
+        var uid = this.$route.params.uid
+        if (uid) {
+          this.$router.push('/' + uid + pagename)
+        } else {
+          this.$router.push(pagename)
+        }
       },
       handleSelect (key, keyPath) {
         console.log(key, keyPath)
@@ -252,6 +260,10 @@
         })
       },
       oneclick (pk) {
+        if (!this.$route.params.uid) {
+          this.showLogin()
+          return
+        }
         this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
@@ -264,10 +276,11 @@
             console.log(res['msg'])
           }
         })
-        this.project_pk = pk
+        this.project_pk = pk.toString()  // has to be a string
         this.dialogVisible = true
       },
       showLogin () {
+        this.$refs['header'].showMessage = true
         this.$refs['header'].dialogVisible = true
       },
       dialogStatus (val) {

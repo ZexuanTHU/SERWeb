@@ -59,11 +59,11 @@
           <el-button @click="oneclick(scope.row.pk)" size="mini">
             <p>一键报名</p>
           </el-button>
-          <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">
-            <el-button type="primary" size="mini">
+          <!--<router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">-->
+          <el-button type="primary" size="mini" @click="routeTo('/project/'+scope.row.pk)">
               <p style="color: white">赛事详情</p>
             </el-button>
-          </router-link>
+          <!--</router-link>-->
 
         </template>
       </el-table-column>
@@ -74,6 +74,7 @@
 <script>
   import registerGroup from './CompetitionInfo/register_group.vue'
   import registerProject from './CompetitionInfo/register_project.vue'
+
   export default {
     components: {
       'registerGroup': registerGroup,
@@ -106,6 +107,14 @@
       this.user_pk = this.$route.params.uid
     },
     methods: {
+      routeTo (pagename) {      // two status: login in or not
+        var uid = this.$route.params.uid
+        if (uid) {
+          this.$router.push('/' + uid + pagename)
+        } else {
+          this.$router.push(pagename)
+        }
+      },
       project_list_display () {
         this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
@@ -119,6 +128,10 @@
         })
       },
       oneclick (pk) {
+        if (!this.$route.params.uid) {
+          this.$emit('showLogin')
+          return
+        }
         this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
