@@ -1,20 +1,20 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <mheader></mheader>
-    <h2 align="center">赛事查询</h2>
-    <div class="selector" style="width: 450px;border: 2px #edf0f5;    border-style: double;    border-radius: 20px;    position: relative;
+    <!--<h2 align="center">赛事查询</h2>-->
+    <div class="selector" style="border: 2px #edf0f5;border-style: double;    border-radius: 20px;    position: relative;
     padding-top: 10px;">
       <el-form ref="form" :model="filterForm" label-width="80px" size="mini" :inline="true" align="left">
         <el-form-item label="比赛名称" prop="name">
           <el-input v-model="filterForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="团队项目">
-          <el-select v-model="filterForm.isGroup" clearable placeholder="" style="width: 80px">
+        <el-form-item label="团队项目" style="margin-left: 150px">
+          <el-select v-model="filterForm.isGroup" clearable placeholder="" style="">
             <el-option label="是" value="true"></el-option>
             <el-option label="否" value="false"></el-option>
         </el-select>
       </el-form-item>
-        <br>
+        <!--<br>-->
         <!--<el-form-item label="活动时间">-->
         <!--<el-col :span="11">-->
         <!--<el-date-picker type="date" placeholder="选择日期" v-model="filterForm.date1" style="width: 100%;"></el-date-picker>-->
@@ -32,22 +32,23 @@
         <!--<el-checkbox-button label="线下主题活动" name="type"></el-checkbox-button>-->
         <!--</el-checkbox-group>-->
         <!--</el-form-item>-->
-        <el-form-item label="报名状态">
-          <el-radio-group v-model="filterForm.resource" size="medium">
+        <br>
+        <el-form-item label="报名状态" >
+          <el-radio-group v-model="filterForm.resource" size="medium" >
             <el-radio border label="正在报名" value="1"></el-radio>
             <el-radio border label="即将开始" value="2"></el-radio>
             <el-radio border label="已经结束" value="3"></el-radio>
 
           </el-radio-group>
       </el-form-item>
-      <br>
-        <el-form-item style="position: relative;float: right"></el-form-item>
+      <!--<br>-->
+        <el-form-item style="position: relative;margin-left: 155px"><el-button type="primary" @click="search" style="position: relative">查询</el-button></el-form-item>
 
         <!--<el-button @click="resetForm('form')">重置</el-button>-->
     </el-form>
-      <p align="right">
-        <el-button type="primary" @click="search" style="position: relative">查询</el-button>
-      </p>
+      <!--<p align="right">-->
+
+      <!--</p>-->
 
     </div>
 
