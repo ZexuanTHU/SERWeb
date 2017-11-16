@@ -9,7 +9,6 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-
     <div id="hot news" style="margin-left: 5%; margin-right: 5%">
       <h1 align="left" @click="showLogin">热门赛事</h1>
       <!--<a href="" target="_blank" id="more">查看更多 ></a>-->
@@ -24,10 +23,10 @@
                   <h3> {{ field.fields.project_name }} </h3>
                 </div>
                 <div id="left-bottom" style="width: 250px; padding-left: 14px; padding-top: 30px">
-                  <el-button>
+                  <el-button @click="oneclick(field.pk)" >
                     <p style="color: black">一键报名</p>
                   </el-button>
-                  <router-link :to="{name: 'CompetitionInfo', params: {uid:$route.params.uid, pid: field.pk}}">
+                  <router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: field.pk}}">
                     <el-button type="primary">
                       <p>赛事详情</p>
                     </el-button>
@@ -43,6 +42,8 @@
             </div>
           </el-card>
         </el-col>
+        <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+        <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       </el-row>
     </div>
     <br/>
@@ -58,12 +59,13 @@
   import auth from '../auth'
   import mheader from './header.vue'
   import mfooter from '../components/mfooter'
+  import registerGroup from './CompetitionInfo/register_group.vue'
+  import registerProject from './CompetitionInfo/register_project.vue'
   import tableList from './TableList.vue'
 
   export default {
     data () {
       return {
-        dialogVisible1: false,
         pics: [
           'slider1',
           'slider2',
@@ -92,7 +94,12 @@
             contact_tel: ''
           }],
           pk: ''
-        }]
+        }],
+        dialogVisible: false,
+        groupVisible: false,
+        user_pk: '',
+        project_pk: '',
+        group: false
       }
     },
     created: function () {
@@ -101,6 +108,7 @@
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
         this.$router.back()
       }
+      this.user_pk = this.$route.params.uid
     },
     methods: {
       getImage (index) {
@@ -212,14 +220,42 @@
           }
         })
       },
+      oneclick (pk) {
+        this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log(res)
+          if (res.error_num === 0) {
+            if (res.list[0].fields.group_project === true) {
+              this.group = true
+            }
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+        this.project_pk = pk
+        this.dialogVisible = true
+      },
       showLogin () {
         this.$refs['header'].dialogVisible = true
+      },
+      dialogStatus (val) {
+        this.dialogVisible = val
+      },
+      showgroup () {
+        this.groupVisible = true
+        this.dialogVisible = false
+      },
+      hidegroup () {
+        this.groupVisible = false
       }
     },
     components: {
       'mheader': mheader,
       'mfooter': mfooter,
-      'tableList': tableList
+      'tableList': tableList,
+      'registerGroup': registerGroup,
+      'registerProject': registerProject
     }
   }
 </script>
