@@ -4,7 +4,7 @@
     <div id="carousel" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
         <el-carousel-item v-for="pic in pics" :key="pic" align="center">
-          <img :src="getImage(pic)" v-bind:alt="pic" style="max-height: 90%; max-width:100%">
+          <img :src="getImage(pic)" v-bind:alt="pic" style="max-height: 90%; width:100%">
           <p>test</p>
         </el-carousel-item>
       </el-carousel>
@@ -18,7 +18,7 @@
         <el-col :span="8" v-for="field in hot_project_card" :key="field.id">
           <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
-            <div id="container" style="background-color: #324157">
+            <div id="container">
               <div style="float: left">
                 <div id="left-top" style="width: 250px; padding-left: 14px; padding-top: 14px">
                   <h3> {{ field.fields.project_name }} </h3>
@@ -65,8 +65,9 @@
       return {
         dialogVisible1: false,
         pics: [
-          'slider1',
           'slider2',
+          'slider3',
+          'slider4',
           'card1'
         ],
         hot_project_card: [{
@@ -236,9 +237,7 @@
     color: white;
 
   }
-  p {
-    color: white;
-  }
+
   .user {
     float: right;
   }
@@ -251,7 +250,7 @@
   }
 
   .el-carousel__item:nth-child(n) {
-    background-color: #324157;
+    background-color: white;
   }
 
   #hot {
