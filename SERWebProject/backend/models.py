@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
-
 # Create your models here.
 PENDING = 'PE'
 APPROVED = 'AP'
@@ -219,3 +218,6 @@ class Carousel(models.Model):
     carousel_image = models.ImageField(upload_to='')
     carousel_upload_time = models.DateTimeField('上传时间', default=timezone.now())
     if_carousel_active = models.BooleanField('是否激活', default=False)
+
+    def __str__(self):
+        return self.carousel_mark + ' ' + self.carousel_upload_time + ' ' + self.if_carousel_active
