@@ -1,11 +1,20 @@
 <template>
   <div>
     <mheader ref="header"></mheader>
+    <!--<div id="carousel" style="margin-bottom: 50px">-->
+      <!--<el-carousel :interval="5000" type="card" height="500px">-->
+        <!--<el-carousel-item v-for="pic in pics" :key="pic" align="center">-->
+          <!--<img :src="getImage(pic)" v-bind:alt="pic" style="max-height: 90%; width:100%">-->
+          <!--<p>test</p>-->
+        <!--</el-carousel-item>-->
+      <!--</el-carousel>-->
+    <!--</div>-->
+
     <div id="carousel" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
-        <el-carousel-item v-for="pic in pics" :key="pic" align="center">
-          <img :src="getImage(pic)" v-bind:alt="pic" style="max-height: 90%; width:100%">
-          <p>test</p>
+        <el-carousel-item v-for="img in carousel_img" :key="img" align="center">
+          <img :src="getImage(img.fields.carousel_image)" v-bind:alt="img" style="max-height: 90%; width:100%">
+          <p> {{ img.fields.carousel_mark }} </p>
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -72,6 +81,13 @@
           'slider4',
           'card1'
         ],
+        carousel_img: [{
+          fields: [{
+            carousel_image: '',
+            carousel_mark: ''
+          }],
+          pk: ''
+        }],
         hot_project_card: [{
           fields: [{
             project_name: '',
@@ -104,6 +120,7 @@
       }
     },
     created: function () {
+      this.carousel_request()
       this.project_list_display()
       this.project_card_display()
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
@@ -113,8 +130,8 @@
     },
     methods: {
       getImage (index) {
-        var images = require.context('../assets/', false, /\.jpg$/)
-        return images('./' + index + '.jpg')
+        var images = require.context('../assets', false, /\.jpg$/)
+        return images('./' + index)
       },
       logout () {
         auth.logout()
@@ -197,10 +214,23 @@
           }
         })
       },
+      carousel_request () {
+        this.$http.get('http://127.0.0.1:8000/api/carousel_request').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log('hello')
+          console.log(res)
+          if (res.error_num === 0) {
+            this.carousel_img = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
+      },
       project_list_display () {
         this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
-          console.log(res)
+//          console.log(res)
           if (res.error_num === 0) {
             this.latest_project_list = res['list']
           } else {
@@ -212,7 +242,7 @@
       project_card_display () {
         this.$http.get('http://127.0.0.1:8000/api/project_card_display').then((response) => {
           var res = JSON.parse(response.bodyText)
-          console.log(res)
+//          console.log(res)
           if (res.error_num === 0) {
             this.hot_project_card = res['list']
           } else {
