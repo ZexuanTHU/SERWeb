@@ -1,8 +1,12 @@
 from django.contrib import admin
 from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel
 
+admin.AdminSite.site_header = '清华大学计算机系体育赛事报名系统'
+admin.AdminSite.site_title = 'SERWEb'
+
 
 # Register your models here.
+
 def delete_selected_project_register_relationship(modeladmin, request, queryset):
     for project in queryset:
         project.delete()
