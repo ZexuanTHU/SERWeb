@@ -245,7 +245,7 @@
   }
 
   .el-carousel__item:nth-child(n) {
-    background-color: antiquewhite;
+    background-color: white;
   }
 
   #hot {
