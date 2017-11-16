@@ -233,11 +233,6 @@
     text-decoration: none;
   }
 
-  h3 {
-    color: white;
-
-  }
-
   .user {
     float: right;
   }
@@ -250,7 +245,7 @@
   }
 
   .el-carousel__item:nth-child(n) {
-    background-color: white;
+    background-color: antiquewhite;
   }
 
   #hot {
