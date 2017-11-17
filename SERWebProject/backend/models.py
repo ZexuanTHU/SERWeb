@@ -244,3 +244,20 @@ class HallOfFame(models.Model):
     class Meta:
         verbose_name = '名人堂 Hall of Fame'
         verbose_name_plural = '名人堂 Hall of Fame'
+
+
+class SchoolTeam(models.Model):
+    school_team_name = models.CharField('名称', max_length=20, default='如：计算机男篮')
+    school_team_gender = models.CharField('性别', choices=GENDER, max_length=1)
+    school_team_introduction = models.TextField('队伍简介', default='请输入队伍简介(500字以内)', max_length=500)
+    school_team_honor = models.TextField('队伍成员', default='请输入队伍成员(500字以内)', max_length=500)
+    school_team_image = models.ImageField(upload_to='SchoolTeam')
+    school_team_upload_time = models.DateTimeField('上传时间', default=timezone.now())
+    if_school_team_active = models.BooleanField('是否激活', default=False)
+
+    def __str__(self):
+        return self.school_team_name
+
+    class Meta:
+        verbose_name = '院队 School Team'
+        verbose_name_plural = '院队 School Team'

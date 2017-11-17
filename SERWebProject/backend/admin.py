@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, \
+    SchoolTeam
 
 admin.AdminSite.site_header = '清华大学计算机系体育赛事报名系统'
 admin.AdminSite.site_title = 'SERWEb'
@@ -45,6 +46,10 @@ class HallOfFameAdmin(admin.ModelAdmin):
     actions = ['delete_selected']
 
 
+class SchoolTeamAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+
 admin.site.disable_action('delete_selected')
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(User, UserAdmin)
@@ -54,3 +59,4 @@ admin.site.register(Group, GroupAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Carousel, CarouselAdmin)
 admin.site.register(HallOfFame, HallOfFameAdmin)
+admin.site.register(SchoolTeam, SchoolTeamAdmin)
