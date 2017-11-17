@@ -19,4 +19,5 @@ urlpatterns = [
         name='set_teammate_confirm'),
     url(r'^carousel_request', views.carousel_request, name='carousel_request'),
     url(r'^hall_of_fame_request', views.hall_of_fame_request, name='hall_of_fame_request'),
+    url(r'^school_team_request', views.school_team_request, name='school_team_request'),
 ]

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, SchoolTeam
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -321,5 +321,20 @@ def hall_of_fame_request(request):
             return JsonResponse(response)
         except:
             return HttpResponse('hall of fame request error!')
+    else:
+        return HttpResponse('request method error!')
+
+
+def school_team_request(request):
+    response = {}
+    if request.method == 'GET':
+        try:
+            latest_school_team_list = SchoolTeam.objects.filter(if_school_team_active=True).order_by('school_team_upload_time')
+            response['list'] = json.loads(serializers.serialize("json", latest_school_team_list))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+            return JsonResponse(response)
+        except:
+            return HttpResponse('school team request error!')
     else:
         return HttpResponse('request method error!')
