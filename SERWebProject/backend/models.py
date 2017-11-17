@@ -13,6 +13,30 @@ APPROVAL_STATUS = (
     (REJECTED, '未通过')
 )
 
+MALE = 'M'
+FEMALE = 'F'
+GENDER = (
+    (MALE, '男'),
+    (FEMALE, '女')
+)
+
+BACHELOR = 'BS'
+MASTER = 'MS'
+DOCTOR = 'PhD'
+READING_DEGREE = (
+    (BACHELOR, '本科生'),
+    (MASTER, '硕士'),
+    (DOCTOR, '博士')
+)
+
+CLOTHES_SIZE = {
+    ('XS', 'XS'),
+    ('S', 'S'),
+    ('M', 'M'),
+    ('L', 'L'),
+    ('XL', 'XL')
+}
+
 
 class User(AbstractUser):
     # email = models.EmailField()
@@ -26,30 +50,6 @@ class User(AbstractUser):
 
 
 class UserInfo(models.Model):
-    MALE = 'M'
-    FEMALE = 'F'
-    GENDER = (
-        (MALE, '男'),
-        (FEMALE, '女')
-    )
-
-    BACHELOR = 'BS'
-    MASTER = 'MS'
-    DOCTOR = 'PhD'
-    READING_DEGREE = (
-        (BACHELOR, '本科生'),
-        (MASTER, '硕士'),
-        (DOCTOR, '博士')
-    )
-
-    CLOTHES_SIZE = {
-        ('XS', 'XS'),
-        ('S', 'S'),
-        ('M', 'M'),
-        ('L', 'L'),
-        ('XL', 'XL')
-    }
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='belong_to')
     name = models.CharField('姓名', max_length=10)
     student_id = models.CharField('学号', max_length=10)
@@ -220,4 +220,44 @@ class Carousel(models.Model):
     if_carousel_active = models.BooleanField('是否激活', default=False)
 
     def __str__(self):
-        return self.carousel_mark + ' ' + self.carousel_upload_time + ' ' + self.if_carousel_active
+        return self.carousel_mark
+
+    class Meta:
+        verbose_name = '轮播图 Carousel'
+        verbose_name_plural = '轮播图 Carousel'
+
+
+class HallOfFame(models.Model):
+    HOF_name = models.CharField('名人堂姓名', max_length=20, default='名人堂')
+    HOF_gender = models.CharField('性别', choices=GENDER, max_length=1)
+    HOF_selected_year = models.CharField('入选年份', max_length=4, default='2018')
+    HOF_class_id = models.CharField('班级', default='计XX', max_length=5)
+    HOF_introduction = models.TextField('个人简介', default='请输入个人简介(500字以内)', max_length=500)
+    HOF_honor = models.TextField('个人荣誉', default='请输入个人荣誉(500字以内)', max_length=500)
+    HOF_image = models.ImageField(upload_to='HallOfFame')
+    HOF_upload_time = models.DateTimeField('上传时间', default=timezone.now())
+    if_HOF_active = models.BooleanField('是否激活', default=False)
+
+    def __str__(self):
+        return self.HOF_name + ' ' + self.HOF_selected_year
+
+    class Meta:
+        verbose_name = '名人堂 Hall of Fame'
+        verbose_name_plural = '名人堂 Hall of Fame'
+
+
+class SchoolTeam(models.Model):
+    school_team_name = models.CharField('名称', max_length=20, default='如：计算机男篮')
+    school_team_gender = models.CharField('性别', choices=GENDER, max_length=1)
+    school_team_introduction = models.TextField('队伍简介', default='请输入队伍简介(500字以内)', max_length=500)
+    school_team_honor = models.TextField('队伍成员', default='请输入队伍成员(500字以内)', max_length=500)
+    school_team_image = models.ImageField(upload_to='SchoolTeam')
+    school_team_upload_time = models.DateTimeField('上传时间', default=timezone.now())
+    if_school_team_active = models.BooleanField('是否激活', default=False)
+
+    def __str__(self):
+        return self.school_team_name
+
+    class Meta:
+        verbose_name = '院队 School Team'
+        verbose_name_plural = '院队 School Team'
