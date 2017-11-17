@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 cd SERWebProject
 python3 manage.py runserver
 coverage run manage.py test
