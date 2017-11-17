@@ -338,3 +338,27 @@ def school_team_request(request):
             return HttpResponse('school team request error!')
     else:
         return HttpResponse('request method error!')
+
+
+def project_registration_cancel_request(request, user_id, project_id):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=user_id)
+            project = Project.objects.get(pk=project_id)
+            if project.group_project:
+                pass
+            else:
+                try:
+                    project_register_relationship = ProjectRegisterRelationship.objects.get(user=user, project=project)
+                    if project_register_relationship.if_approval_status_still_pending:
+                        project_register_relationship.delete()
+                        return HttpResponse('Canceled!')
+                    else:
+                        return HttpResponse('Sorry! You can not cancel this registration because it was already '
+                                            'approved or rejected!')
+                except:
+                    return HttpResponse('request registration info error!')
+        except:
+            return HttpResponse('request user info or object info error!')
+    else:
+        return HttpResponse('request method error!')

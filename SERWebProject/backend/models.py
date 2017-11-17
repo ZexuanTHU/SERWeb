@@ -134,6 +134,12 @@ class ProjectRegisterRelationship(models.Model):
         self.project.save()
         super(ProjectRegisterRelationship, self).delete()
 
+    def if_approval_status_still_pending(self):
+        if self.approval_status == PENDING:
+            return True
+        else:
+            return False
+
     class Meta:
         verbose_name = '项目报名表 ProjectRegisterRelationship'
         verbose_name_plural = '项目报名表 ProjectRegisterRelationship'

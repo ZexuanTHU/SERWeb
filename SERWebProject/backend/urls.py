@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^carousel_request', views.carousel_request, name='carousel_request'),
     url(r'^hall_of_fame_request', views.hall_of_fame_request, name='hall_of_fame_request'),
     url(r'^school_team_request', views.school_team_request, name='school_team_request'),
+    url(r'^^project_registration_cancel_request/(?P<user_id>[0-9]+)/(?P<project_id>[0-9]+)',
+        views.project_registration_cancel_request, name='project_registration_cancel_request'),
 ]
