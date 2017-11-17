@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -306,5 +306,20 @@ def carousel_request(request):
             return JsonResponse(response)
         except:
             return HttpResponse('carousel request error!')
+    else:
+        return HttpResponse('request method error!')
+
+
+def hall_of_fame_request(request):
+    response = {}
+    if request.method == 'GET':
+        try:
+            latest_hall_of_fame_list = HallOfFame.objects.filter(if_HOF_active=True).order_by('HOF_upload_time')
+            response['list'] = json.loads(serializers.serialize("json", latest_hall_of_fame_list))
+            response['msg'] = 'success'
+            response['error_num'] = 0
+            return JsonResponse(response)
+        except:
+            return HttpResponse('hall of fame request error!')
     else:
         return HttpResponse('request method error!')

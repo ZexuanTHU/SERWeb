@@ -223,8 +223,8 @@ class Carousel(models.Model):
         return self.carousel_mark
 
     class Meta:
-        verbose_name = 'Carousel 轮播图'
-        verbose_name_plural = 'Carousel 轮播图'
+        verbose_name = '轮播图 Carousel'
+        verbose_name_plural = '轮播图 Carousel'
 
 
 class HallOfFame(models.Model):
@@ -232,8 +232,8 @@ class HallOfFame(models.Model):
     HOF_gender = models.CharField('性别', choices=GENDER, max_length=1)
     HOF_selected_year = models.CharField('入选年份', max_length=4, default='2018')
     HOF_class_id = models.CharField('班级', default='计XX', max_length=5)
-    HOF_introduction = models.TextField('个人简介', default='请输入个人简介(300字以内)', max_length=300)
-    HOF_honor = models.TextField('个人荣誉', default='请输入个人荣誉(300字以内)', max_length=300)
+    HOF_introduction = models.TextField('个人简介', default='请输入个人简介(500字以内)', max_length=500)
+    HOF_honor = models.TextField('个人荣誉', default='请输入个人荣誉(500字以内)', max_length=500)
     HOF_image = models.ImageField(upload_to='HallOfFame')
     HOF_upload_time = models.DateTimeField('上传时间', default=timezone.now())
     if_HOF_active = models.BooleanField('是否激活', default=False)
@@ -242,5 +242,5 @@ class HallOfFame(models.Model):
         return self.HOF_name + ' ' + self.HOF_selected_year
 
     class Meta:
-        verbose_name = 'Hall of Fame 名人堂'
-        verbose_name_plural = 'Hall of Fame 名人堂'
+        verbose_name = '名人堂 Hall of Fame'
+        verbose_name_plural = '名人堂 Hall of Fame'
