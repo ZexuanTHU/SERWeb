@@ -346,7 +346,16 @@ def project_registration_cancel_request(request, user_id, project_id):
             user = User.objects.get(pk=user_id)
             project = Project.objects.get(pk=project_id)
             if project.group_project:
-                pass
+                try:
+                    group = Group.objects.get(team_creator=user, project=project)
+                    if group.if_approval_status_still_pending:
+                        group.delete()
+                        return HttpResponse('Canceled!')
+                    else:
+                        return HttpResponse('Sorry! You can not cancel this registration because it was already '
+                                            'approved or rejected!')
+                except:
+                    return HttpResponse('request registration info error!')
             else:
                 try:
                     project_register_relationship = ProjectRegisterRelationship.objects.get(user=user, project=project)

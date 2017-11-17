@@ -184,6 +184,12 @@ class Group(models.Model):
         self.project.save()
         super(Group, self).delete()
 
+    def if_approval_status_still_pending(self):
+        if self.approval_status == PENDING:
+            return True
+        else:
+            return False
+
     class Meta:
         verbose_name = '团队 Group'
         verbose_name_plural = '团队 Group'
