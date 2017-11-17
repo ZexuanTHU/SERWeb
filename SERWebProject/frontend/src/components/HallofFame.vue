@@ -83,6 +83,12 @@
         openedPanel: '0',
         dialogVisible: false,
         activeName: 'first',
+        hall_of_fame_data: [{
+          fields: [{
+
+          }],
+          pk: ''
+        }],
         items: [{
           name: '李晨曦',
           gender: '男',
@@ -108,6 +114,19 @@
       },
       handleClick (tab, event) {
         console.log(tab, event)
+      },
+      hall_of_fame_request() {
+        this.$http.get('http://127.0.0.1:8000/api/hall_of_fame_request').then((response) => {
+          var res = JSON.parse(response.bodyText)
+          console.log('hello')
+          console.log(res)
+          if (res.error_num === 0) {
+            this.carousel_img = res['list']
+          } else {
+            this.$message.error('获取项目列表失败"')
+            console.log(res['msg'])
+          }
+        })
       }
     },
     components: {
@@ -115,6 +134,7 @@
       'mfooter': mfooter
     },
     created: function () {
+      this.hall_of_fame_request()
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
         this.$router.back()
       }

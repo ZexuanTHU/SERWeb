@@ -75,12 +75,6 @@
   export default {
     data () {
       return {
-        pics: [
-          'slider2',
-          'slider3',
-          'slider4',
-          'card1'
-        ],
         carousel_img: [{
           fields: [{
             carousel_image: '',
