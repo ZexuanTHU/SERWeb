@@ -8,7 +8,7 @@
             <h5></h5>
             <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanel">
 
-              <el-menu-item index="0">2013</el-menu-item>
+              <el-menu-item index="0"></el-menu-item>
               <el-menu-item index="1"></el-menu-item>
               <el-menu-item index="2"></el-menu-item>
               <el-menu-item index="3"></el-menu-item>
