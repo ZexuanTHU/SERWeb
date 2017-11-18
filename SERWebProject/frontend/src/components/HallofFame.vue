@@ -20,56 +20,57 @@
           <div class="w3-container panel"
                :style="{display:openedPanel==='0'?'inline-block':'none'}">
             <el-row>
-              <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }" style="margin-top: 10px">
-                  <img @click="dialogVisible = true" src="../assets/halloffame.jpg" class="image">
+              <el-col :span="8" v-for="field in hall_of_fame_data" :key="field.id">
+                <el-card :body-style="{ padding: '0px' }" style="margin-top: 10px; width: 300px;">
+                  <img @click="itemClicked(field)" :src="getImage(field.fields.HOF_image)" v-bind:alt="field" style="height: 300px;">
                   <div style="padding: 14px;">
-                    <span>李晨曦</span>
+                    <span> {{ field.fields.HOF_name }} </span>
+                    <li> 性别 : {{ field.fields.HOF_gender }} </li>
+                    <li> 级数 : {{ field.fields.HOF_selected_year }} </li>
+                    <li> 班级 : {{ field.fields.HOF_class_id }} </li>
+                    <li> 擅长项目 : {{ field.fields.HOF_expertise}} </li>
                   </div>
+                  <el-dialog
+                    :visible.sync="dialogVisible"
+                    size="medium">
+                    <div>
+                      <div style="float: right; margin-bottom: 100px">
+                        <img :src="getImage(field.fields.HOF_image)" v-bind:alt="field" style="height: 300px;">
+                      </div>
+                      <div style="margin-right: 600px">
+                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                          <el-tab-pane label="基本信息" name="first">
+                            <li> 性别 : {{ gender }} </li>
+                            <li> 级数 : {{ selected_year }} </li>
+                            <li> 班级 : {{ class_id }} </li>
+                            <li> 擅长项目 : {{ expertise}} </li>
+                          </el-tab-pane>
+                          <!--<el-tab-pane label="个人简介" name="second">-->
+                          <!--{{ intro }}-->
+                          <!--</el-tab-pane>-->
+                          <!--<el-tab-pane label="个人荣誉" name="third">-->
+                          <!--<ul v-for="award in awards">-->
+                          <!--<li> {{ award.first }} </li>-->
+                          <!--<li> {{ award.second }} </li>-->
+                          <!--<li> {{ award.third }} </li>-->
+                          <!--<li> {{ award.fourth }} </li>-->
+                          <!--<li> {{ award.fifth }} </li>-->
+                          <!--<li> {{ award.sixth }} </li>-->
+                          <!--<li> {{ award.seventh }} </li>-->
+                          <!--</ul>-->
+                          <!--</el-tab-pane>-->
+                        </el-tabs>
+                      </div>
+                    </div>
+                  </el-dialog>
                 </el-card>
               </el-col>
             </el-row>
-            <el-dialog
-              title="李晨曦"
-              :visible.sync="dialogVisible"
-              size="medium">
-              <div>
-                <div style="float: right; margin-bottom: 100px">
-                  <img src="../assets/halloffame.jpg" style="display: block; max-width: 500px; max_height: 500px; width: auto; height: auto">
-                </div>
-                <div style="margin-right: 600px">
-                  <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="基本信息" name="first">
-                    <ul v-for="item in items">
-                      <li> 性别 : {{ item.gender }} </li>
-                      <li> 级数 : {{ item.grade }} </li>
-                      <li> 班级 : {{ item.class }} </li>
-                      <li> 擅长项目 : {{ item.expertise }} </li>
-                    </ul>
-                  </el-tab-pane>
-                  <el-tab-pane label="个人简介" name="second">
-                    {{ intro }}
-                  </el-tab-pane>
-                  <el-tab-pane label="个人荣誉" name="third">
-                    <ul v-for="award in awards">
-                      <li> {{ award.first }} </li>
-                      <li> {{ award.second }} </li>
-                      <li> {{ award.third }} </li>
-                      <li> {{ award.fourth }} </li>
-                      <li> {{ award.fifth }} </li>
-                      <li> {{ award.sixth }} </li>
-                      <li> {{ award.seventh }} </li>
-                    </ul>
-                  </el-tab-pane>
-                </el-tabs>
-                </div>
-              </div>
-            </el-dialog>
           </div>
         </div>
-        </div>
+      </div>
     </div>
-      <mfooter></mfooter>
+    <mfooter></mfooter>
   </div>
 </template>
 
@@ -81,11 +82,24 @@
     data () {
       return {
         openedPanel: '0',
-        dialogVisible: false,
         activeName: 'first',
+        dialogVisible: false,
+        name: '',
+        gender: '',
+        selected_year: '',
+        class_id: '',
+        expertise: '',
+        hof_img: '',
         hall_of_fame_data: [{
           fields: [{
-
+            HOF_name: '',
+            HOF_gender: '',
+            HOF_selected_year: '',
+            HOF_class_id: '',
+            HOF_expertise: '',
+            HOF_introduction: '',
+            HOF_honor: '',
+            HOF_image: ''
           }],
           pk: ''
         }],
@@ -109,19 +123,32 @@
       }
     },
     methods: {
+      itemClicked: function (item) {
+        this.name = item.fields.HOF_name
+        this.gender = item.fields.HOF_gender
+        this.selected_year = item.fields.HOF_selected_year
+        this.class_id = item.fields.HOF_class_id
+        this.expertise = item.fields.HOF_expertise
+        this.hof_img = item.fields.HOF_image
+        console.log(this.hof_img)
+        this.dialogVisible = true
+      },
       openPanel: function (index) {
         this.openedPanel = index
       },
       handleClick (tab, event) {
         console.log(tab, event)
       },
-      hall_of_fame_request() {
+      getImage (index) {
+        var images = require.context('../assets/', true, /\.jpg$/)
+        return images('./' + index)
+      },
+      hall_of_fame_request () {
         this.$http.get('http://127.0.0.1:8000/api/hall_of_fame_request').then((response) => {
           var res = JSON.parse(response.bodyText)
-          console.log('hello')
           console.log(res)
           if (res.error_num === 0) {
-            this.carousel_img = res['list']
+            this.hall_of_fame_data = res['list']
           } else {
             this.$message.error('获取项目列表失败"')
             console.log(res['msg'])
