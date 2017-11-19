@@ -42,7 +42,7 @@
                   <!--</router-link>-->
                 </div>
               </div>
-              <div style="padding: 14px">
+              <div style="padding: 14px; min-width: 200px; overflow-x: auto">
                 <p> 当前报名人数 : {{ field.fields.project_hot }} </p>
                 <p> 报名人数限制 : {{ field.fields.max_reg }} </p>
                 <p> 比赛时间 : {{ field.fields.match_data_time | formatDate }} </p>

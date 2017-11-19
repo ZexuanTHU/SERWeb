@@ -60,11 +60,10 @@
             <p>一键报名</p>
           </el-button>
           <!--<router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">-->
-          <el-button type="primary" size="mini" @click="routeTo('/project/'+scope.row.pk)">
-              <p style="color: white">赛事详情</p>
-            </el-button>
+          <el-button type="primary" size="mini" @click="routeTo('/project/'+scope.row.pk)" style="margin-right: 10px">
+            <p style="color: white">赛事详情</p>
+          </el-button>
           <!--</router-link>-->
-
         </template>
       </el-table-column>
     </el-table>
