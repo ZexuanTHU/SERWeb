@@ -2,7 +2,7 @@
   <div id="CompetitionInfo">
     <div id="compinfo">
       <h1 align="left">{{pageInfo.project_name}}</h1>
-      <div id="basic" >
+      <div class="basic">
         <p align="left">
           比赛时间:<br>
           {{pageInfo.match_data_time}}
@@ -18,17 +18,21 @@
         <p align="left">
           紧急联系人姓名: {{pageInfo.contact_name}}
         </p>
-        <p align="left">
+        <p align="left" id="last">
           紧急联系人电话: {{pageInfo.contact_tel}}
         </p>
       </div>
       <div class="status">
         <h3>{{pageInfo.project_hot}}人已報名</h3>
-        <el-progress :show-text="false" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
+        <el-progress :show-text="true" :text-inside="true" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
         <h3>{{rdate}}</h3>
         <h3>{{cdate}}</h3>
+        <el-button id="submit" @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
       </div>
-      <el-button id="submit" @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">报名</el-button>
+      <div id="qr" style="float: left;">
+          <p>手机扫码报名</p>
+          <img src="../../assets/qr.png" />
+      </div>
       <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
       <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
       <div id="detail">
@@ -143,24 +147,69 @@ export default {
     margin: 20px;
     text-align: left;
   }
-  #basic{
+  .basic{
     float: left;
     width: 30%;
+    margin-top: 20px;
+    border-style:solid;
+    border-width: 1px;
+    border-color: #878D99;
   }
-  #detail{
-    clear: left;
+  .basic p {
+    margin: 0px;
+    padding: 10px;
+    border-bottom-style:solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #878D99;
+  }
+  .basic #last{
+    border-bottom-width: 0px;
+    border-bottom-color:black;
   }
   .status {
-    width: 70%;
+    float: left;
+    width: 35%;
+    margin-left: 5%;
   }
-  .status el-progress{
+  .el-progress{
+    width: 90%;
     padding-right: 50px;
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 10px;
+  }
+  .el-button--primary {
+    margin: 3%;
+    margin-left: 0%;
+    width: 80%;
+    line-height: 1;
+    border-radius: 20px;
+  }
+  #qr{
+    float: left;
+    width: 20%;
+    margin: 5%;
+    margin-top: 0%;
+    border: 2px solid silver;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  #qr p{
+    text-align: center;
+  }
+  #qr img {
+    height: 150px;
+    float: left;
   }
   #submit #group{
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  .el-button, .el-textarea__inner {
+    font-size: 35px;
+    border: -20px;
+  }
+  #detail{
+    margin-top: 35%;
+    clear: left;
   }
 </style>

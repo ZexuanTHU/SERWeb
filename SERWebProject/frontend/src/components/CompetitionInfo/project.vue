@@ -20,7 +20,7 @@
           </div>
           <div id="view_grades" class="w3-container panel "
                :style="{display:openedPanel==='2'?'inline-block':'none'}">
-            <h1>比赛成绩</h1>
+            <h1 id="grade">比赛成绩</h1>
             <grades></grades>
           </div>
         </div>
@@ -78,6 +78,9 @@
   #leftnav {
     margin-top: 40px;
     width: 200px;
+  }
+  #grade {
+    margin: 20px;
   }
 
 </style>
