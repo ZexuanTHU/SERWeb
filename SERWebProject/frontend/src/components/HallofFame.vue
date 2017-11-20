@@ -49,10 +49,10 @@
                             <li> 擅长项目 : {{ expertise}} </li>
                           </el-tab-pane>
                           <el-tab-pane label="个人简介" name="second">
-                          {{ intro }}
+                            {{ intro }}
                           </el-tab-pane>
                           <el-tab-pane label="个人荣誉" name="third">
-                          {{ honor }}
+                            <p><span v-html="honor"></span></p>
                           </el-tab-pane>
                         </el-tabs>
                       </div>
@@ -117,6 +117,7 @@
         this.hof_img = item.fields.HOF_image
         this.intro = item.fields.HOF_introduction
         this.honor = item.fields.HOF_honor
+        this.stringData(this.honor)
         this.dialogVisible = true
       },
       openPanel: function (index) {
@@ -132,6 +133,10 @@
       getImage2 (index) {
         var images = require.context('../assets/', true, /\.jpg$/)
         return images('./' + index)
+      },
+      stringData (data) {
+        var str = data.replace(/\n/g, '<br />')
+        this.honor = str
       },
       hall_of_fame_request () {
         this.$http.get('http://127.0.0.1:8000/api/hall_of_fame_request').then((response) => {
