@@ -147,24 +147,28 @@ def project_register(request, user_id, project_id):
             user = User.objects.get(pk=user_id)
             user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
-            if project.was_below_max_reg():
-                project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
-                                                                    register_name=user_info.name,
-                                                                    student_id=user_info.student_id,
-                                                                    project=project,
-                                                                    registered_project_name=project.project_name,
-                                                                    register_datetime=timezone.now(),
-                                                                    if_group_project=project.group_project)
-                project_register_form.save()
-                project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
-                project.save()
-                return HttpResponse("Success!")
+            if_registered = ProjectRegisterRelationship.objects.filter(user=user)
+            if not if_registered:
+                if project.was_below_max_reg():
+                    project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
+                                                                        register_name=user_info.name,
+                                                                        student_id=user_info.student_id,
+                                                                        project=project,
+                                                                        registered_project_name=project.project_name,
+                                                                        register_datetime=timezone.now(),
+                                                                        if_group_project=project.group_project)
+                    project_register_form.save()
+                    project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
+                    project.save()
+                    return HttpResponse("Success!")
+                else:
+                    return HttpResponse("This project already reach its register max")
             else:
-                return HttpResponse("This project already reach its register max")
+                return HttpResponse("You have already registered this project!")
         except:
             raise Http404("Register error!")
-
-    return render(request, 'backend/register.html', context={'form': ProjectRegisterRelationship})
+    else:
+        return HttpResponse("request method error")
 
 
 def project_register_relationship_request(request, user_id):
@@ -228,18 +232,22 @@ def add_group(request, user_id, project_id):
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
             if_group_project = project.group_project
-            new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
-                              team_creator_info=team_leader_info, team_creator_name=team_leader_name,
-                              team_min_reg=team_min_reg, team_max_reg=team_max_reg,
-                              if_group_project=if_group_project)
-            if project.was_below_max_reg:
-                new_group.save()
-                # project.project_hot = project.project_hot + 1
-                project.project_hot = Group.objects.filter(project=project).count()
-                project.save()
-                return HttpResponse('success!')
+            if_registered = Group.objects.filter(team_creator=team_leader)
+            if not if_registered:
+                if project.was_below_max_reg:
+                    new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
+                                      team_creator_info=team_leader_info, team_creator_name=team_leader_name,
+                                      team_min_reg=team_min_reg, team_max_reg=team_max_reg,
+                                      if_group_project=if_group_project)
+                    new_group.save()
+                    # project.project_hot = project.project_hot + 1
+                    project.project_hot = Group.objects.filter(project=project).count()
+                    project.save()
+                    return HttpResponse('success!')
+                else:
+                    return HttpResponse('This project already reach its register team cap')
             else:
-                return HttpResponse('This project already reach its register team cap')
+                return HttpResponse('You have already registered this project!')
         except:
             return HttpResponse('error!')
     else:
