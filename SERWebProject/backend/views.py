@@ -142,6 +142,7 @@ def project_info_request(request, project_id):
 
 @csrf_exempt
 def project_register(request, user_id, project_id):
+    response = {}
     if request.method == 'POST':
         try:
             user = User.objects.get(pk=user_id)
@@ -160,15 +161,25 @@ def project_register(request, user_id, project_id):
                     project_register_form.save()
                     project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
                     project.save()
-                    return HttpResponse("Success!")
+                    response['msg'] = 'Success!'
+                    response['error_num'] = 0
+                    return HttpResponse(response)
                 else:
-                    return HttpResponse("This project already reach its register max")
+                    response['msg'] = 'This project already reach its register max!'
+                    response['error_num'] = 3
+                    return HttpResponse(response)
             else:
-                return HttpResponse("You have already registered this project!")
+                response['msg'] = 'You have already registered this project!!'
+                response['error_num'] = 4
+                return HttpResponse(response)
         except:
-            raise Http404("Register error!")
+            response['msg'] = 'Request project or user info error'
+            response['error_num'] = 2
+            raise Http404(response)
     else:
-        return HttpResponse("request method error")
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return HttpResponse(response)
 
 
 def project_register_relationship_request(request, user_id):
@@ -222,6 +233,7 @@ def project_grade_request(request, project_id):
 
 @csrf_exempt
 def add_group(request, user_id, project_id):
+    response = {}
     if request.method == 'POST':
         try:
             group_name = request.POST['group_name']
@@ -243,15 +255,25 @@ def add_group(request, user_id, project_id):
                     # project.project_hot = project.project_hot + 1
                     project.project_hot = Group.objects.filter(project=project).count()
                     project.save()
-                    return HttpResponse('success!')
+                    response['msg'] = 'Success!'
+                    response['error_num'] = 0
+                    return HttpResponse(response)
                 else:
-                    return HttpResponse('This project already reach its register team cap')
+                    response['msg'] = 'This project already reach its register max!'
+                    response['error_num'] = 3
+                    return HttpResponse(response)
             else:
-                return HttpResponse('You have already registered this project!')
+                response['msg'] = 'You have already registered this project!!'
+                response['error_num'] = 4
+                return HttpResponse(response)
         except:
-            return HttpResponse('error!')
+            response['msg'] = 'Request project or user info error'
+            response['error_num'] = 2
+            raise Http404(response)
     else:
-        return HttpResponse('Please check request method!')
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return HttpResponse(response)
 
 
 @csrf_exempt
