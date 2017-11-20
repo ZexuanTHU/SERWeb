@@ -197,6 +197,7 @@ class Group(models.Model):
 
 class Membership(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project_name = models.CharField('项目', max_length=20, default='项目')
     group = models.ForeignKey(Group)
     group_name = models.CharField("队名", max_length=10, default='队伍')
     team_leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name="team_leader_created_this_team")
@@ -206,6 +207,7 @@ class Membership(models.Model):
     teammate_info = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     teammate_name = models.CharField("队员姓名", max_length=10, default='队员')
     register_datetime = models.DateTimeField('报名时间', default=timezone.now())
+    approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
     if_group_project = models.BooleanField('是否团队项目', default=True)
@@ -263,7 +265,7 @@ class SchoolTeam(models.Model):
     school_team_name = models.CharField('名称', max_length=20, default='如：计算机男篮')
     school_team_gender = models.CharField('性别', choices=GENDER, max_length=1)
     school_team_introduction = models.TextField('队伍简介', default='请输入队伍简介(500字以内)', max_length=500)
-    school_team_honor = models.TextField('队伍成员', default='请输入队伍成员(500字以内)', max_length=500)
+    school_team_member = models.TextField('队伍成员', default='请输入队伍成员(500字以内)', max_length=500)
     school_team_image = models.ImageField(upload_to='SchoolTeam')
     school_team_upload_time = models.DateTimeField('上传时间', default=timezone.now())
     if_school_team_active = models.BooleanField('是否激活', default=False)
