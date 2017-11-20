@@ -98,6 +98,14 @@
     padding: 50px;
     /*box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/
   }
+
+  .el-form-item {
+    margin-left: -120px;
+  }
+
+  .el-button {
+    width: 100%;
+  }
 </style>
 
 <script>
@@ -261,6 +269,7 @@
                 if (res.status === 0) {
                   this.dialogVisible = false
                   this.user.authenticated = true
+//                  this.username = this.loginForm.username
                   this.user_id = res.list[0].pk
                   if (!res.list[0].fields.submit_info) {
                     this.registerVisible = true

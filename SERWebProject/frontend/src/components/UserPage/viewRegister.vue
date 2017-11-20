@@ -14,26 +14,34 @@
       <el-table-column
         prop="pk"
         label="项目名称"
-        width="180px">
-        <template scope="scope"> {{ scope.row.fields.registered_project_name }} </template>
+        width="280px">
+        <template scope="scope"> {{ scope.row.fields.registered_project_name || scope.row.fields.project_name }}
+        </template>
       </el-table-column>
       <el-table-column
         prop="pk"
-        label="团队项目"
-        width="100px">
-        <template scope="scope"> {{ scope.row.fields.if_group_project ? '是' : '否' }} </template>
+        label="项目类型"
+        width="150px">
+        <template scope="scope"> {{ scope.row.fields.if_group_project ? '团队' : '个人' }} </template>
       </el-table-column>
 
       <el-table-column
         prop="contact_info"
+        label="队长"
+        width="150px"
+        >
+        <template scope="scope"> {{ scope.row.fields.team_leader_name || '' }} </template>
+      </el-table-column>
+      <el-table-column
+        prop="contact_info"
         label="报名时间"
         >
-        <template scope="scope"> {{ scope.row.fields.register_datetime }} </template>
+        <template scope="scope"> {{ scope.row.fields.register_datetime |formatDate }} </template>
       </el-table-column>
       <el-table-column
         prop="register_state"
         label="报名状态"
-        width="100">
+        width="150px">
         <template scope="scope">
           {{approvalStatus( scope.row.fields.approval_status)}}
         </template>
@@ -44,12 +52,12 @@
         prop="register">
         <template scope="scope">
           <el-button type="text" size="small">
-            <router-link :to="{name: 'CompetitionInfo', params: {pid:scope.row.fields.project.toString()}}">
+            <router-link :to="{name: 'project', params: {pid:scope.row.fields.project.toString(),uid:id.toString()}}">
               查看
             </router-link>
           </el-button>
           <span>/</span>
-          <el-button type="text" size="small">删除</el-button>
+          <el-button type="text" size="small" @click="cancel(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,38 +72,7 @@
         id: this.$route.params.uid,
         activeName: '1',
         tableData: [
-          {
-            'model': 'backend.projectregisterrelationship',
-            pk: 9,
-            'fields': {
-              'user': 22,
-              'user_info': 8,
-              'register_name': '叶泽轩',
-              'student_id': '2014012430',
-              'project': 2,
-              'registered_project_name': '女子100m',
-              'register_datetime': '2017-11-06T11:03:27.747Z',
-              'approval_status': 'PE',
-              'grade': '完赛',
-              'if_finished': false
-            }
-          },
-          {
-            'model': 'backend.projectregisterrelationship',
-            'pk': 8,
-            'fields': {
-              'user': 22,
-              'user_info': 8,
-              'register_name': '叶泽轩',
-              'student_id': '2014012430',
-              'project': 1,
-              'registered_project_name': '男子100m',
-              'register_datetime': '2017-11-06T11:03:24.172Z',
-              'approval_status': 'PE',
-              'grade': '完赛',
-              'if_finished': false
-            }
-          }
+
         ]
       }
     },
@@ -105,6 +82,24 @@
       },
       malert (row) {
         alert(row.project_name)
+      },
+      cancel (scope) {
+        console.log(scope.$index)
+        this.$http.get('http://localhost:8000/api/project_registration_cancel_request/' + this.$route.params.uid + '/' + scope.row.fields.project).then((response) => {
+//          var res = JSON.parse(response.bodyText)
+          console.log(response)
+          if (response.status >= 200 && response.status < 300) {
+            if (response.bodyText === 'Canceled!') {
+              this.$message('成功删除项目')
+              this.tableData.splice(scope.$index, 1)
+            } else {
+              this.$message.error(response.bodyText)
+            }
+          } else {
+            this.$message.error('删除请求失败"')
+            console.log('failed')
+          }
+        })
       },
       approvalStatus (status) {
         switch (status) {
@@ -118,16 +113,7 @@
       }
     },
     mounted: function () {
-//      this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.id).then((response) => {
-//        var res = JSON.parse(response.bodyText)
-//        console.log(res)
-//        if (res.error_num === 0) {
-//          this.tableData = res.list
-//        } else {
-//          this.$message.error('获取个人信息列表失败"')
-//          console.log(res['msg'])
-//        }
-//      })
+
     },
     computed: {
       filteredTable: function () {

@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, SchoolTeam
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, \
+    SchoolTeam
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -29,7 +30,8 @@ def register(request):
             # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
             new_user = form.save()
             # 用户认证后创建未激活用户信息页
-            new_user.userinfo_set.create(user=new_user, name=new_user.username + ' 未激活用户信息')
+            new_user_info = UserInfo.objects.create(user=new_user, name=new_user.username + ' 未激活用户信息')
+            # new_user_info = UserInfo.create(user=new_user, name=new_user.username)
             # 注册成功，跳转回首页
             return HttpResponse('register success!')
     else:
@@ -254,9 +256,11 @@ def add_teammate(request, user_id, project_id):
             group = Group.objects.get(team_creator=team_creator, project=project)
             team_creator_info = UserInfo.objects.get(user=team_creator)
             new_teammate_info = UserInfo.objects.get(name=name)
+            project_name = project.project_name
             group_name = group.group_name
             team_leader_name = group.team_creator_name
             teammate_name = name
+            approval_status = group.approval_status
             rank = group.rank
             grade = group.grade
             if_group_project = project.group_project
@@ -267,6 +271,7 @@ def add_teammate(request, user_id, project_id):
                                                 team_leader_info=team_creator_info, team_leader_name=team_leader_name,
                                                 teammate=new_teammate,
                                                 teammate_info=new_teammate_info, teammate_name=teammate_name,
+                                                project_name=project_name, approval_status=approval_status,
                                                 rank=rank, grade=grade, if_group_project=if_group_project)
                 new_teammate_addon.save()
                 # group.teammate_num = group.teammate_num + 1
@@ -329,7 +334,8 @@ def school_team_request(request):
     response = {}
     if request.method == 'GET':
         try:
-            latest_school_team_list = SchoolTeam.objects.filter(if_school_team_active=True).order_by('school_team_upload_time')
+            latest_school_team_list = SchoolTeam.objects.filter(if_school_team_active=True).order_by(
+                'school_team_upload_time')
             response['list'] = json.loads(serializers.serialize("json", latest_school_team_list))
             response['msg'] = 'success'
             response['error_num'] = 0

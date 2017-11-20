@@ -14,27 +14,26 @@
       style="width: 100%">
       <el-table-column
         prop="pk"
-        label="项目名称"
-        width="180px">
-        <template scope="scope"> {{ scope.row.fields.registered_project_name }} </template>
+        label="项目名称">
+        <template scope="scope"> {{ scope.row.fields.registered_project_name||scope.row.fields.project_name}} </template>
       </el-table-column>
       <el-table-column
         prop="pk"
         label="团队项目"
-        width="100px">
+        width="200px">
         <template scope="scope"> {{ scope.row.fields.if_group_project ? '是' : '否' }} </template>
       </el-table-column>
 
-      <el-table-column
-        prop="contact_info"
-        label="报名时间"
-        >
-        <template scope="scope"> {{ scope.row.fields.register_datetime }} </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="contact_info"-->
+        <!--label="报名时间"-->
+        <!--&gt;-->
+        <!--<template scope="scope"> {{ scope.row.fields.register_datetime }} </template>-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="register_state"
         label="名次"
-        width="100">
+        width="200px">
         <template scope="scope">
           {{'第'+scope.row.fields.rank+'名'}}
           <!--{{approvalStatus(scope.row.fields.approval_status)}}-->
@@ -42,7 +41,7 @@
       </el-table-column>
       <el-table-column
         label="成绩"
-        width="110px">
+        width="200px">
         <template scope="scope">
           {{ scope.row.fields.grade }}
         </template>
@@ -73,7 +72,7 @@
           case '1':
             console.log(this.activeName)
             return this.tableData.filter(function (item) {
-              return true
+              return item.fields.if_finished
             })
           case '2':
             console.log(this.tableData)
