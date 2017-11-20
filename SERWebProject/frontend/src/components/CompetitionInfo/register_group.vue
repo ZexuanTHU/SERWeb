@@ -6,7 +6,7 @@
         label="隊長姓名"
         :rules="[
           { required: true, message: '请输入隊長姓名', trigger: 'blur' },
-          { min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
         ]"
       >
         <el-input style="width: 70%;" v-model="dynamicValidateForm.name"></el-input>
@@ -18,7 +18,7 @@
         :prop="'teamates.' + index + '.value'"
         :rules="[
         {required: true, message: '队员不能为空', trigger: 'blur'},
-        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
         ]"
       >
         <el-input style="width: 50%;" v-model="teamate.value"></el-input>

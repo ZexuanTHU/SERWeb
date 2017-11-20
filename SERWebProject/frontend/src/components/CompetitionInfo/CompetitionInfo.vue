@@ -1,46 +1,72 @@
 <template>
   <div id="CompetitionInfo">
     <div id="compinfo">
-      <h1 align="left">{{pageInfo.project_name}}</h1>
-      <div class="basic">
-        <p align="left">
-          比赛时间:<br>
-          {{pageInfo.match_data_time}}
-        </p>
-        <p align="left">
-          报名时间: <br>
-          from: {{pageInfo.pub_date}}<br>
-          to: {{pageInfo.ddl_date}}
-        </p>
-        <p align="left">
-          报名人数限制: {{pageInfo.max_reg}}
-        </p>
-        <p align="left">
-          紧急联系人姓名: {{pageInfo.contact_name}}
-        </p>
-        <p align="left" id="last">
-          紧急联系人电话: {{pageInfo.contact_tel}}
-        </p>
+      <h1 align="left">項目：{{pageInfo.project_name}}</h1>
+      <div class="basic" align="left">
+        <h2 id="basicTitle">報名資料</h2>
+        <el-row class="block">
+          <el-col :span="12"><div class="title">比赛时间</div></el-col>
+          <el-col :span="12">
+            <div class="detail">
+              {{pageInfo.match_data_time | formatDate }}
+            </div></el-col>
+        </el-row>
+        <el-row class="block">
+          <el-col :span="12"><div class="title">报名时间</div></el-col>
+          <el-col :span="12">
+            <div class="detail">
+              {{pageInfo.pub_date | formatDate }} - 
+              {{pageInfo.ddl_date | formatDate }}
+            </div></el-col>
+        </el-row>
+        <el-row class="block">
+          <el-col :span="12"><div class="title">报名人数限制</div></el-col>
+          <el-col :span="12">
+            <div class="detail">
+              {{pageInfo.max_reg}}
+            </div></el-col>
+        </el-row>
+        <el-row class="block">
+          <el-col :span="12"><div class="title">紧急联系人姓名</div></el-col>
+          <el-col :span="12">
+            <div class="detail">
+              {{pageInfo.contact_name}}
+            </div></el-col>
+        </el-row>
+        <el-row id="last" class="block">
+          <el-col :span="12"><div class="title">紧急联系人电话</div></el-col>
+          <el-col :span="12">
+            <div class="detail">
+              {{pageInfo.contact_tel}}
+            </div></el-col>
+        </el-row>
       </div>
-      <div class="status">
-        <h3>{{pageInfo.project_hot}}人已報名</h3>
-        <el-progress :show-text="true" :text-inside="true" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
-        <h3>{{rdate}}</h3>
-        <h3>{{cdate}}</h3>
+      <div id="mid">
+        <div class="status">
+          <h2 id="statusTitle">報名狀態</h2>
+          <div class="bar">
+            <h3>{{pageInfo.project_hot}}人已報名</h3>
+            <el-progress :show-text="true" :text-inside="true" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
+          </div>
+          <el-tag class="tag" v-if="rdate==='报名已结束'" type="danger">{{rdate}}</el-tag>
+          <el-tag class="tag" v-else type="success">{{rdate}}</el-tag>
+          <el-tag class="tag" v-if="cdate==='比赛已结束'" type="danger" size="mini">{{cdate}}</el-tag>
+          <el-tag class="tag" v-else type="success">{{cdate}}</el-tag>
+        </div>
         <el-button id="submit" @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
       </div>
-      <div id="qr" style="float: left;">
-          <p>手机扫码报名</p>
+      <div id="qr">
+          <h3>手机扫码报名</h3>
           <img src="../../assets/qr.png" />
-      </div>
-      <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
-      <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
-      <div id="detail">
-        <hr>
-        <h2 align="left">详细介绍</h2>
-        <p>
-          {{pageInfo.project_text}}
-        </p>
+          <div id="mobileInfo">登錄微信小程序用手機報名</div>
+    </div>
+    </div>
+    <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+    <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
+    <div id="detail">   
+      <h2 align="left">详细介绍</h2>
+      <div>
+        {{pageInfo.project_text}}
       </div>
     </div>
   </div>
@@ -117,7 +143,7 @@ export default {
           this.pageInfo.attend = '30'
           this.project_pk = res.list[0].pk
           if (res.list[0].fields.group_project === true) {
-            this.group = true
+            this.groudiv = true
           }
         } else {
           this.$message.error('获取项目列表失败"')
@@ -128,11 +154,11 @@ export default {
     dialogStatus (val) {
       this.dialogVisible = val
     },
-    showgroup () {
+    showgroudiv () {
       this.groupVisible = true
       this.dialogVisible = false
     },
-    hidegroup () {
+    hidegroudiv () {
       this.groupVisible = false
     }
   }
@@ -146,70 +172,101 @@ export default {
   #compinfo{
     margin: 20px;
     text-align: left;
+    border-bottom: solid 1px lightgrey;
+    padding-bottom: 40%;
   }
   .basic{
-    float: left;
-    width: 30%;
-    margin-top: 20px;
-    border-style:solid;
-    border-width: 1px;
-    border-color: #878D99;
-  }
-  .basic p {
-    margin: 0px;
-    padding: 10px;
-    border-bottom-style:solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #878D99;
-  }
-  .basic #last{
-    border-bottom-width: 0px;
-    border-bottom-color:black;
-  }
-  .status {
+    padding: 3%;
     float: left;
     width: 35%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: #EDF2FC;
+    box-shadow: 1px 1px 1px lightgray;
+  }
+  #basicTitle {
+    margin-top: -5%;
+  }
+  .title {
+    font-size: 17px;
+    display: inline;
+  }
+  .block {
+    border-top: solid 1px lightgrey;
+    padding-top:3%;
+    padding-bottom: 3%;
+  }
+  .detail {
+    display: inline;
+    font-size: 17px;
+  }
+  #last {
+    border-bottom: 0px;
+  }
+  #mid {
+    float: left;
+    width: 30%;
     margin-left: 5%;
+    margin-top: 20px;
+  }
+  .status {
+    padding: 10%;
+    border-radius: 10px;
+    background-color: #EDF2FC;
+    box-shadow: 1px 1px 1px lightgray;
+  }
+  #statusTitle {
+    margin-top: -5%;
+    border-bottom: solid 1px lightgrey;
+    padding-bottom: 3%;
+  }
+  .tag {
+    margin:1%;
+    font-size: 15px;
+    height: 40px;
+    line-height: 40px;
   }
   .el-progress{
-    width: 90%;
+    width: 100%;
     padding-right: 50px;
     margin-top: 20px;
     margin-bottom: 20px;
   }
   .el-button--primary {
-    margin: 3%;
-    margin-left: 0%;
-    width: 80%;
-    line-height: 1;
+    width: 100%;
+    line-height: 1.2;
     border-radius: 20px;
-  }
-  #qr{
-    float: left;
-    width: 20%;
-    margin: 5%;
-    margin-top: 0%;
-    border: 2px solid silver;
-    border-radius: 10px;
-    padding: 20px;
-  }
-  #qr p{
-    text-align: center;
-  }
-  #qr img {
-    height: 150px;
-    float: left;
-  }
-  #submit #group{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 30px;
   }
   .el-button, .el-textarea__inner {
     font-size: 35px;
     border: -20px;
   }
+  #qr{
+    float: left;
+    width: 20%;
+    margin-left: 5%;
+    margin-top: 20px;
+    border: 2px solid silver;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+  }
+  #qr p{
+  }
+  #qr img {
+    margin-left: 0%;
+    width: 100%;
+    height: auto;
+  }
+  #mobileInfo {
+    font-size: 10px;
+  }
   #detail{
-    margin-top: 35%;
+    margin-left: 5%;
     clear: left;
   }
+  #detail h2{
+    font-size: 25px;
+  } 
 </style>
