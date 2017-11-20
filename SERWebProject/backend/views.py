@@ -142,29 +142,44 @@ def project_info_request(request, project_id):
 
 @csrf_exempt
 def project_register(request, user_id, project_id):
+    response = {}
     if request.method == 'POST':
         try:
             user = User.objects.get(pk=user_id)
             user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
-            if project.was_below_max_reg():
-                project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
-                                                                    register_name=user_info.name,
-                                                                    student_id=user_info.student_id,
-                                                                    project=project,
-                                                                    registered_project_name=project.project_name,
-                                                                    register_datetime=timezone.now(),
-                                                                    if_group_project=project.group_project)
-                project_register_form.save()
-                project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
-                project.save()
-                return HttpResponse("Success!")
+            if_registered = ProjectRegisterRelationship.objects.filter(user=user)
+            if not if_registered:
+                if project.was_below_max_reg():
+                    project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
+                                                                        register_name=user_info.name,
+                                                                        student_id=user_info.student_id,
+                                                                        project=project,
+                                                                        registered_project_name=project.project_name,
+                                                                        register_datetime=timezone.now(),
+                                                                        if_group_project=project.group_project)
+                    project_register_form.save()
+                    project.project_hot = ProjectRegisterRelationship.objects.filter(project=project).count()
+                    project.save()
+                    response['msg'] = 'Success!'
+                    response['error_num'] = 0
+                    return JsonResponse(response)
+                else:
+                    response['msg'] = 'This project already reach its register max!'
+                    response['error_num'] = 3
+                    return JsonResponse(response)
             else:
-                return HttpResponse("This project already reach its register max")
+                response['msg'] = 'You have already registered this project!!'
+                response['error_num'] = 4
+                return JsonResponse(response)
         except:
-            raise Http404("Register error!")
-
-    return render(request, 'backend/register.html', context={'form': ProjectRegisterRelationship})
+            response['msg'] = 'Request project or user info error'
+            response['error_num'] = 2
+            raise JsonResponse(response)
+    else:
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return JsonResponse(response)
 
 
 def project_register_relationship_request(request, user_id):
@@ -218,6 +233,7 @@ def project_grade_request(request, project_id):
 
 @csrf_exempt
 def add_group(request, user_id, project_id):
+    response = {}
     if request.method == 'POST':
         try:
             group_name = request.POST['group_name']
@@ -228,26 +244,41 @@ def add_group(request, user_id, project_id):
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
             if_group_project = project.group_project
-            new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
-                              team_creator_info=team_leader_info, team_creator_name=team_leader_name,
-                              team_min_reg=team_min_reg, team_max_reg=team_max_reg,
-                              if_group_project=if_group_project)
-            if project.was_below_max_reg:
-                new_group.save()
-                # project.project_hot = project.project_hot + 1
-                project.project_hot = Group.objects.filter(project=project).count()
-                project.save()
-                return HttpResponse('success!')
+            if_registered = Group.objects.filter(team_creator=team_leader)
+            if not if_registered:
+                if project.was_below_max_reg:
+                    new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
+                                      team_creator_info=team_leader_info, team_creator_name=team_leader_name,
+                                      team_min_reg=team_min_reg, team_max_reg=team_max_reg,
+                                      if_group_project=if_group_project)
+                    new_group.save()
+                    # project.project_hot = project.project_hot + 1
+                    project.project_hot = Group.objects.filter(project=project).count()
+                    project.save()
+                    response['msg'] = 'Success!'
+                    response['error_num'] = 0
+                    return JsonResponse(response)
+                else:
+                    response['msg'] = 'This project already reach its register max!'
+                    response['error_num'] = 3
+                    return JsonResponse(response)
             else:
-                return HttpResponse('This project already reach its register team cap')
+                response['msg'] = 'You have already registered this project!!'
+                response['error_num'] = 4
+                return JsonResponse(response)
         except:
-            return HttpResponse('error!')
+            response['msg'] = 'Request project or user info error'
+            response['error_num'] = 2
+            raise JsonResponse(response)
     else:
-        return HttpResponse('Please check request method!')
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return JsonResponse(response)
 
 
 @csrf_exempt
 def add_teammate(request, user_id, project_id):
+    response = {}
     if request.method == 'POST':
         name = request.POST['name']
         try:
@@ -266,22 +297,30 @@ def add_teammate(request, user_id, project_id):
             if_group_project = project.group_project
             if new_teammate_info is not None and group.if_below_team_max_reg:
                 new_teammate = User.objects.get(belong_to=new_teammate_info)
-                new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
-                                                team_leader=team_creator,
-                                                team_leader_info=team_creator_info, team_leader_name=team_leader_name,
-                                                teammate=new_teammate,
-                                                teammate_info=new_teammate_info, teammate_name=teammate_name,
-                                                project_name=project_name, approval_status=approval_status,
-                                                rank=rank, grade=grade, if_group_project=if_group_project)
-                new_teammate_addon.save()
-                # group.teammate_num = group.teammate_num + 1
-                group.teammate_num = Membership.objects.filter(group=group).count()
-                group.save()
-                return JsonResponse({'status': 0, 'msg': '添加成功！'})
+                if_registered = Membership.objects.filter(Q(project=project), Q(teammate=new_teammate))
+                if not if_registered:
+                    new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
+                                                    team_leader=team_creator,
+                                                    team_leader_info=team_creator_info, team_leader_name=team_leader_name,
+                                                    teammate=new_teammate,
+                                                    teammate_info=new_teammate_info, teammate_name=teammate_name,
+                                                    project_name=project_name, approval_status=approval_status,
+                                                    rank=rank, grade=grade, if_group_project=if_group_project)
+                    new_teammate_addon.save()
+                    # group.teammate_num = group.teammate_num + 1
+                    group.teammate_num = Membership.objects.filter(group=group).count()
+                    group.save()
+                    return JsonResponse({'error_num': 0, 'status': 0, 'msg': '添加成功！'})
+                else:
+                    response['msg'] = 'This user already joined another team'
+                    response['error_num'] = 3
+                    return JsonResponse(response)
         except:
-            return JsonResponse({'status': 1, 'msg': '用户不存在或未激活！'})
+            return JsonResponse({'error_num': 2, 'status': 1, 'msg': '用户不存在或未激活！'})
     else:
-        return HttpResponse('add teammate request error!')
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return JsonResponse(response)
 
 
 @csrf_exempt
