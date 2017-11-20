@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import RegisterForm, UserInfoForm
-from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, SchoolTeam
+from .models import Project, User, ProjectRegisterRelationship, UserInfo, Group, Membership, Carousel, HallOfFame, \
+    SchoolTeam
 from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
@@ -29,7 +30,8 @@ def register(request):
             # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
             new_user = form.save()
             # 用户认证后创建未激活用户信息页
-            new_user.userinfo_set.create(user=new_user, name=new_user.username + ' 未激活用户信息')
+            new_user_info = UserInfo.objects.create(user=new_user, name=new_user.username + ' 未激活用户信息')
+            # new_user_info = UserInfo.create(user=new_user, name=new_user.username)
             # 注册成功，跳转回首页
             return HttpResponse('register success!')
     else:
@@ -332,7 +334,8 @@ def school_team_request(request):
     response = {}
     if request.method == 'GET':
         try:
-            latest_school_team_list = SchoolTeam.objects.filter(if_school_team_active=True).order_by('school_team_upload_time')
+            latest_school_team_list = SchoolTeam.objects.filter(if_school_team_active=True).order_by(
+                'school_team_upload_time')
             response['list'] = json.loads(serializers.serialize("json", latest_school_team_list))
             response['msg'] = 'success'
             response['error_num'] = 0
