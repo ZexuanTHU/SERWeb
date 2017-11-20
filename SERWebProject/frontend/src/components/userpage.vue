@@ -167,7 +167,7 @@
     },
     watch: {
       userProjects: function () {
-        this.$refs['viewRegister'].tableData = this.userProjects.list
+        this.$refs['viewRegister'].tableData = this.userProjects.list.concat(this.userProjects.group_list)
         this.$refs['viewGrades'].tableData = this.userProjects.list
 //        this.$refs['viewGrades'].tableData
         console.log(this.$refs['viewGrades'].tableData)

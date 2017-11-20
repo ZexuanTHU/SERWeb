@@ -16,11 +16,11 @@
         首页
       </el-menu-item>
       <el-menu-item index="2">赛事信息</el-menu-item>
-        <el-menu-item index="3">酒井名人堂</el-menu-item>
+      <el-menu-item index="3">酒井名人堂</el-menu-item>
       <el-menu-item index="4">系代表队宣传</el-menu-item>
       <el-submenu class="user" index="5" v-if="user.authenticated" style="float: right;margin-right: 100px">
         <template slot="title">{{username}}</template>
-        <el-menu-item index="5-1" >
+        <el-menu-item index="5-1">
           用户信息
         </el-menu-item>
         <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
@@ -32,7 +32,8 @@
         <el-dialog
           :visible.sync="dialogVisible"
           size="tiny">
-          <p v-if="showMessage" align="center" style="position:absolute;width: 100%;top: 40px;left: 0px;z-index: -1;font-size:1.5em">
+          <p v-if="showMessage" align="center"
+             style="position:absolute;width: 100%;top: 40px;left: 0px;z-index: -1;font-size:1.5em">
             请先登陆后再报名</p>
           <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="120px" class="login">
 
@@ -97,14 +98,6 @@
     padding: 50px;
     /*box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);*/
   }
-
-  .el-form-item {
-    margin-left: -120px;
-  }
-
-  .el-button {
-    width: 100%;
-  }
 </style>
 
 <script>
@@ -164,9 +157,7 @@
         user: auth.user,
         dialogVisible: false,
         activeIndex: '',
-        activeName: 'first',
         activeName2: '10',
-        currentDate: new Date(),
         loginForm: {
           username: '',
           password: ''
@@ -208,7 +199,10 @@
         this.registerVisible = false
         console.log(this.$route.fullPath)
         console.log(this.$refs['infoRegister'].infoForm)
-        auth.login(this, this.loginForm, '/' + this.user_id + this.$route.path)
+        auth.login(this, {
+          user_id: this.user_id,
+          username: this.loginForm.username
+        }, '/' + this.user_id + this.$route.path)
       },
       handleSelect (index) {
         switch (index) {
@@ -248,15 +242,18 @@
         } else {
           if (path.indexOf('/', 1) === -1) {
             this.$router.push('/')
-          } else { this.$router.push(path.slice(path.indexOf('/', 1))) }
+          } else {
+            this.$router.push(path.slice(path.indexOf('/', 1)))
+          }
         }
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let username = this.loginForm.username
+//            console.log(username)
 //            let password = this.loginForm.password
-            console.log(username)
+            console.log(username, 'saveto')
             this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
