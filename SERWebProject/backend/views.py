@@ -254,9 +254,11 @@ def add_teammate(request, user_id, project_id):
             group = Group.objects.get(team_creator=team_creator, project=project)
             team_creator_info = UserInfo.objects.get(user=team_creator)
             new_teammate_info = UserInfo.objects.get(name=name)
+            project_name = project.project_name
             group_name = group.group_name
             team_leader_name = group.team_creator_name
             teammate_name = name
+            approval_status = group.approval_status
             rank = group.rank
             grade = group.grade
             if_group_project = project.group_project
@@ -267,6 +269,7 @@ def add_teammate(request, user_id, project_id):
                                                 team_leader_info=team_creator_info, team_leader_name=team_leader_name,
                                                 teammate=new_teammate,
                                                 teammate_info=new_teammate_info, teammate_name=teammate_name,
+                                                project_name=project_name, approval_status=approval_status,
                                                 rank=rank, grade=grade, if_group_project=if_group_project)
                 new_teammate_addon.save()
                 # group.teammate_num = group.teammate_num + 1
