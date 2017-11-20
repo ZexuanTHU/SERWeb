@@ -39,7 +39,7 @@
                       <div style="margin-right: 600px">
                         <el-tabs v-model="activeName" @tab-click="handleClick">
                           <el-tab-pane label="队伍成员" name="first">
-                            {{ honor }}
+                            <p><span v-html="member"></span></p>
                           </el-tab-pane>
                           <el-tab-pane label="队伍简介" name="second">
                             {{ intro }}
@@ -73,13 +73,14 @@
         name: '',
         gender: '',
         school_team_img: '',
-        honor: '',
+        member: '',
+        intro: '',
         school_team_data: [{
           fields: [{
             school_team_name: '',
             school_team_gender: '',
             school_team_introduction: '',
-            school_team_honor: '',
+            school_team_member: '',
             school_team_image: ''
           }],
           pk: ''
@@ -96,7 +97,8 @@
         this.gender = item.fields.school_team_gender
         this.hof_img = item.fields.school_team_image
         this.intro = item.fields.school_team_introduction
-        this.honor = item.fields.school_team_honor
+        this.member = item.fields.school_team_member
+        this.stringData(this.member)
         this.dialogVisible = true
       },
       openPanel: function (index) {
@@ -112,6 +114,10 @@
       getImage2 (index) {
         var images = require.context('../assets/', true, /\.jpg$/)
         return images('./' + index)
+      },
+      stringData (data) {
+        var str = data.replace(/\n/g, '<br />')
+        this.member = str
       },
       school_team_request () {
         this.$http.get('http://127.0.0.1:8000/api/school_team_request').then((response) => {
