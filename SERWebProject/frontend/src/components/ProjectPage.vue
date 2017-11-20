@@ -5,13 +5,13 @@
     <div class="selector" style="border: 2px #edf0f5;border-style: double;    border-radius: 20px;    position: relative;
     padding-top: 10px;">
       <el-form ref="form" :model="filterForm" label-width="80px" size="mini" :inline="true" align="left">
-        <el-form-item label="比赛名称" prop="name">
-          <el-input v-model="filterForm.name"></el-input>
+        <el-form-item label="比赛名称" prop="name" >
+          <el-input v-model="filterForm.name"  style="width: 260px"></el-input>
         </el-form-item>
-        <el-form-item label="团队项目" style="margin-left: 150px">
-          <el-select v-model="filterForm.isGroup" clearable placeholder="" style="">
-            <el-option label="是" value="true"></el-option>
-            <el-option label="否" value="false"></el-option>
+        <el-form-item label="项目类型"style="margin-left: 59px">
+          <el-select v-model="filterForm.isGroup" clearable placeholder="团队/个人" >
+            <el-option label="团队" value="true"></el-option>
+            <el-option label="个人" value="false"></el-option>
         </el-select>
       </el-form-item>
         <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible"
@@ -39,7 +39,7 @@
         <!--</el-form-item>-->
         <br>
         <el-form-item label="报名状态" >
-          <el-radio-group v-model="filterForm.resource" size="medium" >
+          <el-radio-group v-model="filterForm.resource" size="medium" style="width: 300px">
             <el-radio border label="正在报名" value="1"></el-radio>
             <el-radio border label="即将开始" value="2"></el-radio>
             <el-radio border label="已经结束" value="3"></el-radio>
@@ -47,7 +47,9 @@
           </el-radio-group>
       </el-form-item>
       <!--<br>-->
-        <el-form-item style="position: relative;margin-left: 155px"><el-button type="primary" @click="search" style="position: relative">查询</el-button></el-form-item>
+        <el-form-item style="margin-left:30px;"><el-checkbox v-model="filterForm.showFinishedProj">显示已完赛项目(未完成)</el-checkbox></el-form-item>
+        <el-form-item style="position: relative;margin-left: 155px">
+          <el-button type="primary" @click="search" style="position: relative;margin-left: 30px">查询</el-button></el-form-item>
 
         <!--<el-button @click="resetForm('form')">重置</el-button>-->
     </el-form>
@@ -84,7 +86,7 @@
           prop="date"
           label="报名起止时间"
           align="center">
-          <template scope="scope"> {{ scope.row.fields.pub_date }} -- {{ scope.row.fields.ddl_date }} </template>
+          <template scope="scope"> {{ scope.row.fields.pub_date | formatDate }}~{{ scope.row.fields.ddl_date | formatDate }} </template>
         </el-table-column>
         <el-table-column
           prop="project_hot"
@@ -139,18 +141,16 @@
   //  import tableList from './TableList.vue'
   import registerGroup from './CompetitionInfo/register_group.vue'
   import registerProject from './CompetitionInfo/register_project.vue'
+//  import ElCheckboxButton from "../../node_modules/element-ui/packages/checkbox/src/checkbox-button.vue";
   export default {
     data () {
       return {
         filterForm: {
           name: '',
           isGroup: '',
-          date1: '',
-          date2: '',
-          delivery: false,
           type: [],
           resource: '',
-          desc: ''
+          showFinishedProj: false
         },
         latest_project_list: [{
           fields: {
@@ -176,9 +176,6 @@
       }
     },
     methods: {
-//      search () {
-//        console.log('submit!')
-//      },
       project_list_display () {
         this.$http.get('http://127.0.0.1:8000/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
@@ -250,6 +247,7 @@
             default:
           }
           if (!correct) return false
+          if (!self.filterForm.showFinishedProj && item.fields.if_finished) return false
           if (self.filterForm.isGroup) {
             console.log(self.filterForm.isGroup, item.fields.group_project)
             correct = self.filterForm.isGroup === item.fields.group_project.toString()

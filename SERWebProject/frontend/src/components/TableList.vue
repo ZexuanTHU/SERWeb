@@ -143,7 +143,7 @@
             console.log(res['msg'])
           }
         })
-        this.project_pk = pk
+        this.project_pk = pk.toString()
         this.dialogVisible = true
       },
       dialogStatus (val) {

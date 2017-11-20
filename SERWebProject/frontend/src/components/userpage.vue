@@ -1,15 +1,6 @@
 <template>
   <div>
-    <!--<el-dialog-->
-    <!--:close-on-click-modal="false"-->
-    <!--:close-on-press-escape="false"-->
-    <!--title="第一次登陆个人信息修改"-->
-    <!--:visible.sync="registerVisible"-->
-    <!--width="60%"-->
-    <!--:show-close="false"-->
-    <!--:before-close="handleClose">-->
-    <!--<infoRegister @submit="registerVisible=false" :inline='true'></infoRegister>-->
-    <!--</el-dialog>-->
+
     <mheader></mheader>
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:6px">
@@ -17,7 +8,7 @@
         <div class="w3-left" style="width: 200px;height: 100% ">
           <el-col :span="8">
             <h5></h5>
-            <el-menu id="leftnav" default-active="4" class="el-menu-vertical-demo" @select="openPanel">
+            <el-menu id="leftnav" default-active="1" class="el-menu-vertical-demo" @select="openPanel">
               <el-menu-item index="1">报名结果</el-menu-item>
               <el-menu-item index="2">比赛成绩</el-menu-item>
               <el-menu-item index="3">个人信息</el-menu-item>
@@ -36,15 +27,6 @@
           <div id="modify" class="w3-container panel" style="display: inline-block"
                :style="{display:openedPanel==='3'?'inline-block':'none'}">
             <infoRegister :inline='false' ref="info"></infoRegister>
-            <!--<div style="width: 240px;height: 360px;text-align: center;position: absolute;right: 200px;top: 40px">-->
-            <!--<img class="icon" :src="imageUrl"-->
-            <!--style="width:100%;margin-bottom: 5px; height: 240px;border-style: solid;border-color: #e3d4d4;  border-radius: 20%;"-->
-            <!--alt="">-->
-            <!--<button class="w3-button mboarderbtn " style="width: 50%;margin: auto;"-->
-            <!--v-on:click="fileclick()">选择头像-->
-            <!--</button>-->
-            <!--<input id="filechooser" type="file" @change="onFileChange" style="display: none;"/>-->
-            <!--</div>-->
           </div>
           <div class="w3-container panel"
                :style="{display:openedPanel==='4'?'inline-block':'none'}">
@@ -77,8 +59,7 @@
     data () {
       return {
         registerVisible: true,
-//        imageUrl: require('../image/icon.jpg'),
-        userProjects: [],
+        userProjects: 'unstart',
         openedPanel: '1',
         applyState: JSON.stringify({ddl: 'ddl'})
       }
@@ -87,19 +68,6 @@
       openPanel: function (index) {
         this.openedPanel = index
       },
-//      onFileChange (e) {
-//        var files = e.target.files || e.dataTransfer.files
-//        if (!files.length) return
-//        if (!/image+/.test(files[0].type)) {
-//          alert('请输入一张图片')
-//          return
-//        }
-//        var reader = new FileReader()
-//        reader.onload = (e) => {
-//          this.imageUrl = e.target.result
-//        }
-//        reader.readAsDataURL(files[0])
-//      },
       fileclick: function () {
         document.getElementById('filechooser').click()
         console.log(document.getElementById('filechooser'))
@@ -111,29 +79,6 @@
           console.log('save to local failed')
         }
       },
-      applyInfo (statechange) {
-        var newmessage = ''
-        for (var i = 0; i < statechange.length; i++) {
-          newmessage = newmessage.concat('您在 ' + statechange[i].gametime.toDateString() + '的 ' + statechange[i].gamename + ' 比赛报名已经' + statechange[i].state + '\r')
-        }
-        this.$notify.info({
-          title: '报名状态更新',
-          offset: 300,
-          message: newmessage
-        })
-      },
-      getstate: function () {
-        return localStorage.getItem('applyState')
-      },
-      compareState: function (news) {
-        if (news === this.applyState) return null
-        this.applyState = news
-        return [{
-          gametime: new Date(),
-          gamename: 'football',
-          state: '通过'
-        }]
-      },
       handleOpen (key, p) {
         console.log(key, p)
       },
@@ -141,36 +86,72 @@
         var self = this
         setInterval(function () {
 //          console.log('start')
-          var newState = self.getstate()
-          var change = self.compareState(newState)
-          if (change !== null) {
-//            console.log(change)
-            self.applyInfo(change)
-          }
+          self.project_register_relationship_request()
         }, 5000)
+      },
+      project_register_relationship_request: function () {
+        this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.$route.params.uid).then((response) => {
+          var res = JSON.parse(response.bodyText)
+//          console.log('project_status', response)
+          if (res.error_num === 0) {
+            this.userProjects = res
+          } else {
+            this.$message.error('获取个人信息列表失败"')
+            console.log(res['msg'])
+          }
+        })
       }
-//      project_info_request (pk) {
-//        this.$http.get('http://localhost:8000/api/' + pk).then((response) => {
-//          var res = JSON.parse(response.bodyText)
-//          console.log(res)
-//          if (res.error_num === 0) {
-//            this.pageInfo = res.list[0].fields
-//            this.pageInfo.attend = '30'
-//            this.project_pk = res.list[0].pk
-//          } else {
-//            this.$message.error('获取项目列表失败"')
-//            console.log(res['msg'])
-//          }
-//        })
-//      }
 
     },
     watch: {
-      userProjects: function () {
-        this.$refs['viewRegister'].tableData = this.userProjects.list
-        this.$refs['viewGrades'].tableData = this.userProjects.list
-//        this.$refs['viewGrades'].tableData
-        console.log(this.$refs['viewGrades'].tableData)
+      userProjects: function (val, oldval) {
+//        console.log('val', val)
+//        console.log('val', oldval)
+        var refreshMessage = false
+        var changedProjs = []
+        try {
+          if (val.list.length !== oldval.list.length || val.group_list.length !== oldval.group_list.length) {
+            refreshMessage = true
+          } else {
+            for (var i = 0; i < val.list.length; i++) {
+              if (val.list[i].fields.approval_status !== oldval.list[i].fields.approval_status) {
+                console.log('haschanged')
+                refreshMessage = true
+                changedProjs.push(val.list[i])
+              }
+            }
+            for (i = 0; i < val.group_list.length; i++) {
+              if (val.group_list[i].fields.approval_status !== oldval.group_list[i].fields.approval_status) {
+                refreshMessage = true
+                changedProjs.push(val.group_list[i])
+              }
+            }
+          }
+        } catch (e) {
+          console.error(e)
+        }
+        console.log(changedProjs, 'changedProjs')
+        if (refreshMessage || oldval === 'unstart') {
+          if (changedProjs.length > 0) {
+            var newMessage = ''
+            for (i = 0; i < changedProjs.length; i++) {
+              newMessage = newMessage.concat('您在 ' + new Date(changedProjs[i].fields.register_datetime).toDateString() + '申请报名的 ' +
+                (changedProjs[i].fields.registered_project_name || changedProjs[i].fields.project_name) +
+                ' 比赛' + this.$refs['viewRegister'].approvalStatus(changedProjs[i].fields.approval_status) + '\r')
+            }
+            console.log(this.formatDate)
+            this.$notify.info({
+              title: '报名状态更新',
+              offset: 300,
+              message: newMessage,
+              duration: 0
+            })
+          }
+          var newTable = this.userProjects.list.concat(this.userProjects.group_list)
+          this.$refs['viewRegister'].tableData = newTable
+          this.$refs['viewGrades'].tableData = newTable
+          newTable = null
+        }
       }
     },
     created: function () {
@@ -184,17 +165,8 @@
 //      for (i = 0; i < textarea.length; i++) {
 //        textarea[i].value = localStorage.getItem(textarea[i].name) || ''
 //      }
-//      this.ajaxpoll()
-      this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.$route.params.uid).then((response) => {
-        var res = JSON.parse(response.bodyText)
-        console.log(res)
-        if (res.error_num === 0) {
-          this.userProjects = res
-        } else {
-          this.$message.error('获取个人信息列表失败"')
-          console.log(res['msg'])
-        }
-      })
+      this.ajaxpoll()
+      this.project_register_relationship_request()
       if (this.$route.params.uid && localStorage.getItem('user_id') !== this.$route.params.uid) {
         this.$router.back()
       }

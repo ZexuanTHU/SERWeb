@@ -8,11 +8,8 @@
       </el-select>
     </el-form-item>
     <el-form-item label="院系" prop="faculty">
-      <el-select v-model="infoForm.faculty" placeholder="选择院系" class="mid">
-        <el-option label="计算机" value="cs"></el-option>
-        <el-option label="自动化" value="auto"></el-option>
-        <el-option label="电子" value="ee"></el-option>
-      </el-select>
+      <el-input v-model="infoForm.faculty" placeholder="院系" class="mid">
+      </el-input>
     </el-form-item>
     <br v-if="inline">
     <el-form-item label="班级" prop="class_id">
@@ -35,7 +32,7 @@
     <el-form-item label="学号" prop="student_id">
       <el-input v-model="infoForm.student_id" class="mid"></el-input>
     </el-form-item>
-    <el-form-item prop="birth" label="生日">
+    <el-form-item prop="birth_date" label="生日">
       <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birth_date" class="mid"></el-date-picker>
     </el-form-item>
     <br v-if="inline">
@@ -89,12 +86,171 @@
         },
         rules: {
           name: [
-            {required: true, message: '请输入名字'}
+            {
+              trigger: 'blur',
+              validator: function (rule, value, callback) {
+                if (!value || value === '') {
+                  callback(new Error('请输入名字'))
+                } else {
+                  setTimeout(function () {
+                    if (value.length > 10) {
+                      callback(new Error('名字不超过10个符号'))
+                    } else callback()
+                  }, 1000)
+                }
+              }
+            }
           ],
           student_id: [
-//            {type: 'number', message: '年龄必须为数字值'},
-            {required: true, message: '请输入学号'}
-          ]
+            {
+              trigger: 'blur',
+              validator: function (rule, value, callback) {
+                if (value === '') {
+                  callback(new Error('请输入学号'))
+                } else {
+                  setTimeout(function () {
+                    var pattern = /^[0-9]{10}$/g
+                    if (!pattern.test(value)) {
+                      callback(new Error('学号为10个数字'))
+                    } else callback()
+                  }, 1000)
+                }
+              }
+            }
+          ],
+          faculty: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('请输入院系'))
+              } else {
+                setTimeout(function () {
+                  if (value.length > 20) {
+                    callback(new Error('不超过20个字符'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          id_card: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('请输入身份证号码'))
+              } else {
+                setTimeout(function () {
+                  var pattern = /^[0-9]{18}$/g
+                  console.log('here')
+                  if (!pattern.test(value)) {
+                    callback(new Error('身份证号为18个数字'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          class_id: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('请输入身份证号码'))
+              } else {
+                setTimeout(function () {
+//                  var pattern = /^[0-9]{18}$/g
+                  if (value.length > 20) {
+                    callback(new Error('不超过20个字符'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          reading_degree: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('选择学位'))
+              } else {
+                setTimeout(function () {
+                  callback()
+                }, 1000)
+              }
+            }
+          }],
+          gender: [],
+          birth_date: [{
+            trigger: 'change',
+            validator: function (rule, value, callback) {
+              console.log('here', value)
+              if (!value || value === '') {
+                callback(new Error('请选择生日'))
+              } else {
+                setTimeout(function () {
+                  if (new Date() < new Date(value)) {
+                    callback(new Error('生日不超过当前日期'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          clothes_size: [{
+            trigger: 'change',
+            validator: function (rule, value, callback) {
+              console.log('here', value)
+              if (!value || value === '') {
+                callback(new Error('请选择衣服型号'))
+              } else {
+                setTimeout(function () {
+                  callback()
+                }, 1000)
+              }
+            }
+          }],
+          cellphone_num: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('请输入手机号码'))
+              } else {
+                setTimeout(function () {
+                  var pattern = /^[0-9]{11}$/g
+                  console.log('here')
+                  if (!pattern.test(value)) {
+                    callback(new Error('手机号码为11个数字'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          email: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              if (value === '') {
+                callback(new Error('请输入电子邮箱'))
+              } else {
+                setTimeout(function () {
+                  var pattern = /^\w+@/g
+                  if (!pattern.test(value)) {
+                    callback(new Error('邮箱不正确'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }],
+          dormitory: [{
+            trigger: 'blur',
+            validator: function (rule, value, callback) {
+              console.log('here', value)
+              if (!value || value === '') {
+                callback(new Error('请输入宿舍号'))
+              } else {
+                setTimeout(function () {
+                  if (value.length > 20) {
+                    callback(new Error('不超过20个字符'))
+                  } else callback()
+                }, 1000)
+              }
+            }
+          }]
+
         }
       }
     },
