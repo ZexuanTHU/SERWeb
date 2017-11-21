@@ -53,7 +53,8 @@
           <el-tag class="tag" v-if="cdate==='比赛已结束'" type="danger" size="mini">{{cdate}}</el-tag>
           <el-tag class="tag" v-else type="success">{{cdate}}</el-tag>
         </div>
-        <el-button id="submit" @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
+        <el-button v-if="rdate==='报名已结束'" @click="alert('報名已結束')" type="info" plain>報名截止</el-button>
+        <el-button v-else @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
       </div>
       <div id="qr">
           <h3>手机扫码报名</h3>
@@ -233,6 +234,12 @@ export default {
     margin-bottom: 20px;
   }
   .el-button--primary {
+    width: 100%;
+    line-height: 1.2;
+    border-radius: 20px;
+    margin-top: 30px;
+  }
+  .el-button--info {
     width: 100%;
     line-height: 1.2;
     border-radius: 20px;

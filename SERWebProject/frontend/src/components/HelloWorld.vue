@@ -264,6 +264,8 @@
           if (res.error_num === 0) {
             if (res.list[0].fields.group_project === true) {
               this.group = true
+            } else {
+              this.group = false
             }
           } else {
             this.$message.error('获取项目列表失败"')

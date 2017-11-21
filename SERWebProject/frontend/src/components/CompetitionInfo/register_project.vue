@@ -1,5 +1,5 @@
 <template>
-  <el-dialog @open="checkGroup" @close="closeDialog" title="报名资料确认" :visible.sync="dialogFormVisible">
+  <el-dialog @close="closeDialog" title="报名资料确认" :visible.sync="dialogFormVisible">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item v-if="this.group === true" label="队名" prop="teamname">
           <el-input v-model="ruleForm.teamname"></el-input>
@@ -42,7 +42,8 @@
           <el-input v-model="ruleForm.cellphone_num"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">{{groupStatus}}</el-button>
+          <el-button v-if="group===true" type="primary" @click="submitForm('ruleForm')">建立队伍</el-button>
+          <el-button v-else type="primary" @click="submitForm('ruleForm')">报名</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -72,7 +73,6 @@ export default {
   data () {
     return {
       user_pk: '',
-      groupStatus: '',
       ruleForm: {
         faculty: '',
         name: '',
@@ -130,11 +130,6 @@ export default {
   methods: {
     user_info_request (uid) {
       console.log(this.group)
-      if (this.group === true) {
-        this.groupStatus = '建立队伍'
-      } else {
-        this.groupStatus = '报名'
-      }
       this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
@@ -155,15 +150,46 @@ export default {
           this.registerForm.project_id = this.pid
           console.log(this.registerForm)
           if (this.group === false) {
-            this.$http.post('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid)
+            this.$http.post('http://127.0.0.1:8000/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
+              var res = JSON.parse(response.bodyText)
+              if (res.error_num === 0) {
+                alert('報名成功')
+              }
+              if (res.error_num === 1) {
+                alert('抱歉，出錯了！')
+              }
+              if (res.error_num === 2) {
+                alert('項目或個人資料出錯')
+              }
+              if (res.error_num === 3) {
+                alert('已達最高報名人數')
+              }
+              if (res.error_num === 4) {
+                alert('您已在報名列表裡')
+              }
+            })
             this.dialogFormVisible = false
             this.closeDialog()
-            alert('報名成功')
           } else {
             this.groupForm.group_name = this.ruleForm.teamname
             this.$http.post('http://127.0.0.1:8000/api/add_group/' + this.uid + '/' + this.pid, this.groupForm, {emulateJSON: true}).then((response) => {
               this.dialogFormVisible = false
-              alert('创建成功')
+              var res = JSON.parse(response.bodyText)
+              if (res.error_num === 0) {
+                alert('創建成功')
+              }
+              if (res.error_num === 1) {
+                alert('抱歉，出錯了！')
+              }
+              if (res.error_num === 2) {
+                alert('項目或個人資料出錯')
+              }
+              if (res.error_num === 3) {
+                alert('已達最高報名人數')
+              }
+              if (res.error_num === 4) {
+                alert('您已在報名列表裡')
+              }
               this.$emit('finish')
             })
           }
@@ -178,13 +204,6 @@ export default {
     },
     closeDialog () {
       this.$emit('dialogStatus', false)
-    },
-    checkGroup () {
-      if (this.group === true) {
-        this.groupStatus = '建立队伍'
-      } else {
-        this.groupStatus = '报名'
-      }
     }
   }
 }
