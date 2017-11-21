@@ -66,7 +66,7 @@
     <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
     <div id="detail">
       <h2 align="left">详细介绍</h2>
-      <div>
+      <div id="detailInfo">
         {{pageInfo.project_text}}
       </div>
     </div>
@@ -138,7 +138,6 @@ export default {
     project_info_request (pk) {
       this.$http.get('http://111.230.226.45:8888/api/project_info_request/' + pk).then((response) => {
         var res = JSON.parse(response.bodyText)
-        console.log(res)
         if (res.error_num === 0) {
           this.pageInfo = res.list[0].fields
           this.pageInfo.attend = '30'
@@ -155,11 +154,11 @@ export default {
     dialogStatus (val) {
       this.dialogVisible = val
     },
-    showgroudiv () {
+    showgroup () {
       this.groupVisible = true
       this.dialogVisible = false
     },
-    hidegroudiv () {
+    hidegroup () {
       this.groupVisible = false
     }
   }
@@ -181,9 +180,10 @@ export default {
     float: left;
     width: 35%;
     margin-top: 20px;
-    border-radius: 10px;
-    background-color: #EDF2FC;
-    box-shadow: 1px 1px 1px lightgray;
+    border-radius: 4px;
+    border: 1px solid #e6ebf5;
+    background-color: rgb(238,241,246);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
   #basicTitle {
     margin-top: -5%;
@@ -191,6 +191,7 @@ export default {
   .title {
     font-size: 17px;
     display: inline;
+    color: #5A5E66;
   }
   .block {
     border-top: solid 1px lightgrey;
@@ -212,9 +213,10 @@ export default {
   }
   .status {
     padding: 10%;
-    border-radius: 10px;
-    background-color: #EDF2FC;
-    box-shadow: 1px 1px 1px lightgray;
+    border-radius: 4px;
+    border: 1px solid #e6ebf5;
+    background-color: rgb(238,241,246);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
   #statusTitle {
     margin-top: -5%;
@@ -270,10 +272,10 @@ export default {
     font-size: 10px;
   }
   #detail{
-    margin-left: 5%;
+    margin-left: 4.5%;
     clear: left;
   }
-  #detail h2{
-    font-size: 25px;
+  #detailInfo {
+    margin-left: 1%;
   }
 </style>

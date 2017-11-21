@@ -67,13 +67,11 @@
       getGrade (pid) {
         this.$http.get('http://111.230.226.45:8888/api/project_grade_request/' + pid).then((response) => {
           var res = JSON.parse(response.bodyText)
-          console.log(res)
           if (res.error_num === 0) {
             this.tableData = res['list']
             if (this.tableData[0].fields.if_group_project === true) {
               this.group = true
             }
-            console.log(this.tableData)
           } else {
             this.$message.error('获取项目列表失败"')
             console.log(res['msg'])

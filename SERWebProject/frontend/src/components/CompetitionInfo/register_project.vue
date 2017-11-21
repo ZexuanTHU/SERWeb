@@ -58,11 +58,9 @@ export default {
       default: false
     },
     pid: {
-      type: String,
       default: ''
     },
     uid: {
-      type: String,
       default: ''
     },
     group: {
@@ -129,10 +127,8 @@ export default {
   },
   methods: {
     user_info_request (uid) {
-      console.log(this.group)
       this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
-        console.log(res)
         if (res.error_num === 0) {
           this.ruleForm = res.list[0].fields
           this.user_pk = res.list[0].pk
@@ -148,7 +144,6 @@ export default {
         if (valid) {
           this.registerForm.user_id = this.uid
           this.registerForm.project_id = this.pid
-          console.log(this.registerForm)
           if (this.group === false) {
             this.$http.post('http://111.230.226.45:8888/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
               var res = JSON.parse(response.bodyText)
