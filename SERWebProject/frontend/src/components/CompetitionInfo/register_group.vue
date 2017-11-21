@@ -42,11 +42,9 @@ export default {
       default: false
     },
     pid: {
-      type: String,
       default: ''
     },
     uid: {
-      type: String,
       default: ''
     }
   },
@@ -92,7 +90,6 @@ export default {
         cancelButtonText: '取消',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            console.log('12312341252345')
             this.submitForm(this.dynamicValidateForm)
             this.closeDialog()
             done()
@@ -130,11 +127,9 @@ export default {
     },
     checkteamate () {
       var i = this.dynamicValidateForm.teamates.length - 1
-      console.log(this.dynamicValidateForm.teamates[i].value)
       this.registerForm.name = this.dynamicValidateForm.teamates[i].value
       this.$http.post('http://111.230.226.45:8888/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
         var res = JSON.parse(response.bodyText)
-        console.log(res)
         if (res.status !== 0) {
           alert('User doesn\'t exsist !')
         } else {
@@ -145,7 +140,6 @@ export default {
     user_info_request (username) {
       this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + username).then((response) => {
         var res = JSON.parse(response.bodyText)
-        console.log(res)
         if (res.error_num === 0) {
           this.dynamicValidateForm.name = res.list[0].fields.name
           this.ruleForm.birth_date = ''
