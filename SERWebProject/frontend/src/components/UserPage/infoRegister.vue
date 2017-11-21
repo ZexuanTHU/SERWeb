@@ -262,7 +262,7 @@
 //        })
         console.log(this.infoForm)
         this.$http.post(
-          'http://localhost:8000/api/user_info_submit/' + this.id,
+          'http://111.230.226.45:8888/api/user_info_submit/' + this.id,
           this.infoForm, {emulateJSON: true}
         ).then((response) => {
 //          let res = JSON.parse(response.body)
@@ -295,7 +295,7 @@
         } else {
           this.id = this.$route.params.uid
         }
-        this.$http.get('http://localhost:8000/api/user_info_request/' + this.id).then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + this.id).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.error_num === 0) {

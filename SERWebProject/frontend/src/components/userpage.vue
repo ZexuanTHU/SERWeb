@@ -90,7 +90,7 @@
         }, 5000)
       },
       project_register_relationship_request: function () {
-        this.$http.get('http://localhost:8000/api/project_register_relationship_request/' + this.$route.params.uid).then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_register_relationship_request/' + this.$route.params.uid).then((response) => {
           var res = JSON.parse(response.bodyText)
 //          console.log('project_status', response)
           if (res.error_num === 0) {

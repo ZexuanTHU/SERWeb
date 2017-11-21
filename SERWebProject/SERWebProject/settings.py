@@ -139,5 +139,5 @@ AUTH_USER_MODEL = 'backend.User'
 # MEDIA_ROOT = 'frontend/src/assets/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend/src/assets/')
 
-MEDIA_URL = 'http://localhost:8000/frontend/src/assets/'
+MEDIA_URL = 'http://111.230.226.45:8888/frontend/src/assets/'
 

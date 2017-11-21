@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     submitForm (formName) {
-      this.$http.post('http://127.0.0.1:8000/api/set_teammate_confirm/' + this.uid + '/' + this.pid)
+      this.$http.post('http://111.230.226.45:8888/api/set_teammate_confirm/' + this.uid + '/' + this.pid)
       this.$emit('finishGroup')
     },
     open2 () {
@@ -132,7 +132,7 @@ export default {
       var i = this.dynamicValidateForm.teamates.length - 1
       console.log(this.dynamicValidateForm.teamates[i].value)
       this.registerForm.name = this.dynamicValidateForm.teamates[i].value
-      this.$http.post('http://127.0.0.1:8000/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
+      this.$http.post('http://111.230.226.45:8888/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.status !== 0) {
@@ -143,7 +143,7 @@ export default {
       })
     },
     user_info_request (username) {
-      this.$http.get('http://127.0.0.1:8000/api/user_info_request/' + username).then((response) => {
+      this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + username).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
