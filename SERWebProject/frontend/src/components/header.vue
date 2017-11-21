@@ -262,7 +262,7 @@
 //            console.log(username)
 //            let password = this.loginForm.password
             console.log(username, 'saveto')
-            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
+            this.$http.post('http://111.230.226.45:8888/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
@@ -311,13 +311,13 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-//                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+//                      this.$http.get('http://111.230.226.45:8888/api/register?username=' + uname +
 //                        //                        '&email=' + email +
 //                        '&password1=' + pwd +
 //                        '&password2=' + pwd)
                       this.$http({
                         method: 'POST',
-                        url: 'http://localhost:8000/api/register',
+                        url: 'http://111.230.226.45:8888/api/register',
                         body: {
                           username: uname,
                           password1: pwd,

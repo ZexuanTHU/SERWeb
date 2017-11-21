@@ -85,7 +85,7 @@
       },
       cancel (scope) {
         console.log(scope.$index)
-        this.$http.get('http://localhost:8000/api/project_registration_cancel_request/' + this.$route.params.uid + '/' + scope.row.fields.project).then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_registration_cancel_request/' + this.$route.params.uid + '/' + scope.row.fields.project).then((response) => {
 //          var res = JSON.parse(response.bodyText)
           console.log(response)
           if (response.status >= 200 && response.status < 300) {

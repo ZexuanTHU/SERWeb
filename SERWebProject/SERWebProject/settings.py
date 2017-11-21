@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-de2d8bb_$myi9lcc*(-h9jqv*sva)tli$kt@e^inxe7%6*la%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['111.230.226.45']
 
 # Application definition
 
@@ -123,6 +123,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
 
 # Add for vuejs
@@ -137,5 +139,5 @@ AUTH_USER_MODEL = 'backend.User'
 # MEDIA_ROOT = 'frontend/src/assets/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend/src/assets/')
 
-MEDIA_URL = 'http://localhost:8000/frontend/src/assets/'
+MEDIA_URL = 'http://111.230.226.45:8888/frontend/src/assets/'
 

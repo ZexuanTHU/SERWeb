@@ -55,7 +55,7 @@
           if (valid) {
             let username = this.loginForm.username
             let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+            this.$http.get('http://111.230.226.45:8888/api/login?username=' + username + '&password=' + password)
                 .then((response) => {
                   let res = JSON.parse(response.bodyText)
                   if (res.status === 0) {

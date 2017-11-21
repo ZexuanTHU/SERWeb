@@ -95,7 +95,7 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+                      this.$http.get('http://111.230.226.45:8888/api/register?username=' + uname +
 //                        '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)

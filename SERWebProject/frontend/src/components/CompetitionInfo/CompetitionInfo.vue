@@ -15,7 +15,7 @@
           <el-col :span="12"><div class="title">报名时间</div></el-col>
           <el-col :span="12">
             <div class="detail">
-              {{pageInfo.pub_date | formatDate }} - 
+              {{pageInfo.pub_date | formatDate }} -
               {{pageInfo.ddl_date | formatDate }}
             </div></el-col>
         </el-row>
@@ -64,7 +64,7 @@
     </div>
     <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
     <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
-    <div id="detail">   
+    <div id="detail">
       <h2 align="left">详细介绍</h2>
       <div>
         {{pageInfo.project_text}}
@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     project_info_request (pk) {
-      this.$http.get('http://127.0.0.1:8000/api/project_info_request/' + pk).then((response) => {
+      this.$http.get('http://111.230.226.45:8888/api/project_info_request/' + pk).then((response) => {
         var res = JSON.parse(response.bodyText)
         console.log(res)
         if (res.error_num === 0) {
@@ -275,5 +275,5 @@ export default {
   }
   #detail h2{
     font-size: 25px;
-  } 
+  }
 </style>
