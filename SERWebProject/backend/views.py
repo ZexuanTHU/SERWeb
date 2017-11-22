@@ -148,7 +148,7 @@ def project_register(request, user_id, project_id):
             user = User.objects.get(pk=user_id)
             user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
-            if_registered = ProjectRegisterRelationship.objects.filter(user=user)
+            if_registered = ProjectRegisterRelationship.objects.filter(Q(project=project) & Q(user=user))
             if not if_registered:
                 if project.was_below_max_reg():
                     project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
@@ -301,7 +301,8 @@ def add_teammate(request, user_id, project_id):
                 if not if_registered:
                     new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
                                                     team_leader=team_creator,
-                                                    team_leader_info=team_creator_info, team_leader_name=team_leader_name,
+                                                    team_leader_info=team_creator_info,
+                                                    team_leader_name=team_leader_name,
                                                     teammate=new_teammate,
                                                     teammate_info=new_teammate_info, teammate_name=teammate_name,
                                                     project_name=project_name, approval_status=approval_status,
