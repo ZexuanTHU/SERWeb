@@ -23,7 +23,8 @@
         <el-menu-item index="5-1">
           用户信息
         </el-menu-item>
-        <el-menu-item index="5-2" @click="logout()">登出</el-menu-item>
+        <a href="http://111.230.226.45:8888/admin/login/?next=/admin/"><el-menu-item index="5-2">控制台</el-menu-item></a>
+        <el-menu-item index="5-3" @click="logout()">登出</el-menu-item>
       </el-submenu>
       <el-menu-item class="user" index="5" style="float: right;margin-right: 100px" v-if="!user.authenticated"
                     v-on:mouseup.native="showMessage=false;dialogVisible=true">
