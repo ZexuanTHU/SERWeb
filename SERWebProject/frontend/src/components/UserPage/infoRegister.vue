@@ -93,8 +93,8 @@
                   callback(new Error('请输入名字'))
                 } else {
                   setTimeout(function () {
-                    if (value.length > 10) {
-                      callback(new Error('名字不超过10个符号'))
+                    if (value.length > 20) {
+                      callback(new Error('名字不超过20个符号'))
                     } else callback()
                   }, 1000)
                 }
@@ -136,13 +136,13 @@
             trigger: 'blur',
             validator: function (rule, value, callback) {
               if (value === '') {
-                callback(new Error('请输入身份证号码'))
+                callback(new Error('请输入证件号码'))
               } else {
                 setTimeout(function () {
-                  var pattern = /^[0-9]{18}$/g
+                  var pattern = /^[0-9]{0,30}$/g
                   console.log('here')
                   if (!pattern.test(value)) {
-                    callback(new Error('身份证号为18个数字'))
+                    callback(new Error('请输入小于30个的数字'))
                   } else callback()
                 }, 1000)
               }
@@ -227,10 +227,11 @@
                 callback(new Error('请输入电子邮箱'))
               } else {
                 setTimeout(function () {
-                  var pattern = /^\w+@/g
-                  if (!pattern.test(value)) {
-                    callback(new Error('邮箱不正确'))
-                  } else callback()
+//                  var pattern = /^\w+@/g
+//                  if (!pattern.test(value)) {
+//                    callback(new Error('邮箱不正确'))
+//                  } else
+                  callback()
                 }, 1000)
               }
             }
@@ -260,21 +261,29 @@
 //          method: 'GET',
 //          url:''
 //        })
-        console.log(this.infoForm)
-        this.$http.post(
-          'http://111.230.226.45:8888/api/user_info_submit/' + this.id,
-          this.infoForm, {emulateJSON: true}
-        ).then((response) => {
+        console.log(this.infoForm, 'infoForm')
+        console.log(this.id, 'id')
+        var self = this
+        this.$refs['ruleForm'].validate(function (validate) {
+          if (validate) {
+            self.$http.post(
+              'http://localhost:8000/api/user_info_submit/' + self.id,
+              self.infoForm, {emulateJSON: true}
+            ).then((response) => {
 //          let res = JSON.parse(response.body)
-          var res = response
-          console.log('response', response)
-          if (res.statusText === 'OK') {
-            alert('已经提交表单')
+              var res = response
+              console.log('response', response)
+              if (res.statusText === 'OK') {
+                alert('已经提交表单')
+              } else {
+                alert('失败，请检查您输入')
+              }
+            })
+            self.$emit('submit')
           } else {
-            alert('失败，请检查您输入')
+            self.$message.error('信息填写错误')
           }
         })
-        this.$emit('submit')
       },
       onSubmit () {
         console.log('submit!')
