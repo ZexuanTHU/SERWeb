@@ -244,7 +244,7 @@ def add_group(request, user_id, project_id):
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
             if_group_project = project.group_project
-            if_registered = Group.objects.filter(team_creator=team_leader)
+            if_registered = Group.objects.filter(Q(project=project) & Q(team_creator=team_leader))
             if not if_registered:
                 if project.was_below_max_reg:
                     new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
