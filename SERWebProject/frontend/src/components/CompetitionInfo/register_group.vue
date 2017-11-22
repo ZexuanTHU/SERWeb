@@ -99,7 +99,7 @@ export default {
         }
       }).then(action => {
         this.$message({
-          type: 'info',
+          type: 'success',
           message: '成功提交'
         })
       })
@@ -131,9 +131,9 @@ export default {
       this.$http.post('http://111.230.226.45:8888/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
         var res = JSON.parse(response.bodyText)
         if (res.status !== 0) {
-          alert('User doesn\'t exsist !')
+          this.$message({message: '用户不存在！', type: 'warning'})
         } else {
-          alert('confirm !')
+          this.$message({message: '成功!', type: 'success'})
         }
       })
     },

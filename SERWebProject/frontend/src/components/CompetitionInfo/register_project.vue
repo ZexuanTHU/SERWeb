@@ -148,19 +148,19 @@ export default {
             this.$http.post('http://111.230.226.45:8888/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {
-                alert('报名成功')
+                this.$message({message: '报名成功', type: 'success'})
               }
               if (res.error_num === 1) {
-                alert('抱歉，出错了！')
+                this.$message({message: '抱歉，出错了！', type: 'warning'})
               }
               if (res.error_num === 2) {
-                alert('项目或个人资料出错')
+                this.$message({message: '项目或个人资料出错', type: 'warning'})
               }
               if (res.error_num === 3) {
-                alert('已达最高报名人数')
+                this.$message({message: '已达最高报名人数', type: 'warning'})
               }
               if (res.error_num === 4) {
-                alert('您已在报名列表里')
+                this.$message({message: '您已在报名列表里', type: 'warning'})
               }
             })
             this.dialogFormVisible = false
@@ -171,21 +171,25 @@ export default {
               this.dialogFormVisible = false
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {
-                alert('创建成功')
+                this.$message({message: '创建成功', type: 'success'})
+                this.$emit('finish')
               }
               if (res.error_num === 1) {
-                alert('抱歉，出错了！')
+                this.$message({message: '抱歉，出错了！', type: 'warning'})
+                this.$emit('error')
               }
               if (res.error_num === 2) {
-                alert('项目或个人资料出错')
+                this.$message({message: '项目或个人资料出错', type: 'warning'})
+                this.$emit('error')
               }
               if (res.error_num === 3) {
-                alert('已达最高报名人数')
+                this.$message({message: '已达最高报名人数', type: 'warning'})
+                this.$emit('error')
               }
               if (res.error_num === 4) {
-                alert('您已在报名列表里')
+                this.$message({message: '您已在报名列表里', type: 'warning'})
+                this.$emit('error')
               }
-              this.$emit('finish')
             })
           }
         } else {
