@@ -212,6 +212,7 @@ class Membership(models.Model):
     approval_status = models.CharField('报名审核状态', max_length=10, choices=APPROVAL_STATUS, default=PENDING)
     rank = models.IntegerField('排名', default=0)
     grade = models.CharField('比赛成绩', max_length=100, default='比赛尚未结束')
+    if_finished = models.BooleanField('比赛是否已结束', default=False)
     if_group_project = models.BooleanField('是否团队项目', default=True)
 
     def __str__(self):
