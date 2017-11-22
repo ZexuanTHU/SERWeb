@@ -27,7 +27,7 @@
         <el-form-item label="学号" prop="student_id">
           <el-input v-model="ruleForm.student_id"></el-input>
         </el-form-item>
-        <el-form-item prop="birth_date">
+        <el-form-item label="生日" prop="birth_date">
           <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birth_date" style="width: 100%;"></el-date-picker>
         </el-form-item>
         <el-form-item label="服装号码" prop="clothes_size">
@@ -148,19 +148,19 @@ export default {
             this.$http.post('http://111.230.226.45:8888/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {
-                alert('報名成功')
+                alert('报名成功')
               }
               if (res.error_num === 1) {
-                alert('抱歉，出錯了！')
+                alert('抱歉，出错了！')
               }
               if (res.error_num === 2) {
-                alert('項目或個人資料出錯')
+                alert('项目或个人资料出错')
               }
               if (res.error_num === 3) {
-                alert('已達最高報名人數')
+                alert('已达最高报名人数')
               }
               if (res.error_num === 4) {
-                alert('您已在報名列表裡')
+                alert('您已在报名列表里')
               }
             })
             this.dialogFormVisible = false
@@ -171,19 +171,19 @@ export default {
               this.dialogFormVisible = false
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {
-                alert('創建成功')
+                alert('创建成功')
               }
               if (res.error_num === 1) {
-                alert('抱歉，出錯了！')
+                alert('抱歉，出错了！')
               }
               if (res.error_num === 2) {
-                alert('項目或個人資料出錯')
+                alert('项目或个人资料出错')
               }
               if (res.error_num === 3) {
-                alert('已達最高報名人數')
+                alert('已达最高报名人数')
               }
               if (res.error_num === 4) {
-                alert('您已在報名列表裡')
+                alert('您已在报名列表里')
               }
               this.$emit('finish')
             })

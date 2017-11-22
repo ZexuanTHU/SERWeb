@@ -3,7 +3,7 @@
     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
       <el-form-item
         prop="name"
-        label="隊長姓名"
+        label="队长姓名"
         :rules="[
           { required: true, message: '请输入隊長姓名', trigger: 'blur' },
           { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
@@ -22,7 +22,7 @@
         ]"
       >
         <el-input style="width: 50%;" v-model="teamate.value"></el-input>
-        <el-button style="width: 20%;" @click.prevent="checkteamate()">確認</el-button>
+        <el-button style="width: 20%;" @click.prevent="checkteamate()">确认</el-button>
         <el-button style="width: 20%;" @click.prevent="removeteamate(teamate)">删除</el-button>
       </el-form-item>
       <el-form-item>
