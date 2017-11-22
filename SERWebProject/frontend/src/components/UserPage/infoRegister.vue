@@ -139,10 +139,10 @@
                 callback(new Error('请输入证件号码'))
               } else {
                 setTimeout(function () {
-                  var pattern = /^[0-9]{0,30}$/g
-                  console.log('here')
-                  if (!pattern.test(value)) {
-                    callback(new Error('请输入小于30个的数字'))
+//                  var pattern = /^[0-9]{0,30}$/g
+//                  console.log('here')
+                  if (value.length > 30) {
+                    callback(new Error('请输入不超过30个的字符'))
                   } else callback()
                 }, 1000)
               }
@@ -152,7 +152,7 @@
             trigger: 'blur',
             validator: function (rule, value, callback) {
               if (value === '') {
-                callback(new Error('请输入身份证号码'))
+                callback(new Error('请输入班级'))
               } else {
                 setTimeout(function () {
 //                  var pattern = /^[0-9]{18}$/g

@@ -1,10 +1,7 @@
 <template>
   <div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="所有报名" name="1"></el-tab-pane>
-      <el-tab-pane label="审核中" name="2"></el-tab-pane>
-      <el-tab-pane label="已通过" name="3"></el-tab-pane>
-      <el-tab-pane label="未通过" name="4"></el-tab-pane>
+      <el-tab-pane label="所有成绩" name="1"></el-tab-pane>
     </el-tabs>
     <!--<p>hello</p>-->
     <el-table

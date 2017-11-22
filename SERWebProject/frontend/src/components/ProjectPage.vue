@@ -47,7 +47,7 @@
           </el-radio-group>
       </el-form-item>
       <!--<br>-->
-        <el-form-item style="margin-left:30px;"><el-checkbox v-model="filterForm.showFinishedProj">显示已完赛项目(未完成)</el-checkbox></el-form-item>
+        <el-form-item style="margin-left:30px;"><el-checkbox v-model="filterForm.showFinishedProj">显示历史项目</el-checkbox></el-form-item>
         <el-form-item style="position: relative;margin-left: 155px">
           <el-button type="primary" @click="search" style="position: relative;margin-left: 30px">查询</el-button></el-form-item>
 
@@ -247,7 +247,7 @@
             default:
           }
           if (!correct) return false
-          if (!self.filterForm.showFinishedProj && item.fields.if_finished) return false
+          if (!self.filterForm.showFinishedProj && item.fields.if_legacy) return false
           if (self.filterForm.isGroup) {
             console.log(self.filterForm.isGroup, item.fields.group_project)
             correct = self.filterForm.isGroup === item.fields.group_project.toString()
