@@ -56,12 +56,12 @@
         label="赛事报名"
         align="center">
         <template scope="scope">
-          <el-button @click="oneclick(scope.row.pk)" size="mini">
-            <p>一键报名</p>
+          <el-button @click="oneclick(scope.row.pk)" style="padding: 1px; height: 30px; margin-right: -10px">
+            一键报名
           </el-button>
           <!--<router-link :to="{name: 'project', params: {uid:$route.params.uid, pid: scope.row.pk}}">-->
-          <el-button type="primary" size="mini" @click="routeTo('/project/'+scope.row.pk)" style="margin-right: 10px">
-            <p style="color: white">赛事详情</p>
+          <el-button type="primary" @click="routeTo('/project/'+scope.row.pk)" style="padding: 1px; height: 30px;">
+            赛事详情
           </el-button>
           <!--</router-link>-->
         </template>

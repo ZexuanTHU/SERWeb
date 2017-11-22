@@ -106,6 +106,10 @@
   .el-button {
     width: 100%;
   }
+
+  .login[data-v-a75313e8] {
+    max-width: 450px;
+  }
 </style>
 
 <script>
