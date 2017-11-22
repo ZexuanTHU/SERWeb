@@ -12,7 +12,7 @@
 
     <div id="carousel" style="margin-bottom: 50px">
       <el-carousel :interval="5000" type="card" height="500px">
-        <el-carousel-item v-for="img in carousel_img" :key="img" align="center">
+        <el-carousel-item v-for="img in carousel_img" :key="img.id" align="center">
           <img :src="getImage(img.fields.carousel_image)" v-bind:alt="img" style="max-height: 90%; width:100%">
           <p> {{ img.fields.carousel_mark }} </p>
         </el-carousel-item>
