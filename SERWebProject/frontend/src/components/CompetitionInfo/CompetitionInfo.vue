@@ -53,16 +53,17 @@
           <el-tag class="tag" v-if="cdate==='比赛已结束'" type="danger" size="mini">{{cdate}}</el-tag>
           <el-tag class="tag" v-else type="success">{{cdate}}</el-tag>
         </div>
-        <el-button v-if="rdate==='报名已结束'" @click="alert('報名已結束')" type="info" plain>報名截止</el-button>
+        <el-button v-if="rdate==='报名已结束'" @click="$message({message: '報名已結束', type: 'warning'})" type="info" plain>報名截止</el-button>
+        <el-button v-else-if="registered===true" @click="$message({message: '您已报名', type: 'warning'})" type="info" plain>已报名</el-button>
         <el-button v-else @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
       </div>
       <div id="qr">
           <h3>手机扫码报名</h3>
           <img src="../../assets/qr.png" />
           <div id="mobileInfo">登陆微信小程序用手机报名</div>
+      </div>
     </div>
-    </div>
-    <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
+    <registerProject @dialogStatus="dialogStatus" @finish="showgroup" @error="dontshow" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
     <registerGroup @finishGroup="hidegroup" :groupDialogFormVisible="groupVisible" :pid="project_pk" :uid="user_pk"></registerGroup>
     <div id="detail">
       <h2 align="left">详细介绍</h2>
@@ -102,7 +103,8 @@ export default {
       groupVisible: false,
       project_pk: '',
       user_pk: '',
-      group: false
+      group: false,
+      registered: false
     }
   },
   computed: {
@@ -133,6 +135,7 @@ export default {
   created: function () {
     this.project_info_request(this.$route.params.pid)
     this.user_pk = this.$route.params.uid
+    this.user_register_status(this.$route.params.pid)
   },
   methods: {
     project_info_request (pk) {
@@ -150,11 +153,34 @@ export default {
         }
       })
     },
+    user_register_status (pk) {
+      this.$http.get('http://111.230.226.45:8888/api/project_register_relationship_request/' + this.user_pk).then((response) => {
+        var res = JSON.parse(response.bodyText)
+        if (this.group === false) {
+          for (var i = 0; i < res.list.length; i++) {
+            if (res.list[i].fields.project === this.project_pk) {
+              this.registered = true
+              break
+            }
+          }
+        } else {
+          for (i = 0; i < res.group_list.length; i++) {
+            if (res.group_list[i].fields.project === this.project_pk) {
+              this.registered = true
+              break
+            }
+          }
+        }
+      })
+    },
     dialogStatus (val) {
-      this.dialogVisible = val
+      this.dialogVisible = false
     },
     showgroup () {
       this.groupVisible = true
+      this.dialogVisible = false
+    },
+    dontshow () {
       this.dialogVisible = false
     },
     hidegroup () {
@@ -260,7 +286,8 @@ export default {
     padding: 20px;
     background-color: white;
   }
-  #qr p{
+  #qr h3{
+    text-align: center;
   }
   #qr img {
     margin-left: 0%;
@@ -268,6 +295,7 @@ export default {
     height: auto;
   }
   #mobileInfo {
+    text-align: center;
     font-size: 10px;
   }
   #detail{
