@@ -275,11 +275,11 @@
               console.log('response', response)
               if (res.statusText === 'OK') {
                 alert('已经提交表单')
+                self.$emit('submit')
               } else {
                 alert('失败，请检查您输入')
               }
             })
-            self.$emit('submit')
           } else {
             self.$message.error('信息填写错误')
           }
