@@ -18,7 +18,9 @@ export default {
     localStorage.setItem('id_token', creds.username)
     localStorage.setItem('user_id', creds.user_id)
     context.user.autenticated = true
-    router.push(redirect)
+    router.replace(redirect, function () {
+      window.location.reload()
+    })
 //    context.$http.post(LOGIN_URL, creds).then(function (response) {
 //      console.log(response.data)
 //      localStorage.setItem('id_token', creds.username)
