@@ -263,6 +263,7 @@
 //        })
         console.log(this.infoForm, 'infoForm')
         console.log(this.id, 'id')
+        if (this.infoForm.birth_date.constructor === Date) this.infoForm.birth_date=this.infoForm.birth_date.toLocaleDateString()
         var self = this
         this.$refs['ruleForm'].validate(function (validate) {
           if (validate) {
