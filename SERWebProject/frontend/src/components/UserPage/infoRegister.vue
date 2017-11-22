@@ -267,7 +267,7 @@
         this.$refs['ruleForm'].validate(function (validate) {
           if (validate) {
             self.$http.post(
-              'http://localhost:8000/api/user_info_submit/' + self.id,
+              'http://111.230.226.45:8888/api/user_info_submit/' + self.id,
               self.infoForm, {emulateJSON: true}
             ).then((response) => {
 //          let res = JSON.parse(response.body)
