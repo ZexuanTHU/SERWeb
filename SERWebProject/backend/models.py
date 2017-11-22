@@ -51,16 +51,16 @@ class User(AbstractUser):
 
 class UserInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='belong_to')
-    name = models.CharField('姓名', max_length=10)
+    name = models.CharField('姓名', max_length=20)
     student_id = models.CharField('学号', max_length=10)
-    id_card = models.CharField('身份证号', max_length=18)
+    id_card = models.CharField('身份证号\护照号', max_length=30)
     gender = models.CharField('性别', choices=GENDER, max_length=1)
     birth_date = models.DateField('出生日期', default=timezone.now())
     reading_degree = models.CharField('攻读学位', choices=READING_DEGREE, max_length=3)
     faculty = models.CharField('院系', max_length=20)
     class_id = models.CharField('班级', max_length=10)
     clothes_size = models.CharField('衣服尺寸', choices=CLOTHES_SIZE, max_length=2)
-    email = models.EmailField()
+    email = models.CharField('邮箱', default="Groupchat@mails.com", max_length=50)
     cellphone_num = models.CharField('手机号码', max_length=11)
     dormitory = models.CharField('寝室号码', max_length=20)
 
@@ -81,6 +81,8 @@ class Project(models.Model):
     match_venue = models.CharField('比赛地点', max_length=30, default='清华大学')
     contact_name = models.CharField('紧急联系人姓名', max_length=30, default='郭志芃')
     contact_tel = models.CharField('紧急联系人电话', max_length=30, default='18813040000')
+    if_finished = models.BooleanField('比赛已结束', default=False)
+    if_legacy = models.BooleanField('是否为历史项目', default=False)
     # 个人项目字段
     min_reg = models.IntegerField('报名人数/队伍数下限', default=0)
     max_reg = models.IntegerField('报名人数/队伍数上限', default=100)
