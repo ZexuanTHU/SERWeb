@@ -161,6 +161,7 @@
       return {
         registerVisible: false,
         user_id: '',
+        username: localStorage.getItem('id_token'),
         showMessage: true,
         user: auth.user,
         dialogVisible: false,
@@ -197,11 +198,11 @@
         }
       }
     },
-    computed: {
-      username: function () {
-        return localStorage.getItem('id_token')
-      }
-    },
+//    computed: {
+//      username: function () {
+//        return localStorage.getItem('id_token')
+//      }
+//    },
     methods: {
       handlesubmit () {
         this.registerVisible = false
@@ -269,7 +270,7 @@
                 if (res.status === 0) {
                   this.dialogVisible = false
                   this.user.authenticated = true
-//                  this.username = this.loginForm.username
+                  this.username = this.loginForm.username
                   this.user_id = res.list[0].pk
                   if (!res.list[0].fields.submit_info) {
                     this.registerVisible = true
@@ -284,7 +285,7 @@
                 }
               })
           } else {
-            console.log('error submit!!')
+            alert('错误的用户名和密码')
             return false
           }
         })
@@ -311,10 +312,6 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-//                      this.$http.get('http://111.230.226.45:8888/api/register?username=' + uname +
-//                        //                        '&email=' + email +
-//                        '&password1=' + pwd +
-//                        '&password2=' + pwd)
                       this.$http({
                         method: 'POST',
                         url: 'http://111.230.226.45:8888/api/register',
