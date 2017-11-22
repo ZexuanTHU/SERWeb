@@ -1,9 +1,9 @@
 <template>
   <div id="CompetitionInfo">
     <div id="compinfo">
-      <h1 align="left">項目：{{pageInfo.project_name}}</h1>
+      <h1 align="left">项目：{{pageInfo.project_name}}</h1>
       <div class="basic" align="left">
-        <h2 id="basicTitle">報名資料</h2>
+        <h2 id="basicTitle">报名资料</h2>
         <el-row class="block">
           <el-col :span="12"><div class="title">比赛时间</div></el-col>
           <el-col :span="12">
@@ -43,9 +43,9 @@
       </div>
       <div id="mid">
         <div class="status">
-          <h2 id="statusTitle">報名狀態</h2>
+          <h2 id="statusTitle">报名状态</h2>
           <div class="bar">
-            <h3>{{pageInfo.project_hot}}人已報名</h3>
+            <h3>{{pageInfo.project_hot}}人已报名</h3>
             <el-progress :show-text="true" :text-inside="true" :stroke-width="18" :percentage="parseInt(attendPercent*100)"></el-progress>
           </div>
           <el-tag class="tag" v-if="rdate==='报名已结束'" type="danger">{{rdate}}</el-tag>
@@ -59,7 +59,7 @@
       <div id="qr">
           <h3>手机扫码报名</h3>
           <img src="../../assets/qr.png" />
-          <div id="mobileInfo">登錄微信小程序用手機報名</div>
+          <div id="mobileInfo">登陆微信小程序用手机报名</div>
     </div>
     </div>
     <registerProject @dialogStatus="dialogStatus" @finish="showgroup" :dialogFormVisible="dialogVisible" :pid="project_pk" :uid="user_pk" :group="group"></registerProject>
@@ -140,10 +140,9 @@ export default {
         var res = JSON.parse(response.bodyText)
         if (res.error_num === 0) {
           this.pageInfo = res.list[0].fields
-          this.pageInfo.attend = '30'
           this.project_pk = res.list[0].pk
           if (res.list[0].fields.group_project === true) {
-            this.groudiv = true
+            this.group = true
           }
         } else {
           this.$message.error('获取项目列表失败"')
