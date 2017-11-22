@@ -89,6 +89,7 @@ def project_card_display(request):
 
 @csrf_exempt
 def user_info_submit(request, user_id):
+    response = {}
     if request.method == 'POST':
         # 用户
         user = User.objects.get(pk=user_id)
@@ -102,13 +103,20 @@ def user_info_submit(request, user_id):
             user_info.save()
             user.submit_info = True
             user.save()
-
-            return HttpResponse('submit user info success')
+            response['msg'] = 'submit user info success'
+            response['error_num'] = 0
+            return JsonResponse('submit user info success')
+        else:
+            response['msg'] = 'submit user info error'
+            response['error_num'] = 2
+            return JsonResponse(response)
 
     else:
-        form = UserInfoForm()
+        response['msg'] = 'request method error!'
+        response['error_num'] = 1
+        return JsonResponse(response)
 
-    return render(request, 'backend/register.html', context={'form': form})
+        # return render(request, 'backend/register.html', context={'form': form})
 
 
 def user_info_request(request, user_id):
@@ -301,7 +309,8 @@ def add_teammate(request, user_id, project_id):
                 if not if_registered:
                     new_teammate_addon = Membership(project=project, group=group, group_name=group_name,
                                                     team_leader=team_creator,
-                                                    team_leader_info=team_creator_info, team_leader_name=team_leader_name,
+                                                    team_leader_info=team_creator_info,
+                                                    team_leader_name=team_leader_name,
                                                     teammate=new_teammate,
                                                     teammate_info=new_teammate_info, teammate_name=teammate_name,
                                                     project_name=project_name, approval_status=approval_status,
