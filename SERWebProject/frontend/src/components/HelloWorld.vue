@@ -27,11 +27,11 @@
           <el-card :body-style="{ padding: '0px' }" style="margin-right: 5%">
             <img src="../assets/card1.jpg" class="image">
             <div id="container">
-              <div style="float: left">
-                <div id="left-top" style="width: 250px; padding-left: 14px; padding-top: 14px">
+              <div style="float: left; min-width: 50%">
+                <div id="left-top" style="padding-left: 14px; padding-top: 14px">
                   <h3> {{ field.fields.project_name }} </h3>
                 </div>
-                <div id="left-bottom" style="width: 250px; padding-left: 14px; padding-top: 30px">
+                <div id="left-bottom" style="padding-left: 14px; padding-top: 30px">
                   <el-button @click="oneclick(field.pk)" >
                     <p style="color: black">一键报名</p>
                   </el-button>
@@ -42,7 +42,7 @@
                   <!--</router-link>-->
                 </div>
               </div>
-              <div style="padding: 14px; min-width: 190px; overflow-x: auto">
+              <div style="padding: 14px; min-width: 50%; overflow-x: auto">
                 <p> 当前报名人数 : {{ field.fields.project_hot }} </p>
                 <p> 报名人数限制 : {{ field.fields.max_reg }} </p>
                 <p> 比赛时间 : {{ field.fields.match_data_time | formatDate }} </p>
