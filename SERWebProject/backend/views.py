@@ -89,7 +89,6 @@ def project_card_display(request):
 
 @csrf_exempt
 def user_info_submit(request, user_id):
-    response = {}
     if request.method == 'POST':
         # 用户
         user = User.objects.get(pk=user_id)
@@ -103,20 +102,13 @@ def user_info_submit(request, user_id):
             user_info.save()
             user.submit_info = True
             user.save()
-            response['msg'] = 'submit user info success'
-            response['error_num'] = 0
-            return JsonResponse('submit user info success')
-        else:
-            response['msg'] = 'submit user info error'
-            response['error_num'] = 2
-            return JsonResponse(response)
+
+            return HttpResponse('submit user info success')
 
     else:
-        response['msg'] = 'request method error!'
-        response['error_num'] = 1
-        return JsonResponse(response)
+        form = UserInfoForm()
 
-        # return render(request, 'backend/register.html', context={'form': form})
+    return render(request, 'backend/register.html', context={'form': form})
 
 
 def user_info_request(request, user_id):
@@ -156,7 +148,7 @@ def project_register(request, user_id, project_id):
             user = User.objects.get(pk=user_id)
             user_info = UserInfo.objects.get(user=user)
             project = Project.objects.get(pk=project_id)
-            if_registered = ProjectRegisterRelationship.objects.filter(user=user)
+            if_registered = ProjectRegisterRelationship.objects.filter(Q(project=project) & Q(user=user))
             if not if_registered:
                 if project.was_below_max_reg():
                     project_register_form = ProjectRegisterRelationship(user=user, user_info=user_info,
@@ -252,7 +244,7 @@ def add_group(request, user_id, project_id):
             team_min_reg = project.team_min_reg
             team_max_reg = project.team_max_reg
             if_group_project = project.group_project
-            if_registered = Group.objects.filter(team_creator=team_leader)
+            if_registered = Group.objects.filter(Q(project=project) & Q(team_creator=team_leader))
             if not if_registered:
                 if project.was_below_max_reg:
                     new_group = Group(group_name=group_name, project=project, team_creator=team_leader,
