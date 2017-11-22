@@ -98,14 +98,14 @@ export default {
         ],
         name: [
           { required: true, message: '请输入名字', trigger: 'blur' },
-          { min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         gender: [
           { required: true, message: '请选性别', trigger: 'change' }
         ],
         id_card: [
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { min: 0, max: 20, message: '长度在 x 到 x 个字符', trigger: 'blur' }
+          { min: 0, max: 30, message: '长度在 0 到 30 个字符', trigger: 'blur' }
         ],
         student_id: [
           { required: true, message: '请输入学号', trigger: 'blur' },

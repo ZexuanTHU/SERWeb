@@ -55,6 +55,7 @@
         </div>
         <el-button v-if="rdate==='报名已结束'" @click="$message({message: '報名已結束', type: 'warning'})" type="info" plain>報名截止</el-button>
         <el-button v-else-if="registered===true" @click="$message({message: '您已报名', type: 'warning'})" type="info" plain>已报名</el-button>
+        <el-button v-else-if="attendPercent===1" @click="$message({message: '已额满', type: 'warning'})" type="info" plain>已额满</el-button>
         <el-button v-else @click="$route.params.uid!= null?dialogVisible = true:$emit('showLogin')" type="primary">立即报名</el-button>
       </div>
       <div id="qr">
@@ -299,8 +300,17 @@ export default {
     font-size: 10px;
   }
   #detail{
-    margin-left: 4.5%;
+    width: 67%;
     clear: left;
+    margin-left: 2%;
+    padding: 3%;
+    border-radius: 4px;
+    border: 1px solid #e6ebf5;
+    background-color: rgb(238,241,246);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  }
+  #detail h2 {
+    margin-top: -2%;
   }
   #detailInfo {
     margin-left: 1%;
