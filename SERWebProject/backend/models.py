@@ -113,6 +113,12 @@ class Project(models.Model):
     def show_project_hot(self):
         return self.project_hot
 
+    def was_exceeded_deadline(self):
+        if self.ddl_date < timezone.now():
+            return True
+        else:
+            return False
+
 
 class ProjectRegisterRelationship(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
