@@ -213,11 +213,11 @@
         this.registerVisible = false
         console.log(this.$route.fullPath)
         console.log(this.$refs['infoRegister'].infoForm)
-        alert('wait')
-//        auth.login(this, {
-//          user_id: this.user_id,
-//          username: this.loginForm.username
-//        }, '/' + this.user_id + this.$route.path)
+//        alert('wait')
+        auth.login(this, {
+          user_id: this.user_id,
+          username: this.loginForm.username
+        }, '/' + this.user_id + this.$route.path)
       },
       handleSelect (index) {
         switch (index) {
