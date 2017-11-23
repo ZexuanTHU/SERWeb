@@ -162,6 +162,9 @@ export default {
               if (res.error_num === 4) {
                 this.$message({message: '您已在报名列表里', type: 'warning'})
               }
+              if (res.error_num === 5) {
+                this.$message({message: '赛事已截止', type: 'warning'})
+              }
             })
             this.dialogFormVisible = false
             this.closeDialog()
@@ -189,6 +192,9 @@ export default {
               if (res.error_num === 4) {
                 this.$message({message: '您已在报名列表里', type: 'warning'})
                 this.$emit('error')
+              }
+              if (res.error_num === 5) {
+                this.$message({message: '赛事已截止', type: 'warning'})
               }
             })
           }
