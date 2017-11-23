@@ -33,7 +33,8 @@
       <el-input v-model="infoForm.student_id" class="mid"></el-input>
     </el-form-item>
     <el-form-item prop="birth_date" label="生日">
-      <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birth_date" class="mid"></el-date-picker>
+      <el-date-picker type="date" placeholder="选择日期"  v-model="infoForm.birth_date"
+                      class="mid"></el-date-picker>
     </el-form-item>
     <br v-if="inline">
     <el-form-item label="服装号码" prop="clothes_size">
@@ -179,7 +180,7 @@
           birth_date: [{
             trigger: 'change',
             validator: function (rule, value, callback) {
-              console.log('here', value)
+              console.log('here', value, value.constructor)
               if (!value || value === '') {
                 callback(new Error('请选择生日'))
               } else {
@@ -261,9 +262,9 @@
 //          method: 'GET',
 //          url:''
 //        })
+        if (this.infoForm.birth_date.constructor === Date) this.infoForm.birth_date = this.infoForm.birth_date.toLocaleDateString()
         console.log(this.infoForm, 'infoForm')
         console.log(this.id, 'id')
-        if (this.infoForm.birth_date.constructor === Date) this.infoForm.birth_date=this.infoForm.birth_date.toLocaleDateString()
         var self = this
         this.$refs['ruleForm'].validate(function (validate) {
           if (validate) {
