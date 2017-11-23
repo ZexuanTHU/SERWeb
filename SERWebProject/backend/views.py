@@ -397,6 +397,7 @@ def school_team_request(request):
 
 
 def project_registration_cancel_request(request, user_id, project_id):
+    response = {}
     if request.method == 'GET':
         try:
             user = User.objects.get(pk=user_id)
@@ -406,24 +407,40 @@ def project_registration_cancel_request(request, user_id, project_id):
                     group = Group.objects.get(team_creator=user, project=project)
                     if group.if_approval_status_still_pending:
                         group.delete()
-                        return HttpResponse('Canceled!')
+                        response['msg'] = 'Canceled!'
+                        response['error_num'] = 0
+                        return JsonResponse(response)
                     else:
-                        return HttpResponse('Sorry! You can not cancel this registration because it was already '
-                                            'approved or rejected!')
+                        response['msg'] = 'Sorry! You can not cancel this registration because it was already ' \
+                                          'approved or rejected!'
+                        response['error_num'] = 4
+                        return JsonResponse(response)
                 except:
-                    return HttpResponse('request registration info error!')
+                    response['msg'] = 'request group info error!'
+                    response['error_num'] = 3
+                    return JsonResponse(response)
             else:
                 try:
                     project_register_relationship = ProjectRegisterRelationship.objects.get(user=user, project=project)
                     if project_register_relationship.if_approval_status_still_pending:
                         project_register_relationship.delete()
-                        return HttpResponse('Canceled!')
+                        response['msg'] = 'Canceled!'
+                        response['error_num'] = 0
+                        return JsonResponse(response)
                     else:
-                        return HttpResponse('Sorry! You can not cancel this registration because it was already '
-                                            'approved or rejected!')
+                        response['msg'] = 'Sorry! You can not cancel this registration because it was already ' \
+                                          'approved or rejected!'
+                        response['error_num'] = 4
+                        return JsonResponse(response)
                 except:
-                    return HttpResponse('request registration info error!')
+                    response['msg'] = 'request group info error!'
+                    response['error_num'] = 3
+                    return JsonResponse(response)
         except:
-            return HttpResponse('request user info or object info error!')
+            response['msg'] = 'request user info or object info error!'
+            response['error_num'] = 2
+            return JsonResponse(response)
     else:
-        return HttpResponse('request method error!')
+        response['msg'] = 'Request method error'
+        response['error_num'] = 1
+        return JsonResponse(response)
