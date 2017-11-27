@@ -14,6 +14,16 @@ def delete_selected_project_register_relationship(modeladmin, request, queryset)
     delete_selected_project_register_relationship.short_description = "删除选中的条目"
 
 
+def bulk_approve(modeladmin, request, queryset):
+    queryset.update(approval_status='AP')
+    bulk_approve.short_description = '批量通过报名表'
+
+
+def bulk_reject(modeladmin, request, queryset):
+    queryset.update(approval_status='RE')
+    bulk_reject.short_description = '批量通过报名表'
+
+
 class ProjectAdmin(admin.ModelAdmin):
     actions = ['delete_selected']
 
@@ -27,15 +37,15 @@ class UserInfoAdmin(admin.ModelAdmin):
 
 
 class ProjectRegisterRelationshipAdmin(admin.ModelAdmin):
-    actions = [delete_selected_project_register_relationship]
+    actions = [delete_selected_project_register_relationship, bulk_approve, bulk_reject]
 
 
 class GroupAdmin(admin.ModelAdmin):
-    actions = [delete_selected_project_register_relationship]
+    actions = [delete_selected_project_register_relationship, bulk_approve, bulk_reject]
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    actions = [delete_selected_project_register_relationship]
+    actions = [delete_selected_project_register_relationship, bulk_approve, bulk_reject]
 
 
 class CarouselAdmin(admin.ModelAdmin):
