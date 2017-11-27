@@ -4,7 +4,7 @@
 import router from '../router/index'
 
 // URL and endpoint constants
-const API_URL = 'http://localhost:8080/'
+const API_URL = 'http://111.230.226.45:8888:8080/'
 // const LOGIN_URL = API_URL + 'sessions/create/'
 const SIGNUP_URL = API_URL + 'users/'
 
