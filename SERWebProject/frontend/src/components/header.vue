@@ -6,8 +6,11 @@
       title="第一次登录个人信息修改"
       :visible.sync="registerVisible"
       width="100"
+      ref="firsttime"
       :show-close="false">
-      <infoRegister @submit="handlesubmit" :inline='true' ref="infoRegister" :uid='user_id'></infoRegister>
+      <infoRegister ref='info'
+                    @submit="handlesubmit" :inline='true' :first='first'
+                    :uid='user_id'></infoRegister>
 
     </el-dialog>
     <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
@@ -23,7 +26,9 @@
         <el-menu-item index="5-1">
           用户信息
         </el-menu-item>
-        <a href="http://111.230.226.45:8888/admin/login/?next=/admin/"><el-menu-item index="5-2">控制台</el-menu-item></a>
+        <a href="http://localhost:8000/admin/login/?next=/admin/">
+          <el-menu-item index="5-2">控制台</el-menu-item>
+        </a>
         <el-menu-item index="5-3" @click="logout()">登出</el-menu-item>
       </el-submenu>
       <el-menu-item class="user" index="5" style="float: right;margin-right: 100px" v-if="!user.authenticated"
@@ -166,6 +171,7 @@
       return {
         registerVisible: false,
         user_id: '',
+        first: true,
         username: localStorage.getItem('id_token'),
         showMessage: true,
         user: auth.user,
@@ -190,6 +196,7 @@
           pass: '',
           checkPass: ''
         },
+        newInfoForm: {},
         registerRules: {
           username: [
             {validator: validateUsername2, trigger: 'blur'}
@@ -211,8 +218,6 @@
     methods: {
       handlesubmit () {
         this.registerVisible = false
-        console.log(this.$route.fullPath)
-        console.log(this.$refs['infoRegister'].infoForm)
 //        alert('wait')
         auth.login(this, {
           user_id: this.user_id,
@@ -265,11 +270,8 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            let username = this.loginForm.username
-//            console.log(username)
-//            let password = this.loginForm.password
-            console.log(username, 'saveto')
-            this.$http.post('http://111.230.226.45:8888/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
+//            let username = this.loginForm.username
+            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
@@ -278,8 +280,16 @@
                   this.user.authenticated = true
                   this.username = this.loginForm.username
                   this.user_id = res.list[0].pk
+                  var self = this
                   if (!res.list[0].fields.submit_info) {
                     this.registerVisible = true
+                    if (self.newInfoForm.name) {
+                      setTimeout(function () {
+                        self.$refs.info.infoForm = self.newInfoForm
+                      }, 1000)
+                    } else {
+                      self.first = false
+                    }
                   } else {
                     auth.login(this, {
                       user_id: this.user_id,
@@ -297,6 +307,8 @@
         })
       },
       register (formName) {
+//        var this_ = this
+        console.log(this.$refs[formName])
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let clientid = 'EqlnQKv2oxvF2imyZloL6N1Doy8'
@@ -311,6 +323,7 @@
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 if (res.error) {
+                  console.log(res)
                   alert('登录失败！请输入正确的 Account9 用户名及密码')
                 } else {
                   console.log(res)
@@ -318,9 +331,17 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
+                      var user = res2.user
+                      var newInfo = {}
+                      newInfo.name = user.fullname
+                      newInfo.email = user.email
+//                      newInfo.birth_date = new Date(user.birthdate)
+                      newInfo.reading_degree = user.bachelor.year ? 'BS' : user.master.year ? 'MS' : 'PhD'
+                      newInfo.cellphone_num = user.mobile
+                      this.newInfoForm = newInfo
                       this.$http({
                         method: 'POST',
-                        url: 'http://111.230.226.45:8888/api/register',
+                        url: 'http://localhost:8000/api/register',
                         body: {
                           username: uname,
                           password1: pwd,

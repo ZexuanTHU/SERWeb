@@ -65,7 +65,7 @@
     },
     methods: {
       getGrade (pid) {
-        this.$http.get('http://111.230.226.45:8888/api/project_grade_request/' + pid).then((response) => {
+        this.$http.get('http://localhost:8000/api/project_grade_request/' + pid).then((response) => {
           var res = JSON.parse(response.bodyText)
           if (res.error_num === 0) {
             this.tableData = res['list']

@@ -120,7 +120,7 @@
         this.member = str
       },
       school_team_request () {
-        this.$http.get('http://111.230.226.45:8888/api/school_team_request').then((response) => {
+        this.$http.get('http://localhost:8000/api/school_team_request').then((response) => {
           var res = JSON.parse(response.bodyText)
           if (res.error_num === 0) {
             this.school_team_data = res['list']

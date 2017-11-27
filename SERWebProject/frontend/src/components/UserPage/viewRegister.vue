@@ -85,22 +85,22 @@
       },
       cancel (scope) {
         console.log(scope.$index)
-        this.$http.get('http://111.230.226.45:8888/api/project_registration_cancel_request/' + this.$route.params.uid + '/' + scope.row.fields.project).then((response) => {
+        this.$http.get('http://localhost:8000/api/project_registration_cancel_request/' + this.$route.params.uid + '/' + scope.row.fields.project).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
-          if (response.status >= 200 && response.status < 300) {
-            if (res.error_num === 0) {
-              this.$message('成功删除项目')
-              this.tableData.splice(scope.$index, 1)
-            } else if (res.error_num === 3) {
-              this.$message.error('组员不能删除团体项目')
-            } else if (res.error_num === 4) {
-              this.$message.error('不能取消已审核的项目')
-            }
-          } else {
-            this.$message.error('删除请求失败"')
-            console.log('failed')
+//          if (response.status >= 200 && response.status < 300) {
+          if (res.error_num === 0) {
+            this.$message('成功删除项目')
+            this.tableData.splice(scope.$index, 1)
+          } else if (res.error_num === 3) {
+            this.$message.error('组员不能删除团体项目')
+          } else if (res.error_num === 4) {
+            this.$message.error('不能取消已审核的项目')
           }
+//          else {
+//            this.$message.error('删除请求失败"')
+//            console.log('failed')
+//          }
         })
       },
       approvalStatus (status) {
