@@ -26,7 +26,7 @@
         <el-menu-item index="5-1">
           用户信息
         </el-menu-item>
-        <a href="http://localhost:8000/admin/login/?next=/admin/">
+        <a href="http://111.230.226.45:8888/admin/login/?next=/admin/">
           <el-menu-item index="5-2">控制台</el-menu-item>
         </a>
         <el-menu-item index="5-3" @click="logout()">登出</el-menu-item>
@@ -271,7 +271,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
 //            let username = this.loginForm.username
-            this.$http.post('http://localhost:8000/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
+            this.$http.post('http://111.230.226.45:8888/api/login', this.loginForm, {emulateJSON: true})  // emulateJSON to transform to a FormData
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 console.log('response', res)
@@ -341,7 +341,7 @@
                       this.newInfoForm = newInfo
                       this.$http({
                         method: 'POST',
-                        url: 'http://localhost:8000/api/register',
+                        url: 'http://111.230.226.45:8888/api/register',
                         body: {
                           username: uname,
                           password1: pwd,

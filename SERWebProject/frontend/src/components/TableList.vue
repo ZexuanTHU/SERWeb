@@ -115,7 +115,7 @@
         }
       },
       project_list_display () {
-        this.$http.get('http://localhost:8000/api/project_list_display').then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.error_num === 0) {
@@ -131,7 +131,7 @@
           this.$emit('showLogin')
           return
         }
-        this.$http.get('http://localhost:8000/api/project_info_request/' + pk).then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_info_request/' + pk).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.error_num === 0) {

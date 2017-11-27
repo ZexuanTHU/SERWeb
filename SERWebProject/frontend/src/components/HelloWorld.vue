@@ -158,7 +158,7 @@
           if (valid) {
             let username = this.loginForm.username
             let password = this.loginForm.password
-            this.$http.get('http://localhost:8000/api/login?username=' + username + '&password=' + password)
+            this.$http.get('http://111.230.226.45:8888/api/login?username=' + username + '&password=' + password)
               .then((response) => {
                 let res = JSON.parse(response.bodyText)
                 if (res.status === 0) {
@@ -199,7 +199,7 @@
                     .then((response) => {
                       let res2 = JSON.parse(response.bodyText)
                       console.log(res2)
-                      this.$http.get('http://localhost:8000/api/register?username=' + uname +
+                      this.$http.get('http://111.230.226.45:8888/api/register?username=' + uname +
                         //                        '&email=' + email +
                         '&password1=' + pwd +
                         '&password2=' + pwd)
@@ -217,7 +217,7 @@
         })
       },
       carousel_request () {
-        this.$http.get('http://localhost:8000/api/carousel_request').then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/carousel_request').then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log('hello')
           console.log(res)
@@ -230,7 +230,7 @@
         })
       },
       project_list_display () {
-        this.$http.get('http://localhost:8000/api/project_list_display').then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_list_display').then((response) => {
           var res = JSON.parse(response.bodyText)
 //          console.log(res)
           if (res.error_num === 0) {
@@ -242,7 +242,7 @@
         })
       },
       project_card_display () {
-        this.$http.get('http://localhost:8000/api/project_card_display').then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_card_display').then((response) => {
           var res = JSON.parse(response.bodyText)
 //          console.log(res)
           if (res.error_num === 0) {
@@ -258,7 +258,7 @@
           this.showLogin()
           return
         }
-        this.$http.get('http://localhost:8000/api/project_info_request/' + pk).then((response) => {
+        this.$http.get('http://111.230.226.45:8888/api/project_info_request/' + pk).then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.error_num === 0) {

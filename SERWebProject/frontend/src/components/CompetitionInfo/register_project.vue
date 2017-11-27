@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     user_info_request (uid) {
-      this.$http.get('http://localhost:8000/api/user_info_request/' + uid).then((response) => {
+      this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + uid).then((response) => {
         var res = JSON.parse(response.bodyText)
         if (res.error_num === 0) {
           this.ruleForm = res.list[0].fields
@@ -145,7 +145,7 @@ export default {
           this.registerForm.user_id = this.uid
           this.registerForm.project_id = this.pid
           if (this.group === false) {
-            this.$http.post('http://localhost:8000/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
+            this.$http.post('http://111.230.226.45:8888/api/project_register/' + this.uid + '/' + this.pid).then((response) => {
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {
                 this.$message({message: '报名成功', type: 'success'})
@@ -167,7 +167,7 @@ export default {
             this.closeDialog()
           } else {
             this.groupForm.group_name = this.ruleForm.teamname
-            this.$http.post('http://localhost:8000/api/add_group/' + this.uid + '/' + this.pid, this.groupForm, {emulateJSON: true}).then((response) => {
+            this.$http.post('http://111.230.226.45:8888/api/add_group/' + this.uid + '/' + this.pid, this.groupForm, {emulateJSON: true}).then((response) => {
               this.dialogFormVisible = false
               var res = JSON.parse(response.bodyText)
               if (res.error_num === 0) {

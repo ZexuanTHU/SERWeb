@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     submitForm (formName) {
-      this.$http.post('http://localhost:8000/api/set_teammate_confirm/' + this.uid + '/' + this.pid)
+      this.$http.post('http://111.230.226.45:8888/api/set_teammate_confirm/' + this.uid + '/' + this.pid)
       this.$emit('finishGroup')
     },
     open2 () {
@@ -128,7 +128,7 @@ export default {
     checkteamate () {
       var i = this.dynamicValidateForm.teamates.length - 1
       this.registerForm.name = this.dynamicValidateForm.teamates[i].value
-      this.$http.post('http://localhost:8000/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
+      this.$http.post('http://111.230.226.45:8888/api/add_teammate/' + this.uid + '/' + this.pid, this.registerForm, {emulateJSON: true}).then((response) => {
         var res = JSON.parse(response.bodyText)
         if (res.status !== 0) {
           this.$message({message: '用户不存在！', type: 'warning'})
@@ -138,7 +138,7 @@ export default {
       })
     },
     user_info_request (username) {
-      this.$http.get('http://localhost:8000/api/user_info_request/' + username).then((response) => {
+      this.$http.get('http://111.230.226.45:8888/api/user_info_request/' + username).then((response) => {
         var res = JSON.parse(response.bodyText)
         if (res.error_num === 0) {
           this.dynamicValidateForm.name = res.list[0].fields.name
