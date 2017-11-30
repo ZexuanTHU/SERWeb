@@ -10,6 +10,7 @@ from django.contrib import auth
 from django.core import serializers
 from django.utils import timezone
 import json
+import requests
 
 
 # from oauthlib.oauth2 import LegacyApplicationClient
@@ -63,6 +64,29 @@ def login(request):
         else:
             # Show an error page
             return JsonResponse({'status': 1})
+
+
+def wx_login(request, wx_code):
+    response = {}
+    if request.method == 'GET':
+        wx_code = wx_code
+        para = {
+            'appid': 'wx6ca6baf575deb2ea',
+            'secret': '2d89a46e116c7456564bbab30be7c536',
+            'js_code': wx_code,
+            'grant_type': 'authorization_code'
+        }
+        res = requests.get('https://api.weixin.qq.com/sns/jscode2session?', params=para)
+        if res.status_code == 200:
+            response['error_num'] = '0'
+            response['text'] = res.json()
+            return JsonResponse(response)
+        else:
+            response['error_num'] = '2'
+            return JsonResponse(response)
+    else:
+        response['error_num'] = '1'
+        return JsonResponse(response)
 
 
 def project_list_display(request):
