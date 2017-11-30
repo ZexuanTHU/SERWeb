@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^register', views.register, name='register'),
     url(r'^login', views.login, name='login'),
+    url(r'^wx_login/(?P<wx_code>[A-Za-z0-9_]+)', views.wx_login, name='wx_login'),
     url(r'^project_list_display', views.project_list_display, name='project_list_display'),
     url(r'^project_card_display', views.project_card_display, name='project_card_display'),
     url(r'^user_info_submit/(?P<user_id>[0-9]+)', views.user_info_submit, name='user_info_submit'),

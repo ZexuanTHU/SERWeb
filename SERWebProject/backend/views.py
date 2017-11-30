@@ -66,26 +66,26 @@ def login(request):
             return JsonResponse({'status': 1})
 
 
-def wx_login(request, code):
+def wx_login(request, wx_code):
     response = {}
     if request.method == 'GET':
-        wx_code = code
+        wx_code = wx_code
         para = {
-            'app_id': 'wx6ca6baf575deb2ea',
+            'appid': 'wx6ca6baf575deb2ea',
             'secret': '2d89a46e116c7456564bbab30be7c536',
-            'code': wx_code,
+            'js_code': wx_code,
             'grant_type': 'authorization_code'
         }
         res = requests.get('https://api.weixin.qq.com/sns/jscode2session?', params=para)
         if res.status_code == 200:
             response['error_num'] = '0'
-            response['open_id'] = res.open_id
-            response['session_key'] = res.session_key
+            response['text'] = res.json()
             return JsonResponse(response)
         else:
-            response['error_num'] = '1'
+            response['error_num'] = '2'
             return JsonResponse(response)
     else:
+        response['error_num'] = '1'
         return JsonResponse(response)
 
 
