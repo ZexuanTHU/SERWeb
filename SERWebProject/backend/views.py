@@ -74,13 +74,14 @@ def wx_register(request):
         openid = request.POST['openid']
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
-            user_info = User.objects.filter(username=username)
+            user_info = User.objects.get(username=username)
             user_info.wechat_open_id = openid
             user_info.save()
-            response = {'list': json.loads(serializers.serialize("json", user_info)),
+            response = {'pk': user_info.pk,
+                        'username': user_info.username,
+                        'openid': user_info.wechat_open_id,
                         'msg': 'success',
                         'status': 0}
-            # Redirect to a success page.
             return JsonResponse(response)
         else:
             # Show an error page
@@ -108,7 +109,6 @@ def wx_login(request, wx_code):
                 response['text'] = res.json()
                 return JsonResponse(response)
             except:
-                response['list'] = json.loads(serializers.serialize("json", user))
                 response['error_num'] = '3'
                 response['msg'] = 'openid match fail! User does not exist!'
                 return JsonResponse(response)
