@@ -88,6 +88,7 @@ def wx_login(request, wx_code):
                 return JsonResponse(response)
             except:
                 response['error_num'] = '3'
+                response['msg'] = 'openid match fail! User does not exist!'
                 return JsonResponse(response)
         else:
             response['error_num'] = '2'
