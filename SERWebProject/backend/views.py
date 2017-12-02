@@ -66,6 +66,27 @@ def login(request):
             return JsonResponse({'status': 1})
 
 
+@csrf_exempt
+def wx_register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        openid = request.POST['openid']
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            user_info = User.objects.filter(username=username)
+            user_info.wechat_open_id = openid
+            user_info.save()
+            response = {'list': json.loads(serializers.serialize("json", user_info)),
+                        'msg': 'success',
+                        'status': 0}
+            # Redirect to a success page.
+            return JsonResponse(response)
+        else:
+            # Show an error page
+            return JsonResponse({'status': 1})
+
+
 def wx_login(request, wx_code):
     response = {}
     if request.method == 'GET':
