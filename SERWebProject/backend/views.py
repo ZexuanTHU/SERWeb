@@ -78,9 +78,17 @@ def wx_login(request, wx_code):
         }
         res = requests.get('https://api.weixin.qq.com/sns/jscode2session?', params=para)
         if res.status_code == 200:
-            response['error_num'] = '0'
-            response['text'] = res.json()
-            return JsonResponse(response)
+            info = res.json()
+            open_id = info['openid']
+            try:
+                user = User.objects.get(wechat_open_id=open_id)
+                response['list'] = json.loads(serializers.serialize("json", user))
+                response['error_num'] = '0'
+                response['text'] = res.json()
+                return JsonResponse(response)
+            except:
+                response['error_num'] = '3'
+                return JsonResponse(response)
         else:
             response['error_num'] = '2'
             return JsonResponse(response)

@@ -41,6 +41,7 @@ CLOTHES_SIZE = {
 class User(AbstractUser):
     # email = models.EmailField()
     submit_info = models.BooleanField(default=False)
+    wechat_open_id = models.CharField('微信号', max_length=50, default='微信号')
 
     def __str__(self):
         return self.username
