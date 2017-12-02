@@ -108,6 +108,7 @@ def wx_login(request, wx_code):
                 response['text'] = res.json()
                 return JsonResponse(response)
             except:
+                response['list'] = json.loads(serializers.serialize("json", user))
                 response['error_num'] = '3'
                 response['msg'] = 'openid match fail! User does not exist!'
                 return JsonResponse(response)
